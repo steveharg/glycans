@@ -1,4 +1,4 @@
-import re, sys, json
+import sys, json
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np; np.random.seed(0)
@@ -13,16 +13,6 @@ ALTERNATIVE_LIP_IDX = 4
 UNCERTAIN_CARBON_NUM_IDX = 5
 SINGLE_SIDED_LINK_IDX = 6
 OTHER_LINK_PROBLEM_IDX = 7
-
-# # mono_pattern = re.compile(r"^([0-9a-zA-Z]{3,9})(-\d[abx])?(_[0-9?]-[0-9?])?(_([0-9?]|[0-9]\|[0-9])\*.*)?")
-# # wurcs2_pattern = re.compile(r"^WURCS=2.0\/(\d),(\d),(\d)\/(\[.+[^\[\]]\])+\/(.+)\/(.+)")
-# # wurcs2_pattern1 = re.compile(r"^WURCS=2.0\/(\d),(\d),(\d)\/(\[.+\])+\/(.+)\/(.+)")
-# # wurcs2_pattern1 = re.compile(r"^WURCS=2.0\/(\d),(\d),(\d)\/(\[.+\])+\/(.+)")
-# wurcs2_pattern1 = re.compile(r"^WURCS=2.0\/(\d),(\d),(\d)\/(\[.+\])+(.+)")
-# wurcs2_res_pattern = re.compile(r"(\[.+?\])+?")
-# wurcs2_res_seq_pattern = re.compile(r"\d+")
-# wurcs2_links_pattern = re.compile((r"[^_]+"))
-
 
 # Get glycan sequences from json file (previously generated via sparql query in glytoucan_rdf_to_json.py)
 with open('glycans.json') as f:
@@ -266,45 +256,6 @@ for result in results["results"]["bindings"]:
                             reactions_bag[primary_id]["motifs"].append(motif_id)
                 else:
                     reactions_bag[primary_id]["motifs"] = ['None']
-
-    # # wurcs_string = "WURCS=2.0/3,5,4/[a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-1-2-3-3/a4-b1_b4-c1_c3-d1_c6-e1"
-    #
-    # parsed = re.match(wurcs2_pattern1, wurcs_string)
-    #
-    # num_unique_residues = parsed.group(1)
-    # num_residues = parsed.group(2)
-    # num_links = parsed.group(3)
-    # all_residues = parsed.group(4)
-    # full_residue_seq = parsed.group(5)
-    # pass
-    # # full_link_list = parsed.group(6)
-    #
-    # parsed = re.findall(wurcs2_res_pattern, all_residues)
-    #
-    # residues = []
-    # for residue in parsed:
-    #     residues.append(residue[1:-1])
-    #
-    # print("residues:", residues)
-    #
-    # parsed = re.findall(wurcs2_res_seq_pattern, full_residue_seq)
-    #
-    # residue_seq = []
-    # for seq in parsed:
-    #     residue_seq.append(int(seq))
-    #
-    # print("residue_seq:", residue_seq)
-    #
-    # print("full_link_list:", full_link_list)
-    #
-    # parsed = re.findall(wurcs2_links_pattern, full_link_list)
-    #
-    # link_list = []
-    # for link in parsed:
-    #     link_list.append(link)
-    #
-    # print("link_list:", link_list)
-    #
 
 # Print some metrics
 print("single_sided_link_count:", single_sided_link_count)
