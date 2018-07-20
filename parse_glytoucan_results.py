@@ -10,14 +10,16 @@ UNCERTAIN_CARBON_NUM_IDX = 5
 SINGLE_SIDED_LINK_IDX = 6
 OTHER_LINK_PROBLEM_IDX = 7
 
-def parse_glytoucan_results(json_file):
+def parse_glytoucan_results(json_file, num_datafile_lines):
 
     # Get glycan sequences from json file (previously generated via sparql query in glytoucan_rdf_to_json.py)
     with open(json_file) as f:
         results = json.load(f)
 
-    # Reduce the dataset size whilst testing
-    results["results"]["bindings"] = results["results"]["bindings"][6000:6400]
+    if num_datafile_lines != None:
+        # Reduce the dataset size whilst testing
+        # results["results"]["bindings"] = results["results"]["bindings"][6000:6020]
+        results["results"]["bindings"] = results["results"]["bindings"][0:num_datafile_lines-1]
 
     single_sided_link_count = 0
     double_sided_link_count = 0
