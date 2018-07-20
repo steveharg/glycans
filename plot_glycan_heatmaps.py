@@ -11,14 +11,13 @@ def plot_glycan_heatmaps(heatmaps, column_names):
     sns.set()
 
     # Plot heatmaps
-    reaction_distance_df = pd.DataFrame.from_items(reactions_heatmap_items[::-1],
+    reaction_distance_df = pd.DataFrame.from_dict(reactions_heatmap_items,
                                                    orient='index', columns=glycan_distance_cols)
-    motif_distance_df = pd.DataFrame.from_items(motifs_heatmap_items[::-1],
+    motif_distance_df = pd.DataFrame.from_dict(motifs_heatmap_items,
                                                    orient='index', columns=motif_distance_cols)
 
     plt.subplot(1,2,1)
 
-    # ax = sns.heatmap(ani, annot=True, fmt=".2f", square=True)
     ax_reactions = sns.heatmap(reaction_distance_df, annot=False, fmt=".2f", square=True)
     plt.title('pairwise glycan similarity by reactions')
 
@@ -28,5 +27,4 @@ def plot_glycan_heatmaps(heatmaps, column_names):
 
     plt.show()
 
-    # fig = ax.get_figure()
-    # fig.savefig('strain_ANIs2.png')
+    return reaction_distance_df, motif_distance_df
