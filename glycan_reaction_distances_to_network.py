@@ -18,11 +18,9 @@ if __name__ == "__main__":
     if num_args > 2:
         plot_heatmaps = bool(sys.argv[2])
 
-    reaction_distances = pickle.load(open("reaction_distances.p", "rb"))
-
-    reactions_bag = reaction_distances[0]
-    heatmaps = reaction_distances[1]
-    column_names = reaction_distances[2]
+    reactions_bag = pickle.load(open("reactions_bag.p", "rb"))
+    heatmaps = pickle.load(open("heatmaps.p", "rb"))
+    column_names = pickle.load(open("column_names.p", "rb"))
 
     reactions_heatmap_items = heatmaps[0]
     motifs_heatmap_items = heatmaps[1]
