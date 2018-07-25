@@ -18,14 +18,16 @@ if __name__ == "__main__":
     if num_args > 2:
         plot_heatmaps = bool(sys.argv[2])
 
+    data_dir = "data_top10_motifs"
+
     print("opening reactions_bag.p...")
-    reactions_bag = pickle.load(open("reactions_bag.p", "rb"))
+    reactions_bag = pickle.load(open(data_dir + "/reactions_bag.p", "rb"))
     print("...done")
     print("opening heatmaps.p...")
-    heatmaps = pickle.load(open("heatmaps.p", "rb"))
+    heatmaps = pickle.load(open(data_dir + "/heatmaps.p", "rb"))
     print("...done")
     print("opening column_names.p...")
-    column_names = pickle.load(open("column_names.p", "rb"))
+    column_names = pickle.load(open(data_dir + "/column_names.p", "rb"))
     print("...done")
 
     reactions_heatmap_items = heatmaps[0]
