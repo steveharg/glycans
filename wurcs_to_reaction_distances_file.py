@@ -3,6 +3,7 @@ import pickle
 import json
 from parse_glytoucan_results import parse_glytoucan_results
 from calc_jaccard_distances import calc_jaccard_distances
+from filter_by_common_motifs import filter_by_common_motifs
 
 if __name__ == "__main__":
 
@@ -14,19 +15,13 @@ if __name__ == "__main__":
         num_datafile_lines = int(sys.argv[1])
 
     reactions_bag = parse_glytoucan_results('glycans.json', num_datafile_lines)
+    reactions_bag = filter_by_common_motifs(reactions_bag)
     heatmaps, column_names = calc_jaccard_distances(reactions_bag)
 
     reaction_distances = [reactions_bag, heatmaps, column_names]
 
-    pickle.dump(reactions_bag, open("reactions_bag.p", "wb"))
-    pickle.dump(heatmaps, open("heatmaps.p", "wb"))
-    pickle.dump(column_names, open("column_names.p", "wb"))
+    data_dir = "data_top10_motifs"
 
-    # with open('reactions_bag.json', 'w') as outfile:
-    #     json.dump(reactions_bag, outfile)
-    #
-    # with open('heatmaps.json', 'w') as outfile:
-    #     json.dump(heatmaps, outfile)
-    #
-    # with open('column_names.json', 'w') as outfile:
-    #     json.dump(column_names, outfile)
+    pickle.dump(reactions_bag, open(data_dir + "/reactions_bag.p", "wb"))
+    pickle.dump(heatmaps, open(data_dir + "/heatmaps.p", "wb"))
+    pickle.dump(column_names, open(data_dir + "/column_names.p", "wb"))
