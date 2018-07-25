@@ -101,13 +101,17 @@ def filter_by_common_motifs(reactions_bag):
     # plt.xticks(rotation=90)
     # plt.show()
 
-    # Filter the reactions_bag so that it onyl includes glycans containing one of the top 10 motifs (as found from single motif glycans)
+    # Filter the reactions_bag so that it only includes glycans containing motifs from the top 10 motifs (as found from single motif glycans)
     trimmed_reactions_bag = {}
     top_10_motifs = list(single_glycan_motif_counts_sorted_by_value.keys())[1:11]
     for primary_id in reactions_bag:
+        all_motifs_in_top10 = True
         for motif in reactions_bag[primary_id]["motifs"]:
-            if motif in top_10_motifs:
-                trimmed_reactions_bag[primary_id] = reactions_bag[primary_id]
+            if motif not in top_10_motifs:
+                all_motifs_in_top10 = False
                 break
+
+        if all_motifs_in_top10:
+            trimmed_reactions_bag[primary_id] = reactions_bag[primary_id]
 
     return trimmed_reactions_bag
