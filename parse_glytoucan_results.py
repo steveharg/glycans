@@ -264,42 +264,6 @@ def parse_glytoucan_results(json_file, num_datafile_lines):
     print("total_link_count:", total_link_count)
     print("single_sided_link_count + double_sided_link_count:", single_sided_link_count + double_sided_link_count)
 
-    print("len(reactions_bag) before removing any glycans with zero or more than one motif:", len(reactions_bag))
-
-    print("counting motifs...")
-    motif_counts = {}
-    for primary_id in reactions_bag:
-        sorted_motifs = '-'.join(sorted(reactions_bag[primary_id]["motifs"]))
-        if sorted_motifs in motif_counts:
-            motif_counts[sorted_motifs] +=1
-        else:
-            motif_counts[sorted_motifs] = 1
-
-    plt.bar(motif_counts.keys(), motif_counts.values())
-    plt.xticks(rotation=90)
-    # fig.xlabel.text(rotation='vertical')
-    plt.show()
-
-    print("removing glycans with zero or more than one motif from reactions_bag...")
-
-    trimmed_reactions_bag = {}
-    for primary_id in reactions_bag:
-        if reactions_bag[primary_id]["motifs"] != ['None'] and len(reactions_bag[primary_id]["motifs"]) == 1:
-            trimmed_reactions_bag[primary_id] = reactions_bag[primary_id]
-
-    print("removing", len(reactions_bag) - len(trimmed_reactions_bag), "glycans which had either zero or more than one motif from reactions_bag")
-    reactions_bag = trimmed_reactions_bag
-
-    print("counting motifs...")
-    motif_counts = {}
-    for primary_id in reactions_bag:
-        if reactions_bag[primary_id]["motifs"][0] in motif_counts:
-            motif_counts[reactions_bag[primary_id]["motifs"][0]] +=1
-        else:
-            motif_counts[reactions_bag[primary_id]["motifs"][0]] = 1
-
-    plt.bar(motif_counts.keys(), motif_counts.values())
-    plt.xticks(rotation=90)
-    plt.show()
+    print("len(reactions_bag):", len(reactions_bag))
 
     return reactions_bag
