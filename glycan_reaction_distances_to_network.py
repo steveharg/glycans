@@ -5,6 +5,10 @@ import pandas as pd
 import seaborn as sns
 import sys
 import pickle
+import matplotlib.colors as colors
+import matplotlib.cm as cmx
+import json
+
 
 if __name__ == "__main__":
 
@@ -19,6 +23,7 @@ if __name__ == "__main__":
         plot_heatmaps = bool(sys.argv[2])
 
     data_dir = "data_top10_motifs"
+    # data_dir = "mini_data_top10_motifs"
 
     print("opening reactions_bag.p...")
     reactions_bag = pickle.load(open(data_dir + "/reactions_bag.p", "rb"))
@@ -29,6 +34,16 @@ if __name__ == "__main__":
     print("opening column_names.p...")
     column_names = pickle.load(open(data_dir + "/column_names.p", "rb"))
     print("...done")
+    print("opening motif_ids_and_labels.json...")
+    with open('motif_ids_and_labels.json') as f:
+        motif_ids_and_labels = json.load(f)
+    print("...done")
+
+    motif_ids_and_labels_dict = {}
+    for result in motif_ids_and_labels["results"]["bindings"]:
+        motif_primary_id = result["MotifPrimaryId"]["value"]
+        motif_label = result["MotifLabel"]["value"]
+        motif_ids_and_labels_dict[motif_primary_id] = motif_label
 
     reactions_heatmap_items = heatmaps[0]
     motifs_heatmap_items = heatmaps[1]
@@ -113,6 +128,35 @@ if __name__ == "__main__":
     G = nx.from_pandas_adjacency(thresholded_reactions_df)
     print("...done")
 
+    print("getting connected_components from graph...")
+    # len_c = [len(c) for c in sorted(nx.connected_components(G), key=len, reverse=True)]
+    connected_components = [c for c in sorted(nx.connected_components(G), key=len, reverse=True)]
+    print("connected_components:", connected_components)
+    print("...done")
+
+    # print("removing nodes with zero edges...")
+    # zero_edge_nodes = []
+    # for n, nbrs in G.adjacency():
+    #     # print(n)
+    #     # print(nbrs)
+    #     # print(len(nbrs))
+    #     if len(nbrs) == 1:
+    #         # print("zero edges")
+    #         zero_edge_nodes.append(n)
+    #     # for nbr, eattr in nbrs.items():
+    #     #     print(nbr)
+    #     #     print(eattr)
+    #         # data = eattr['weight']
+    #         # if data < 0.5: print('(%d, %d, %.3f)' % (n, nbr, data))
+    #
+    # # node_degrees = nx.degree(G)
+    # # for node in node_degrees:
+    # #     if node[1] == 0:
+    # #         G.remove_node(node[0])
+    #
+    # G.remove_edges_from(zero_edge_nodes)
+    # print("...done")
+
     motifs = []
     for reaction in reactions_bag:
         sorted_motifs = sorted(reactions_bag[reaction]['motifs'])
@@ -120,25 +164,58 @@ if __name__ == "__main__":
             motifs.append(sorted_motifs)
 
     # print("motifs:", motifs)
+    print("len(motifs):", len(motifs))
 
     node_colors = range(len(motifs))
+    print("creating graph layout...")
     pos = nx.spring_layout(G)
+    # pos = nx.circular_layout(G)
+    # pos = nx.shell_layout(G)
+    # pos = nx.fruchterman_reingold_layout(G) # similar to spring
+    # pos = nx.kamada_kawai_layout(G) # a bit too dense
+    # pos = nx.spectral_layout(G) # nah
+    print("...done")
 
     print("applying colours to nodes in network...")
+
+    reds = plt.cm.Reds
+    cNorm = colors.Normalize(vmin=node_colors[0], vmax=node_colors[-1])
+    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=reds)
+
+    fig1 = plt.figure(1)
+    ax = fig1.add_subplot(1, 1, 1)
+
+    for label in node_colors:
+        motif_labels = []
+        for motif_id in motifs[label]:
+            motif_labels.append(motif_ids_and_labels_dict[motif_id])
+        ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=',||| '.join(motif_labels))
+        # ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label='abc')
+
+    ii = 1
+    node_label_dict = {}
     for node_color in node_colors:
         nodelist = []
         for reaction in reactions_bag:
             sorted_motifs = sorted(reactions_bag[reaction]['motifs'])
             if sorted_motifs == motifs[node_color]:
                 nodelist.append(reaction)
+                # G.nodes[reaction]['motifs'] = sorted_motifs
+                node_label_dict[reaction] = '-'.join(sorted_motifs)
+                # print(G.nodes[reaction])
 
         nx.draw_networkx_nodes(G, pos, with_labels=True, font_weight='bold',
                                node_color=np.zeros((len(nodelist)))+node_colors[node_color],
-                               nodelist=nodelist, cmap=plt.cm.Reds, vmin=node_colors[0], vmax=node_colors[-1])
+                               nodelist=nodelist, cmap=plt.cm.Reds, vmin=node_colors[0], vmax=node_colors[-1], ax=ax)
+        # nx.draw_networkx_labels(G, pos, nodelist=nodelist, label="test "+str(ii), font_size=10)
+        ii += 1
 
+    # nx.draw_networkx_labels(G, pos, nodelist=nodelist, font_size=10, labels=node_label_dict, ax=ax)
     print("...done")
 
     print("drawing network graph...")
     nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
+    plt.legend(loc='upper right', fontsize="xx-small")
+    plt.axis('off')
     plt.show()
     print("...done")
