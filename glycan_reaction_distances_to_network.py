@@ -39,6 +39,7 @@ if __name__ == "__main__":
         motif_ids_and_labels = json.load(f)
     print("...done")
 
+    # motif_ids_and_labels_dict for use in displaying legend
     motif_ids_and_labels_dict = {}
     for result in motif_ids_and_labels["results"]["bindings"]:
         motif_primary_id = result["MotifPrimaryId"]["value"]
@@ -178,9 +179,9 @@ if __name__ == "__main__":
 
     print("applying colours to nodes in network...")
 
-    reds = plt.cm.Reds
+    tab20b = plt.cm.tab20b
     cNorm = colors.Normalize(vmin=node_colors[0], vmax=node_colors[-1])
-    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=reds)
+    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=tab20b)
 
     fig1 = plt.figure(1)
     ax = fig1.add_subplot(1, 1, 1)
@@ -192,8 +193,7 @@ if __name__ == "__main__":
         ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=',||| '.join(motif_labels))
         # ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label='abc')
 
-    ii = 1
-    node_label_dict = {}
+    # node_label_dict = {}
     for node_color in node_colors:
         nodelist = []
         for reaction in reactions_bag:
@@ -201,14 +201,13 @@ if __name__ == "__main__":
             if sorted_motifs == motifs[node_color]:
                 nodelist.append(reaction)
                 # G.nodes[reaction]['motifs'] = sorted_motifs
-                node_label_dict[reaction] = '-'.join(sorted_motifs)
+                # node_label_dict[reaction] = '-'.join(sorted_motifs)
                 # print(G.nodes[reaction])
 
         nx.draw_networkx_nodes(G, pos, with_labels=True, font_weight='bold',
                                node_color=np.zeros((len(nodelist)))+node_colors[node_color],
-                               nodelist=nodelist, cmap=plt.cm.Reds, vmin=node_colors[0], vmax=node_colors[-1], ax=ax)
+                               nodelist=nodelist, cmap=plt.cm.tab20b, vmin=node_colors[0], vmax=node_colors[-1], ax=ax)
         # nx.draw_networkx_labels(G, pos, nodelist=nodelist, label="test "+str(ii), font_size=10)
-        ii += 1
 
     # nx.draw_networkx_labels(G, pos, nodelist=nodelist, font_size=10, labels=node_label_dict, ax=ax)
     print("...done")
@@ -216,6 +215,71 @@ if __name__ == "__main__":
     print("drawing network graph...")
     nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
     plt.legend(loc='upper right', fontsize="xx-small")
-    plt.axis('off')
-    plt.show()
+    # plt.axis('off')
+    # plt.show()
     print("...done")
+
+    print("drawing connected components...")
+    fig = plt.figure(2)
+    ax = fig.add_subplot(1, 1, 1)
+    motifs = []
+
+    num_connected_components_displayed = 5
+    print("Motifs for top", num_connected_components_displayed, "connected components:")
+    for i in range(0, num_connected_components_displayed):
+        for reaction in connected_components[i]:
+            sorted_motifs = sorted(reactions_bag[reaction]['motifs'])
+            if sorted_motifs not in motifs:
+                motifs.append(sorted_motifs)
+        print(i+1,"^", ', '.join([motif_ids_and_labels_dict[x] for x in sorted_motifs]))
+
+    print("(connected components) len(motifs):", len(motifs))
+    node_colors = range(len(motifs))
+
+    tab20b = plt.cm.tab20b
+    cNorm = colors.Normalize(vmin=node_colors[0], vmax=node_colors[-1])
+    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=tab20b)
+
+    for label in node_colors:
+        motif_labels = []
+        for motif_id in motifs[label]:
+            motif_labels.append(motif_ids_and_labels_dict[motif_id])
+        ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=',||| '.join(motif_labels))
+
+    motif_set_counts = dict.fromkeys(node_colors, 0)
+
+    for i in range(0, num_connected_components_displayed):
+
+        # fig = plt.figure(i+2)
+        # ax = fig.add_subplot(6, 4, i+1)
+
+        for node_color in node_colors:
+            nodelist = []
+            for reaction in connected_components[i]:
+                sorted_motifs = sorted(reactions_bag[reaction]['motifs'])
+                if sorted_motifs == motifs[node_color]:
+                    nodelist.append(reaction)
+
+            if len(nodelist) > 0:
+                motif_set_counts[node_color] += 1
+
+            # nx.draw_networkx_nodes(G, pos, with_labels=False, font_weight='bold',
+            #                    nodelist=nodelist, ax=ax)
+            nx.draw_networkx_nodes(G, pos, with_labels=True, font_weight='bold',
+                                   node_color=np.zeros((len(nodelist)))+node_colors[node_color],
+                                   nodelist=nodelist, cmap=plt.cm.tab20b, vmin=node_colors[0], vmax=node_colors[-1], ax=ax)
+
+            nx.draw_networkx_edges(G, pos, edgelist=G.edges(nbunch=nodelist), width=1.0, alpha=0.5, ax=ax)
+
+        plt.legend(loc='upper right', fontsize="xx-small")
+        # plt.axis('off')
+        # plt.show()
+
+    print("...done")
+    motif_set_counts_sorted_by_value = dict(sorted(motif_set_counts.items(),
+                                                   key=lambda kv: kv[1],
+                                                   reverse=True))
+    print("motif_set_counts:", motif_set_counts_sorted_by_value)
+    for motif_set_idx in motif_set_counts_sorted_by_value:
+        print(', '.join([motif_ids_and_labels_dict[x] for x in motifs[motif_set_idx]]), ':', motif_set_counts_sorted_by_value[motif_set_idx])
+    plt.show()
