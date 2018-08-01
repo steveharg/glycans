@@ -21,6 +21,7 @@ if __name__ == "__main__":
     reaction_distances = [reactions_bag, heatmaps, column_names]
 
     data_dir = "data_top10_motifs"
+    # data_dir = "mini_data_top10_motifs"
 
     pickle.dump(reactions_bag, open(data_dir + "/reactions_bag.p", "wb"))
     pickle.dump(heatmaps, open(data_dir + "/heatmaps.p", "wb"))
