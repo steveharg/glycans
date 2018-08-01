@@ -225,13 +225,21 @@ if __name__ == "__main__":
     motifs = []
 
     num_connected_components_displayed = 5
+    # num_connected_components_displayed = 22
+    # num_connected_components_displayed = 40
     print("Motifs for top", num_connected_components_displayed, "connected components:")
     for i in range(0, num_connected_components_displayed):
+        motifs_for_conn_comp = []
         for reaction in connected_components[i]:
             sorted_motifs = sorted(reactions_bag[reaction]['motifs'])
             if sorted_motifs not in motifs:
                 motifs.append(sorted_motifs)
-        print(i+1,"^", ', '.join([motif_ids_and_labels_dict[x] for x in sorted_motifs]))
+            if sorted_motifs not in motifs_for_conn_comp:
+                motifs_for_conn_comp.append(sorted_motifs)
+            # motifs_for_conn_comp = motifs_for_conn_comp + sorted_motifs
+        # print(i+1,"^", ', '.join([motif_ids_and_labels_dict[x] for x in motifs_for_conn_comp]))
+        for sorted_mts in motifs_for_conn_comp:
+            print(i+1,"^", ', '.join([motif_ids_and_labels_dict[x] for x in sorted_mts]))
 
     print("(connected components) len(motifs):", len(motifs))
     node_colors = range(len(motifs))
