@@ -6,8 +6,8 @@ from Bio import Phylo
 
 if __name__ == "__main__":
 
-    data_dir = "data_top10_motifs"
-    # data_dir = "mini_data_top10_motifs"
+    # data_dir = "data_top10_motifs"
+    data_dir = "mini_data_top10_motifs"
 
     print("opening heatmaps.p...")
     heatmaps = pickle.load(open(data_dir + "/heatmaps.p", "rb"))
@@ -49,6 +49,8 @@ if __name__ == "__main__":
     calculator = DistanceCalculator('identity')
     constructor = DistanceTreeConstructor()
     tree = constructor.upgma(dmm)
+
+    pickle.dump(tree, open(data_dir + "/tree.p", "wb"))
 
     Phylo.draw(tree)
 
