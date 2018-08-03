@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def filter_by_common_motifs(reactions_bag):
+def filter_by_common_motifs(reactions_bag, include_zero_motif_glycans):
 
     print("len(reactions_bag) before removing any glycans with zero or more than one motif:", len(reactions_bag))
 
@@ -103,7 +103,12 @@ def filter_by_common_motifs(reactions_bag):
 
     # Filter the reactions_bag so that it only includes glycans containing motifs from the top 10 motifs (as found from single motif glycans)
     trimmed_reactions_bag = {}
-    top_10_motifs = list(single_glycan_motif_counts_sorted_by_value.keys())[1:11]
+
+    if include_zero_motif_glycans:
+        top_10_motifs = list(single_glycan_motif_counts_sorted_by_value.keys())[0:11]
+    else:
+        top_10_motifs = list(single_glycan_motif_counts_sorted_by_value.keys())[1:11]
+
     for primary_id in reactions_bag:
         all_motifs_in_top10 = True
         for motif in reactions_bag[primary_id]["motifs"]:
