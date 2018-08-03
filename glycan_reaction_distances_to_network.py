@@ -16,11 +16,16 @@ if __name__ == "__main__":
 
     threshold = 90
     plot_heatmaps = False
+    num_connected_components_displayed = 5
+    # num_connected_components_displayed = 22
+    # num_connected_components_displayed = 40
 
     if num_args > 1:
         threshold = int(sys.argv[1])
     if num_args > 2:
-        plot_heatmaps = bool(sys.argv[2])
+        num_connected_components_displayed = int(sys.argv[2])
+    if num_args > 3:
+        plot_heatmaps = bool(sys.argv[3])
 
     data_dir = "data_top10_motifs"
     # data_dir = "mini_data_top10_motifs"
@@ -169,12 +174,12 @@ if __name__ == "__main__":
 
     node_colors = range(len(motifs))
     print("creating graph layout...")
-    pos = nx.spring_layout(G)
+    # pos = nx.spring_layout(G)
     # pos = nx.circular_layout(G)
     # pos = nx.shell_layout(G)
-    # pos = nx.fruchterman_reingold_layout(G) # similar to spring
-    # pos = nx.kamada_kawai_layout(G) # a bit too dense
-    # pos = nx.spectral_layout(G) # nah
+    pos = nx.fruchterman_reingold_layout(G) # similar to spring
+    # pos = nx.kamada_kawai_layout(G) # might work
+    # pos = nx.spectral_layout(G) # everything appears on a dense horizontal line, not much use
     print("...done")
 
     print("applying colours to nodes in network...")
@@ -224,9 +229,6 @@ if __name__ == "__main__":
     ax = fig.add_subplot(1, 1, 1)
     motifs = []
 
-    num_connected_components_displayed = 5
-    # num_connected_components_displayed = 22
-    # num_connected_components_displayed = 40
     print("Motifs for top", num_connected_components_displayed, "connected components:")
     for i in range(0, num_connected_components_displayed):
         motifs_for_conn_comp = []
