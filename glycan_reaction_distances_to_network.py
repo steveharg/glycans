@@ -15,10 +15,45 @@ if __name__ == "__main__":
     num_args = len(sys.argv)
 
     threshold = 90
-    plot_heatmaps = False
     num_connected_components_displayed = 5
+    plot_heatmaps = False
     # num_connected_components_displayed = 22
     # num_connected_components_displayed = 40
+
+    # display_motifs = [['G00055MO'],
+    #                     ['G00055MO', 'G00057MO'],
+    #                     ['G00055MO', 'G00068MO'],
+    #                     ['G00046MO', 'G00055MO'],
+    #                     ['G00056MO'],
+    #                     ['G00026MO', 'G00055MO'],
+    #                     ['G00026MO'],
+    #                     ['G00046MO', 'G00055MO', 'G00068MO'],
+    #                     ['G00055MO', 'G00056MO'],
+    #                     ['G00057MO'],
+    #                     ['G00027MO', 'G00055MO'],
+    #                     ['G00056MO', 'G00068MO'],
+    #                     ['G00026MO', 'G00046MO', 'G00055MO'],
+    #                     ['G00026MO', 'G00046MO', 'G00055MO', 'G00057MO'],
+    #                     ['G00026MO', 'G00055MO', 'G00068MO'],
+    #                     ['G00026MO', 'G00056MO'],
+    #                     ['G00026MO', 'G00057MO'],
+    #                     ['G00026MO', 'G00055MO', 'G00056MO'],
+    #                     ['G00026MO', 'G00055MO', 'G00057MO'],
+    #                     ['G00027MO', 'G00046MO', 'G00055MO'],
+    #                     ['G00056MO', 'G00057MO']]  # display all motif sets
+
+    # similar?
+    # display_motifs = [['G00056MO'], ['G00057MO']]  # 2 & 4 - Neo Lactosamine & LacDiNAc
+    # display_motifs = [['G00056MO'], ['G00055MO']]  # 2 & 3 - Neo Lactosamine & Lactosamine motif
+    # display_motifs = [['G00026MO', 'G00055MO', 'G00056MO'], ['G00026MO', 'G00055MO', 'G00057MO']]  # 18 & 19 - N-Glycan core basic, Lactosamine motif, Neo Lactosamine & N-Glycan core basic, Lactosamine motif, LacDiNAc
+    # display_motifs = [['G00026MO', 'G00057MO'], ['G00026MO', 'G00055MO']]  # 5 & 7 - N-Glycan core basic, LacDiNAc & N-Glycan core basic, Lactosamine motif
+    # display_motifs = [['G00026MO', 'G00055MO'], ['G00027MO', 'G00055MO']]  # 7 & 8 - N-Glycan core basic, Lactosamine motif & N-Glycan truncated motif. First GlcpNAC cut off, Lactosamine motif
+    # display_motifs = [['G00046MO', 'G00055MO'], ['G00055MO']]  # 9 & 3 - Galalpha1-3Gal epitope, Lactosamine motif & Lactosamine motif
+    display_motifs = [['G00057MO'], ['G00055MO', 'G00057MO']]  # 4 & 13 LacDiNAc & Lactosamine motif, LacDiNAc
+
+    # dissimilar?
+    # display_motifs = [['G00026MO'], ['G00055MO']]  # N-Glycan core basic, Lactosamine motif
+    # display_motifs = [['G00057MO'], ['G00026MO', 'G00057MO']]  # 4 & 5 – LacDiNAc & N-Glycan core basic, LacDiNAc
 
     if num_args > 1:
         threshold = int(sys.argv[1])
@@ -195,7 +230,7 @@ if __name__ == "__main__":
         motif_labels = []
         for motif_id in motifs[label]:
             motif_labels.append(motif_ids_and_labels_dict[motif_id])
-        ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=',||| '.join(motif_labels))
+        ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=' & '.join(motif_labels))
         # ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label='abc')
 
     # node_label_dict = {}
@@ -219,8 +254,10 @@ if __name__ == "__main__":
 
     print("drawing network graph...")
     nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
-    plt.legend(loc='upper right', fontsize="xx-small")
-    # plt.axis('off')
+    leg = plt.legend(loc='upper right', fontsize="x-small")
+    for line in leg.get_lines():
+        line.set_linewidth(4.0)
+    plt.axis('off')
     # plt.show()
     print("...done")
 
@@ -254,7 +291,12 @@ if __name__ == "__main__":
         motif_labels = []
         for motif_id in motifs[label]:
             motif_labels.append(motif_ids_and_labels_dict[motif_id])
-        ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=',||| '.join(motif_labels))
+        if motifs[label] in display_motifs:
+            ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=' & '.join(motif_labels))
+        # else:
+        #     ax.plot([0], [0], color='Gray', label=' & '.join(motif_labels))
+    ax.plot([0], [0], color='Gray', label='All other motif sets')
+
 
     motif_set_counts = dict.fromkeys(node_colors, 0)
 
@@ -275,14 +317,41 @@ if __name__ == "__main__":
 
             # nx.draw_networkx_nodes(G, pos, with_labels=False, font_weight='bold',
             #                    nodelist=nodelist, ax=ax)
+
+            # color this set of nodes in gray first, then re-color if we've specified them in the
+            # display_motifs list
             nx.draw_networkx_nodes(G, pos, with_labels=True, font_weight='bold',
-                                   node_color=np.zeros((len(nodelist)))+node_colors[node_color],
+                                   node_color='gray',
                                    nodelist=nodelist, cmap=plt.cm.tab20b, vmin=node_colors[0], vmax=node_colors[-1], ax=ax)
+            print(motifs[node_color])
+            if motifs[node_color] in display_motifs:
+                nx.draw_networkx_nodes(G, pos, with_labels=True, font_weight='bold',
+                                       node_color=np.zeros((len(nodelist)))+node_colors[node_color],
+                                       nodelist=nodelist, cmap=plt.cm.tab20b, vmin=node_colors[0], vmax=node_colors[-1], ax=ax)
+            # else:
+            #     nx.draw_networkx_nodes(G, pos, with_labels=True, font_weight='bold',
+            #                            node_color='gray',
+            #                            nodelist=nodelist, cmap=plt.cm.tab20b, vmin=node_colors[0], vmax=node_colors[-1], ax=ax)
+
 
             nx.draw_networkx_edges(G, pos, edgelist=G.edges(nbunch=nodelist), width=1.0, alpha=0.5, ax=ax)
 
-        plt.legend(loc='upper right', fontsize="xx-small")
-        # plt.axis('off')
+        # leg = plt.legend(loc='upper right', fontsize="x-small")
+        leg = plt.legend(fontsize="x-small")
+        for line in leg.get_lines():
+            line.set_linewidth(4.0)
+
+        # Construct figure title
+        plot_title = ''
+        for motif_id_list in display_motifs:
+            motif_names = []
+            for motif_id in motif_id_list:
+                motif_names.append(motif_ids_and_labels_dict[motif_id])
+            plot_title += ', '.join(motif_names)
+            plot_title += ' & '
+        plot_title = plot_title[0:-3]
+        plt.title(plot_title)
+        plt.axis('off')
         # plt.show()
 
     print("...done")
