@@ -11,9 +11,10 @@ if __name__ == "__main__":
 
     include_zero_motif_glycans = False
     num_datafile_lines = None # None means use all datafile lines
+    use_reaction_quantities = True
 
     if num_args > 1:
-        include_zero_motif_glycans = bool(sys.argv[1])
+        include_zero_motif_glycans = 'True' == sys.argv[1]
     if num_args > 2:
         num_datafile_lines = int(sys.argv[2])
 
@@ -24,9 +25,15 @@ if __name__ == "__main__":
     reaction_distances = [reactions_bag, heatmaps, column_names]
 
     if include_zero_motif_glycans:
-        data_dir = "data_top10_and_zero_motifs"
+        if use_reaction_quantities:
+            data_dir = "data_top10_with_reac_quants_and_zero_motifs"
+        else:
+            data_dir = "data_top10_and_zero_motifs"
     else:
-        data_dir = "data_top10_motifs"
+        if use_reaction_quantities:
+            data_dir = "data_top10_with_reac_quants_motifs"
+        else:
+            data_dir = "data_top10_motifs"
 
     # data_dir = "mini_data_top10_motifs"
 
