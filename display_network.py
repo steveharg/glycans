@@ -20,32 +20,32 @@ if __name__ == "__main__":
     # num_connected_components_displayed = 22
     # num_connected_components_displayed = 40
 
-    # display_motifs = [['G00055MO'],
-    #                     ['G00055MO', 'G00057MO'],
-    #                     ['G00055MO', 'G00068MO'],
-    #                     ['G00046MO', 'G00055MO'],
-    #                     ['G00056MO'],
-    #                     ['G00026MO', 'G00055MO'],
-    #                     ['G00026MO'],
-    #                     ['G00046MO', 'G00055MO', 'G00068MO'],
-    #                     ['G00055MO', 'G00056MO'],
-    #                     ['G00057MO'],
-    #                     ['G00027MO', 'G00055MO'],
-    #                     ['G00056MO', 'G00068MO'],
-    #                     ['G00026MO', 'G00046MO', 'G00055MO'],
-    #                     ['G00026MO', 'G00046MO', 'G00055MO', 'G00057MO'],
-    #                     ['G00026MO', 'G00055MO', 'G00068MO'],
-    #                     ['G00026MO', 'G00056MO'],
-    #                     ['G00026MO', 'G00057MO'],
-    #                     ['G00026MO', 'G00055MO', 'G00056MO'],
-    #                     ['G00026MO', 'G00055MO', 'G00057MO'],
-    #                     ['G00027MO', 'G00046MO', 'G00055MO'],
-    #                     ['G00056MO', 'G00057MO']]  # display all motif sets
+    display_motifs = [['G00055MO'],
+                        ['G00055MO', 'G00057MO'],
+                        ['G00055MO', 'G00068MO'],
+                        ['G00046MO', 'G00055MO'],
+                        ['G00056MO'],
+                        ['G00026MO', 'G00055MO'],
+                        ['G00026MO'],
+                        ['G00046MO', 'G00055MO', 'G00068MO'],
+                        ['G00055MO', 'G00056MO'],
+                        ['G00057MO'],
+                        ['G00027MO', 'G00055MO'],
+                        ['G00056MO', 'G00068MO'],
+                        ['G00026MO', 'G00046MO', 'G00055MO'],
+                        ['G00026MO', 'G00046MO', 'G00055MO', 'G00057MO'],
+                        ['G00026MO', 'G00055MO', 'G00068MO'],
+                        ['G00026MO', 'G00056MO'],
+                        ['G00026MO', 'G00057MO'],
+                        ['G00026MO', 'G00055MO', 'G00056MO'],
+                        ['G00026MO', 'G00055MO', 'G00057MO'],
+                        ['G00027MO', 'G00046MO', 'G00055MO'],
+                        ['G00056MO', 'G00057MO']]  # display all motif sets
 
     # similar?
     # display_motifs = [['G00056MO'], ['G00057MO']]  # 2 & 4 - Neo Lactosamine & LacDiNAc
     # display_motifs = [['G00056MO'], ['G00055MO']]  # 2 & 3 - Neo Lactosamine & Lactosamine motif
-    display_motifs = [['G00046MO', 'G00055MO', 'G00068MO'], ['G00055MO', 'G00068MO']]  # 16 & 10 - Galalpha1-3Gal epitope, Lactosamine motif, Blood group H & Lactosamine motif, Blood group H
+    # display_motifs = [['G00046MO', 'G00055MO', 'G00068MO'], ['G00055MO', 'G00068MO']]  # 16 & 10 - Galalpha1-3Gal epitope, Lactosamine motif, Blood group H & Lactosamine motif, Blood group H
 
     # re-check
     # display_motifs = [['G00056MO'], ['G00055MO', 'G00056MO']]  # 2 & 12 - Neo Lactosamine & Lactosamine motif, Neo Lactosamine
@@ -66,8 +66,9 @@ if __name__ == "__main__":
     if num_args > 3:
         plot_heatmaps = bool(sys.argv[3])
 
-    data_dir = "data_top10_motifs"
+    # data_dir = "data_top10_motifs"
     # data_dir = "mini_data_top10_motifs"
+    data_dir = "data_top10_with_reac_quants_motifs"
 
     print("opening reactions_bag.p...")
     reactions_bag = pickle.load(open(data_dir + "/reactions_bag.p", "rb"))
@@ -195,6 +196,11 @@ if __name__ == "__main__":
                                node_color=np.zeros((len(nodelist)))+node_colors[node_color],
                                nodelist=nodelist, cmap=plt.cm.tab20b, vmin=node_colors[0], vmax=node_colors[-1], ax=ax)
         # nx.draw_networkx_labels(G, pos, nodelist=nodelist, label="test "+str(ii), font_size=10)
+        node_motif_dict = dict.fromkeys(nodelist, ', '.join([motif_ids_and_labels_dict[x] for x in motifs[node_color]]))
+        nx.set_node_attributes(G, node_motif_dict, 'motifs')
+
+    print("attribute_assortativity_coefficient:", nx.attribute_assortativity_coefficient(G, 'motifs'))
+
 
     # nx.draw_networkx_labels(G, pos, nodelist=nodelist, font_size=10, labels=node_label_dict, ax=ax)
     print("...done")
