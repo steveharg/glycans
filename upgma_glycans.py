@@ -60,7 +60,7 @@ if __name__ == "__main__":
     glycan_distance_cols_temp = []
     for glycan_id in glycan_distance_cols:
         print("appending:", glycan_motifs[glycan_id])
-        glycan_distance_cols_temp.append(glycan_motifs[glycan_id])
+        glycan_distance_cols_temp.append(glycan_motifs[glycan_id] + '(' + glycan_id + ')')
         if glycan_id == "G00001NT":
             print('no motifs')
 
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     constructor = DistanceTreeConstructor()
     tree = constructor.upgma(dmm)
 
-    pickle.dump(tree, open(data_dir + "/tree.p", "wb"))
+    pickle.dump(tree, open(data_dir + "/tree_with_motif_names.p", "wb"))
 
     Phylo.draw(tree)
 
