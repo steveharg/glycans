@@ -18,9 +18,9 @@ if __name__ == "__main__":
     if num_args > 2:
         num_datafile_lines = int(sys.argv[2])
 
-    reactions_bag = parse_glytoucan_results('glycans.json', num_datafile_lines)
+    reactions_bag = parse_glytoucan_results('glycans.json', num_datafile_lines, use_reaction_quantities=use_reaction_quantities)
     reactions_bag = filter_by_common_motifs(reactions_bag, include_zero_motif_glycans)
-    heatmaps, column_names = calc_jaccard_distances(reactions_bag)
+    heatmaps, column_names = calc_jaccard_distances(reactions_bag, use_reaction_quantities=use_reaction_quantities)
 
     reaction_distances = [reactions_bag, heatmaps, column_names]
 
