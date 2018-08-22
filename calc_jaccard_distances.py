@@ -30,13 +30,13 @@ def calc_jaccard_distances(reactions_bag, use_reaction_quantities):
 
                 reactions1_set = set(reactions1)
                 reactions2_set = set(reactions2)
-                counter_reactions1_set = Counter(reactions1_set)
-                counter_reactions2_set = Counter(reactions2_set)
+                counter_reactions1 = Counter(reactions1)
+                counter_reactions2 = Counter(reactions2)
                 unique_reactions_in_either_set = reactions1_set | reactions2_set
                 unique_reactions_in_both_sets = reactions1_set & reactions2_set
                 jaccard_entries = {}
                 for x in unique_reactions_in_both_sets:
-                    jaccard_entries[x] = min(counter_reactions1_set[x], counter_reactions2_set[x]) / max(counter_reactions1_set[x], counter_reactions2_set[x])
+                    jaccard_entries[x] = min(counter_reactions1[x], counter_reactions2[x]) / max(counter_reactions1[x], counter_reactions2[x])
 
                 motifs1_set = set(motifs1)
                 motifs2_set = set(motifs2)
@@ -45,7 +45,7 @@ def calc_jaccard_distances(reactions_bag, use_reaction_quantities):
                 unique_motifs_in_either_set = motifs1_set | motifs2_set
                 unique_motifs_in_both_sets = motifs1_exclude_none_set & motifs2_exclude_none_set
 
-                glycan_distances[glycan_idx1][glycan_idx2] = 100 * sum(jaccard_entries.values())/len(reactions1_set | reactions2_set)
+                glycan_distances[glycan_idx1][glycan_idx2] = 100 * sum(jaccard_entries.values())/len(unique_reactions_in_either_set)
                 motif_distances[glycan_idx1][glycan_idx2] = 100 * len(unique_motifs_in_both_sets) / len(
                     unique_motifs_in_either_set)
                 glycan_idx2 += 1
