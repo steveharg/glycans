@@ -11,7 +11,8 @@ UNCERTAIN_CARBON_NUM_IDX = 5
 SINGLE_SIDED_LINK_IDX = 6
 OTHER_LINK_PROBLEM_IDX = 7
 
-def parse_glytoucan_results(json_file, num_datafile_lines):
+
+def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantities):
 
     # Get glycan sequences from json file (previously generated via sparql query in glytoucan_rdf_to_json.py)
     with open(json_file) as f:
@@ -240,11 +241,10 @@ def parse_glytoucan_results(json_file, num_datafile_lines):
                         reactions_bag[primary_id] = {'reactions': [reaction]}
                     else:
                         # if reaction not in reactions_bag[primary_id]:
-                        if reaction not in reactions_bag[primary_id]['reactions']:
-                                reactions_bag[primary_id]['reactions'].append(reaction)
-                        else:
-                            # print("already in the bag")
-                            pass
+                        if use_reaction_quantities:
+                            reactions_bag[primary_id]['reactions'].append(reaction)
+                        elif reaction not in reactions_bag[primary_id]['reactions']:
+                            reactions_bag[primary_id]['reactions'].append(reaction)
 
                     # Also add the motifs (as given in glytoucan db) for this glycan to the reactions bag
                     # (these will be used for comparison with the bag of reactions)
