@@ -6,7 +6,7 @@ from collections import Counter
 np.random.seed(0)
 
 
-def calc_jaccard_distances(reactions_bag, use_reaction_quantities=True):
+def calc_jaccard_distances(reactions_bag, use_reaction_quantities):
 
     start = time.time()
 
