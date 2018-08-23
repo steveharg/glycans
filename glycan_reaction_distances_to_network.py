@@ -71,7 +71,7 @@ if __name__ == "__main__":
     # pos = nx.spectral_layout(G) # everything appears on a dense horizontal line, not much use
     print("...done")
 
-    print("Pickling G and pos...")
-    pickle.dump(G, open(data_dir + "/G.p", "wb"))
+    print("Pickling G_" + str(threshold) + " and pos_" + str(threshold) + "...")
+    pickle.dump(G, open(data_dir + "/G_" + str(threshold) + ".p", "wb"))
     pickle.dump(pos, open(data_dir + "/pos_" + str(threshold) + ".p", "wb"))
     print("...done")
