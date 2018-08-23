@@ -79,10 +79,10 @@ if __name__ == "__main__":
     print("opening column_names.p...")
     column_names = pickle.load(open(data_dir + "/column_names.p", "rb"))
     print("...done")
-    print("opening G.p...")
-    G = pickle.load(open(data_dir + "/G.p", "rb"))
+    print("opening G_" + str(threshold) + ".p...")
+    G = pickle.load(open(data_dir + "/G_" + str(threshold) + ".p", "rb"))
     print("...done")
-    print("opening pos" + str(threshold) + ".p...")
+    print("opening pos_" + str(threshold) + ".p...")
     pos = pickle.load(open(data_dir + "/pos_" + str(threshold) + ".p", "rb"))
     print("...done")
 
@@ -312,6 +312,9 @@ if __name__ == "__main__":
                                                    key=lambda kv: kv[1],
                                                    reverse=True))
     print("motif_set_counts:", motif_set_counts_sorted_by_value)
+
+    print('Number of edges in full network:', len(G.edges))
+
     for motif_set_idx in motif_set_counts_sorted_by_value:
         print(', '.join([motif_ids_and_labels_dict[x] for x in motifs[motif_set_idx]]), ':', motif_set_counts_sorted_by_value[motif_set_idx])
     plt.show()
