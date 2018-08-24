@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 
-def filter_by_common_motifs(reactions_bag, include_zero_motif_glycans):
+def filter_by_common_motifs(reactions_collection, include_zero_motif_glycans):
 
-    print("len(reactions_bag) before removing any glycans with zero or more than one motif:", len(reactions_bag))
+    print("len(reactions_bag) before removing any glycans with zero or more than one motif:", len(reactions_collection))
 
     print("counting motifs from multi motif glycans...")
     motif_counts_from_multi_motif_glycans = {}
-    for primary_id in reactions_bag:
-        for motif in reactions_bag[primary_id]["motifs"]:
+    for primary_id in reactions_collection:
+        for motif in reactions_collection[primary_id]["motifs"]:
             if motif in motif_counts_from_multi_motif_glycans:
                 motif_counts_from_multi_motif_glycans[motif] += 1
             else:
@@ -22,9 +22,9 @@ def filter_by_common_motifs(reactions_bag, include_zero_motif_glycans):
 
     print("counting motifs from single motif glycans...")
     motif_counts_from_single_motif_glycans = {}
-    for primary_id in reactions_bag:
-        if len(reactions_bag[primary_id]["motifs"]) == 1:
-            motif = reactions_bag[primary_id]["motifs"][0]
+    for primary_id in reactions_collection:
+        if len(reactions_collection[primary_id]["motifs"]) == 1:
+            motif = reactions_collection[primary_id]["motifs"][0]
             if motif in motif_counts_from_single_motif_glycans:
                 motif_counts_from_single_motif_glycans[motif] += 1
             else:
@@ -76,47 +76,23 @@ def filter_by_common_motifs(reactions_bag, include_zero_motif_glycans):
     plt.xticks(rotation=45)
     plt.show()
 
-    # print("removing glycans with zero or more than one motif from reactions_bag...")
-    #
-    # trimmed_reactions_bag = {}
-    # for primary_id in reactions_bag:
-    #     if reactions_bag[primary_id]["motifs"] != ['None'] and len(reactions_bag[primary_id]["motifs"]) == 1:
-    #         trimmed_reactions_bag[primary_id] = reactions_bag[primary_id]
-    #
-    # print("removing", len(reactions_bag) - len(trimmed_reactions_bag),
-    #       "glycans which had either zero or more than one motif from reactions_bag")
-    # reactions_bag = trimmed_reactions_bag
-    #
-    # print("counting motifs...")
-    # motif_counts = {}
-    # for primary_id in reactions_bag:
-    #     if reactions_bag[primary_id]["motifs"][0] in motif_counts:
-    #         motif_counts[reactions_bag[primary_id]["motifs"][0]] += 1
-    #     else:
-    #         motif_counts[reactions_bag[primary_id]["motifs"][0]] = 1
-    #
-    # motif_counts_sorted_by_value = dict(sorted(motif_counts.items(), key=lambda kv: kv[1], reverse=True))
-    #
-    # plt.bar(motif_counts_sorted_by_value.keys(), motif_counts_sorted_by_value.values())
-    # plt.xticks(rotation=90)
-    # plt.show()
-
-    # Filter the reactions_bag so that it only includes glycans containing motifs from the top 10 motifs (as found from single motif glycans)
-    trimmed_reactions_bag = {}
+    # Filter the reactions_bag so that it only includes glycans containing motifs from the top 10 motifs (as found
+    # from single motif glycans)
+    trimmed_reactions_collection = {}
 
     if include_zero_motif_glycans:
         top_10_motifs = list(single_glycan_motif_counts_sorted_by_value.keys())[0:11]
     else:
         top_10_motifs = list(single_glycan_motif_counts_sorted_by_value.keys())[1:11]
 
-    for primary_id in reactions_bag:
+    for primary_id in reactions_collection:
         all_motifs_in_top10 = True
-        for motif in reactions_bag[primary_id]["motifs"]:
+        for motif in reactions_collection[primary_id]["motifs"]:
             if motif not in top_10_motifs:
                 all_motifs_in_top10 = False
                 break
 
         if all_motifs_in_top10:
-            trimmed_reactions_bag[primary_id] = reactions_bag[primary_id]
+            trimmed_reactions_collection[primary_id] = reactions_collection[primary_id]
 
-    return trimmed_reactions_bag
+    return trimmed_reactions_collection
