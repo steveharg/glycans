@@ -1,56 +1,67 @@
 from Bio import Phylo
-from Bio.Phylo.PhyloXML import Property
 import pickle
 import seaborn as sns
+import configparser
 
-data_dir = 'data_top10_motifs'
+config = configparser.ConfigParser(allow_no_value=True)
+config.read('config.ini')
 
-tree = pickle.load(open(data_dir + "/tree_with_motif_names.p", "rb"))
-# trees = Phylo.parse('/run/media/sah217/DATA/dev/python/glycans/data_top10_motifs/tree_with_motif_names_colour.xml', 'phyloxml')
-# tree = next(trees)
+if __name__ == "__main__":
 
-# get distinct motif groups, and correct for lack of space before opening bracket
-distinct_motif_groups = {}
-for term in tree.get_terminals():
-    name_split = term.name.split('(')
-    print(name_split[0])
-    if name_split[0] not in distinct_motif_groups:
-        distinct_motif_groups[name_split[0]] = ''
-    term.name = name_split[0] + ' (' + name_split[1]
+    include_zero_motif_glycans = config['DEFAULT'].getboolean('IncludeZeroMotifGlycans')
+    use_reaction_quantities = True if config['DEFAULT']['ReactionCountMethod'] == 'List' else False
+    tree_with_motif_names_pickle_file = config['DEFAULT']['TreeWithMotifNamesPickleFile']
+    tree_coloured_by_motif_names_phyloxml_file = config['DEFAULT']['TreeColouredByMotifNamesPhyloXmlFile']
 
-# print(term_names)
+    if include_zero_motif_glycans:
+        if use_reaction_quantities:
+            data_dir = config['DEFAULT']['QuantifiedReactionsZeroMotifsDataDir']
+        else:
+            data_dir = config['DEFAULT']['SetOfReactionsZeroMotifsDataDir']
+    else:
+        if use_reaction_quantities:
+            data_dir = config['DEFAULT']['QuantifiedReactionsDataDir']
+        else:
+            data_dir = config['DEFAULT']['SetOfReactionsDataDir']
 
-print('')
-print('-----------------')
-print('')
+    tree = pickle.load(open(data_dir + "/" + tree_with_motif_names_pickle_file, "rb"))
 
-for motif_group in sorted(distinct_motif_groups):
-    print(motif_group)
+    # get distinct motif groups, and correct for lack of space before opening bracket
+    distinct_motif_groups = {}
+    for term in tree.get_terminals():
+        name_split = term.name.split('(')
+        print(name_split[0])
+        if name_split[0] not in distinct_motif_groups:
+            distinct_motif_groups[name_split[0]] = ''
+        term.name = name_split[0] + ' (' + name_split[1]
 
-print('')
-print('-----------------')
-print('')
+    print('')
+    print('-----------------')
+    print('')
 
+    for motif_group in sorted(distinct_motif_groups):
+        print(motif_group)
 
-for term in tree.get_terminals():
-    print(term)
+    print('')
+    print('-----------------')
+    print('')
 
-pal = sns.color_palette('colorblind', len(distinct_motif_groups))
-# pal = sns.color_palette('RdBu', len(distinct_motif_groups))
+    for term in tree.get_terminals():
+        print(term)
 
-hex_pal = pal.as_hex()  # do we need to convert to hex???
+    pal = sns.color_palette('colorblind', len(distinct_motif_groups))
 
-i = 0
-for distinct_motif_group in distinct_motif_groups:
-    distinct_motif_groups[distinct_motif_group] = hex_pal[i]
-    i += 1
+    hex_pal = pal.as_hex()
 
-# Colour the terminal nodes by motif group
-for term in tree.get_terminals():
-    motif_group = term.name.split(' (')[0]
-    # term.properties = [Property(value=distinct_motif_groups[motif_group],
-    #                            ref='style:font_color', applies_to='node', datatype="xsd:token")]
-    term.color = distinct_motif_groups[motif_group]
+    i = 0
+    for distinct_motif_group in distinct_motif_groups:
+        distinct_motif_groups[distinct_motif_group] = hex_pal[i]
+        i += 1
 
-# save the tree
-Phylo.write(tree, data_dir + "/tree_coloured_by_motif_names.xml", 'phyloxml')
+    # Colour the terminal nodes by motif group
+    for term in tree.get_terminals():
+        motif_group = term.name.split(' (')[0]
+        term.color = distinct_motif_groups[motif_group]
+
+    # save the tree
+    Phylo.write(tree, data_dir + "/" + tree_coloured_by_motif_names_phyloxml_file, 'phyloxml')
