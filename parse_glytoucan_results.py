@@ -1,5 +1,4 @@
 import sys, json
-import matplotlib.pyplot as plt
 
 # These enumeration-type variables are used to gather metrics on the reasons why some wurcs strings are rejected
 WURCS2_STR_IDX = 0
@@ -20,7 +19,6 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
 
     if num_datafile_lines != None:
         # Reduce the dataset size whilst testing
-        # results["results"]["bindings"] = results["results"]["bindings"][6000:6020]
         results["results"]["bindings"] = results["results"]["bindings"][0:num_datafile_lines-1]
 
     single_sided_link_count = 0
@@ -31,7 +29,7 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
     reaction_count = 0
 
     # dictionary of structures (key = PrimaryId) and their reactions (value = list of reactions present)
-    reactions_bag = {}
+    reactions_collection = {}
 
     # dictionary of structures (key = PrimaryId) which we can't use, and flags indicating reasons why
     # [uncertain_lin_count]
@@ -139,18 +137,14 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
                     # If there are more than two 'ends' (i.e. multiple parents or children)
                     # that's valid, but we ignore for now
                     if len(link_split) > 2:
-                        # print("warning - more than two elements in link")
-
                         if primary_id not in rejected_structures:
                             rejected_structures[primary_id] = ['', False, False, False, False, False, False, False]
 
                         rejected_structures[primary_id][WURCS2_STR_IDX] = wurcs_string
                         rejected_structures[primary_id][MORE_THAN_TWO_SIDED_LINK_IDX] = True
+
                     # Reject cases where the are multiple alternative links (left side)
                     if '|' in link_split[0]:
-                        # print('|' in link_split[0])
-                        # print("warning - multiple link options in left side link")
-
                         if primary_id not in rejected_structures:
                             rejected_structures[primary_id] = ['', False, False, False, False, False, False, False]
 
@@ -158,8 +152,6 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
                         rejected_structures[primary_id][ALTERNATIVE_LIP_IDX] = True
                     # Reject cases where the are multiple alternative links (right side)
                     if '|' in link_split[1]:
-                        #print('|' in link_split[1])
-                        #print("warning - multiple link options in right side link")
                         if primary_id not in rejected_structures:
                             rejected_structures[primary_id] = ['', False, False, False, False, False, False, False]
 
@@ -167,9 +159,6 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
                         rejected_structures[primary_id][ALTERNATIVE_LIP_IDX] = True
                     # Reject cases where there's uncertainty over the carbon number (left side)
                     if '?' in link_split[0]:
-                        #print('?' in link_split[0])
-                        #print("warning - uncertain carbon number in left side link")
-
                         if primary_id not in rejected_structures:
                             rejected_structures[primary_id] = ['', False, False, False, False, False, False, False]
 
@@ -177,8 +166,6 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
                         rejected_structures[primary_id][UNCERTAIN_CARBON_NUM_IDX] = True
                     # Reject cases where there's uncertainty over the carbon number (right side)
                     if '?' in link_split[1]:
-                        #print('?' in link_split[1])
-                        #print("warning - uncertain carbon number in right side link")
                         if primary_id not in rejected_structures:
                             rejected_structures[primary_id] = ['', False, False, False, False, False, False, False]
 
@@ -187,10 +174,6 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
                 # Reject single-sided links
                 else:
                     single_sided_link_count += 1
-                    # print("WARNING - STRANGE LINK FORMAT")
-                    # print("link:", link)
-                    # print("PrimaryId:", primary_id)
-                    # print(result["Sequence"]["value"])
 
                     if primary_id not in rejected_structures:
                         rejected_structures[primary_id] = ['', False, False, False, False, False, False, False]
@@ -198,24 +181,14 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
                     rejected_structures[primary_id][WURCS2_STR_IDX] = wurcs_string
                     rejected_structures[primary_id][SINGLE_SIDED_LINK_IDX] = True
 
-            #print("link_list:", link_list)
-
-        #print(len(wurcs2_unique_res_list))
-        #print(num_unique_residues)
-        #print(len(wurcs2_unique_res_list) != num_unique_residues)
-
         if len(wurcs2_unique_res_list) != num_unique_residues:
-            #print("num unique residues found not equal to num_unique_residues)")
+            # num unique residues found not equal to num_unique_residues
             sys.exit(0)
-
-        #print("----------")
 
         # Only proceed if the glycan wasn't rejected above
         if primary_id not in rejected_structures:
             # Final check - reject if the number of residues isn't one more than the number of links
             if len(wurcs2_res_list) != (len(link_list)+1):
-                # print(wurcs2_res_list)
-                # print(link_list)
                 rejected_structures[primary_id] = ['', False, False, False, False, False, False, False]
                 rejected_structures[primary_id][WURCS2_STR_IDX] = wurcs_string
                 rejected_structures[primary_id][OTHER_LINK_PROBLEM_IDX] = True
@@ -230,33 +203,28 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
                     parent_res = ord(link_split[1][0].lower())-96
                     parent_carbon = link_split[1][1:]
 
-                    # print("wurcs2_res_list:", wurcs2_res_list)
-                    # print("child_res:", child_res)
-                    # print("parent_res:", parent_res)
-                    # print("link_list:", link_list)
-
                     reaction = wurcs2_res_list[child_res-1]+'£'+child_carbon+'£'+parent_carbon+wurcs2_res_list[parent_res-1]
 
-                    if primary_id not in reactions_bag:
-                        reactions_bag[primary_id] = {'reactions': [reaction]}
+                    if primary_id not in reactions_collection:
+                        reactions_collection[primary_id] = {'reactions': [reaction]}
                     else:
-                        # if reaction not in reactions_bag[primary_id]:
+                        # if reaction not in reactions_collection[primary_id]:
                         if use_reaction_quantities:
-                            reactions_bag[primary_id]['reactions'].append(reaction)
-                        elif reaction not in reactions_bag[primary_id]['reactions']:
-                            reactions_bag[primary_id]['reactions'].append(reaction)
+                            reactions_collection[primary_id]['reactions'].append(reaction)
+                        elif reaction not in reactions_collection[primary_id]['reactions']:
+                            reactions_collection[primary_id]['reactions'].append(reaction)
 
                     # Also add the motifs (as given in glytoucan db) for this glycan to the reactions bag
                     # (these will be used for comparison with the bag of reactions)
                     if "MotifPrimaryId" in result:
                         motif_id = result["MotifPrimaryId"]["value"]
-                        if "motifs" not in reactions_bag[primary_id]:
-                            reactions_bag[primary_id]["motifs"] = [motif_id]
+                        if "motifs" not in reactions_collection[primary_id]:
+                            reactions_collection[primary_id]["motifs"] = [motif_id]
                         else:
-                            if motif_id not in reactions_bag[primary_id]["motifs"]:
-                                reactions_bag[primary_id]["motifs"].append(motif_id)
+                            if motif_id not in reactions_collection[primary_id]["motifs"]:
+                                reactions_collection[primary_id]["motifs"].append(motif_id)
                     else:
-                        reactions_bag[primary_id]["motifs"] = ['None']
+                        reactions_collection[primary_id]["motifs"] = ['None']
 
     # Print some metrics
     print("single_sided_link_count:", single_sided_link_count)
@@ -264,6 +232,6 @@ def parse_glytoucan_results(json_file, num_datafile_lines, use_reaction_quantiti
     print("total_link_count:", total_link_count)
     print("single_sided_link_count + double_sided_link_count:", single_sided_link_count + double_sided_link_count)
 
-    print("len(reactions_bag):", len(reactions_bag))
+    print("len(reactions_collection):", len(reactions_collection))
 
-    return reactions_bag
+    return reactions_collection
