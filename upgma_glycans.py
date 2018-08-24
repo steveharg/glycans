@@ -4,24 +4,44 @@ import numpy as np
 from Bio.Phylo.TreeConstruction import DistanceMatrix, DistanceTreeConstructor, DistanceCalculator
 from Bio import Phylo
 import json
+import configparser
+
+config = configparser.ConfigParser(allow_no_value=True)
+config.read('config.ini')
 
 if __name__ == "__main__":
 
-    data_dir = "data_top10_motifs"
-    # data_dir = "mini_data_top10_motifs"
+    include_zero_motif_glycans = config['DEFAULT'].getboolean('IncludeZeroMotifGlycans')
+    use_reaction_quantities = True if config['DEFAULT']['ReactionCountMethod'] == 'List' else False
+    heatmaps_pickle_file = config['DEFAULT']['HeatmapsPickleFile']
+    col_names_pickle_file = config['DEFAULT']['ColNamesPickleFile']
+    motif_ids_and_labels_json_file = config['DEFAULT']['MotifIdsAndLabelsJsonFile']
+    glycans_json_file = config['DEFAULT']['GlycansJsonFile']
+    tree_with_motif_names_pickle_file = config['DEFAULT']['TreeWithMotifNamesPickleFile']
 
-    print("opening heatmaps.p...")
-    heatmaps = pickle.load(open(data_dir + "/heatmaps.p", "rb"))
+    if include_zero_motif_glycans:
+        if use_reaction_quantities:
+            data_dir = config['DEFAULT']['QuantifiedReactionsZeroMotifsDataDir']
+        else:
+            data_dir = config['DEFAULT']['SetOfReactionsZeroMotifsDataDir']
+    else:
+        if use_reaction_quantities:
+            data_dir = config['DEFAULT']['QuantifiedReactionsDataDir']
+        else:
+            data_dir = config['DEFAULT']['SetOfReactionsDataDir']
+
+    print("opening " + heatmaps_pickle_file + "...")
+    heatmaps = pickle.load(open(data_dir + "/" + heatmaps_pickle_file, "rb"))
     print("...done")
-    print("opening column_names.p...")
-    column_names = pickle.load(open(data_dir + "/column_names.p", "rb"))
+    print("opening " + col_names_pickle_file + "...")
+    column_names = pickle.load(open(data_dir + "/" + col_names_pickle_file, "rb"))
     print("...done")
 
     # create a glycan id to motif ids dictionary
     glycan_motifs = {}
 
-    print("opening motif_ids_and_labels.json...")
-    with open('motif_ids_and_labels.json') as f:
+    print("opening " + motif_ids_and_labels_json_file + "...")
+    with open(motif_ids_and_labels_json_file) as f:
         motif_ids_and_labels = json.load(f)
     print("...done")
 
@@ -32,8 +52,7 @@ if __name__ == "__main__":
         motif_label = result["MotifLabel"]["value"]
         motif_ids_and_labels_dict[motif_primary_id] = motif_label
 
-    json_file = 'glycans.json'
-    with open(json_file) as f:
+    with open(glycans_json_file) as f:
         results = json.load(f)
 
     for result in results["results"]["bindings"]:
@@ -70,13 +89,8 @@ if __name__ == "__main__":
                                                   orient='index', columns=glycan_distance_cols)
 
     reaction_distance_df_vals = reaction_distance_df.get_values()
-
     reaction_distance_lower_tri = np.multiply(reaction_distance_df_vals, np.tril(np.ones(reaction_distance_df_vals.shape)))
-
     reaction_distance_lower_tri = (100 - reaction_distance_lower_tri)/100
-
-    print(reaction_distance_lower_tri[:][0])
-    print(reaction_distance_lower_tri[:][1])
 
     i = 1
     reaction_distance_lower_tri_list = []
@@ -84,21 +98,12 @@ if __name__ == "__main__":
         reaction_distance_lower_tri_list.append(row[0:i].tolist())
         i += 1
 
-    # reaction_distance_lower_tri_list = reaction_distance_lower_tri.tolist()
-
-    print(reaction_distance_lower_tri_list[0])
-    print(reaction_distance_lower_tri_list[1])
-
-    # print(reaction_distance_lower_tri.tolist())
-
     dmm = DistanceMatrix(names=glycan_distance_cols, matrix=reaction_distance_lower_tri_list)
 
     calculator = DistanceCalculator('identity')
     constructor = DistanceTreeConstructor()
     tree = constructor.upgma(dmm)
 
-    pickle.dump(tree, open(data_dir + "/tree_with_motif_names.p", "wb"))
+    pickle.dump(tree, open(data_dir + "/" + tree_with_motif_names_pickle_file, "wb"))
 
     Phylo.draw(tree)
-
-    print("dfs")
