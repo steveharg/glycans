@@ -29,8 +29,9 @@
 }
 \usepackage{rotating}
 \begin{document}
+\pagenumbering{gobble}
 {\fontfamily{phv}\selectfont}
-\title{\Huge Individual Report: TREEminator\\ \LARGE  A Phylogenetic Tree Creation and Interactive Viewing Tool\vspace{12cm}}
+\title{\Huge Exploring the Landscape of Glycan Structure\vspace{1cm}\\ \large  MSc Bioinformatics and Theoretical Systems Biology Project\vspace{11cm}}
 % * <steven.hargreaves17@ic.ac.uk> 2018-03-20T16:27:53.008Z:
 % oh come on now...!
 % ^.
@@ -45,41 +46,36 @@
 %\end{figure}
 %\vspace{1cm}
 
-\author{\Large Steven Hargreaves\\\vspace{0.5cm}
-		\normalsize Imperial College London \\
-       	\normalsize Department of Life Sciences}
+\author{\Large Steven Hargreaves\\
+\normalsize CID 01453122 \\\vspace{0.5cm}
+\normalsize Imperial College London \\
+\normalsize Department of Life Sciences}
 
 
 \maketitle
 %\setcitestyle{numbers}
 \newpage
 \begin{abstract}
+\pagenumbering{arabic}
 \doublespacing
-The study of viral infections entails, amongst other things, a detailed consideration of the repertoire of protein domains present in virus species, as well as how the number of particular domains varies within a virus family across evolutionary time. In this report, we describe both a method of generating a phylogenetic tree for any chosen virus family, including domain copy number variation information, and also a web application which presents a comprehensive, interactive visualisation of the tree and its domains.
+\noindent
+RE-WRITE\\
+Glycans are tree-like polysaccharides that are frequently found attached to specific sites on eukaryotic cell surface and cellular matrix proteins, with diverse functions including protein folding, cell-cell signaling and immune response. Large databases describing observed glycan structures are now available, which provide an excellent resource for describing and exploring the space of naturally occurring glycans. In this project you will apply tree kernel methods to calculate distances between these structures and thereby develop clustering and data reduction methods to capture the most important differences between subsets of glycans, such as those observed in cancerous vs non-cancerous tissue.
 \end{abstract}
 
 \newpage
 \begin{center}
 \section*{Acknowledgements}
 \doublespacing
-Many thanks to John Pinney and Anderson Brito for their supervision and guidance during this project, and to my co-workers Claire Dunican, Heather Jackson, and Sabina Nowakowska. Thanks also to Christian Zmasek for help with the Archaeopteryx Javascript code, and Suhail Islam for technical assistance.
+Many thanks to John Pinney for his supervision and guidance during this project, and Suhail Islam for technical assistance.
 \end{center}
 \newpage
 \tableofcontents
 \newpage
 \section*{Abbreviations}
 \doublespacing
-\textit{CNV:} Copy Number Variation\\
-\textit{CSS:} Cascading Style Sheets\\
-\textit{dsDNA:} Double-Stranded Deoxyribonucleic Acid\\
-\textit{HGT:} Horizontal Gene Transfer\\
-\textit{HTTP:} Hypertext Transfer Protocol\\
-\textit{JS:} JavaScript\\
-\textit{MVC:} Model View Controller\\
-\textit{PIN:} Protein Interaction Network\\
-\textit{SVG:} Scalable Vector Graphics\\
-\textit{URL:} Uniform Resource Locator\\
-\textit{XML:} Extensible Markup Language
+\textit{ABC:} A Big Charlie\\
+\textit{DEF:} Dazzling Ear Fountain\\
 \addcontentsline{toc}{section}{Abbreviations} %adds it to the table of contents
 
 \newpage
@@ -87,18 +83,13 @@ Many thanks to John Pinney and Anderson Brito for their supervision and guidance
 \addcontentsline{toc}{section}{Glossary}
 \label{sec:glossary}
 \doublespacing
-\noindent{\textit{Clade:} A group of all organisms sharing one common ancestor.}\\\\
-\textit{Copy numbers:} The number of times identical or near identical genomic regions are found in a genome.\\\\
-\textit{Domain gain:} The introduction of a Pfam domain into a genome. This also includes increases in domain copy number.\\\\
-\textit{Domain loss:} When a Pfam domain is no longer present in a genome, or when the copy number decreases.\\\\
-\textit{Pfam domains:} Functional autonomous genomic regions stored within the Pfam database.\\\\
-\textit{Phylogenetic tree:} A graphical representation of the evolutionary relationships between different organisms.\\\\
-\textit{Protopteryx.js:} Software developed from Archeopteryx.js which visualizes phylogenetic trees alongside large amounts of Pfam domain copy number data.\\\\
-\textit{TREEminator:} A multi-faceted tool consisting of a pipeline and user interface which generates and presents phylogenetic trees, respectively.\\
+\noindent{\textit{Clade:} Blah.}\\\\
+\textit{Phylogenetic tree:} Blah blah.\\\\
+\textit{Archeopteryx.js:} ...phylogenetic trees .\\\\
 
 \newpage
 \section{Introduction}
-Key to gaining insights into the mechanisms of viral infections is the study of virus-host protein interactions -- in particular, the competition between pathogen and cellular proteins for binding partners. Proteins able to bind to multiple partners are known as ``hub proteins'', and may be subdivided into two categories -- ``party hubs'', with multiple interfaces, evolve slowly, whereas ``date hubs'' have few interfaces and evolve more rapidly. The binding affinities at protein interfaces can be changed by mutations, and virus-host protein interaction networks (PINs) may evolve via gene duplication (paralogy), conservation (orthology), horizontal gene transfer (HGT), and molecular mimicry (convergence). The resulting repertoire of protein domains encoded by viruses enables them to cause extensive changes in cellular processes \citep{Brito2017}.
+Set in context of related research here \citep{Brito2017}.
 
 An important aspect of genome evolution is gene duplication and loss, otherwise known as copy number variation (CNV). CNV has been linked to a number of diseases \citep{lupski2007genomic}, and to drug resistance \citep{nair2008adaptive}, and has also been shown to be under selection in \textit{Drosophila} \citep{emerson2008natural}.
 
