@@ -1,0 +1,468 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{titletoc}
+\usepackage{setspace}   %Allows double spacing with the \doublespacing command
+\usepackage{authblk}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{textcomp}
+
+\usepackage{caption}
+%\geometry{legalpaper, margin=1.2in}
+\usepackage[usenames, dvipsnames]{color}
+ 
+%Import the natbib package and sets a bibliography  and citation styles
+\usepackage{natbib}
+%Import siunitx packages so that tables can be centered
+\usepackage{siunitx} 
+\usepackage{multirow}
+\sisetup{
+  round-mode          = places, % Rounds numbers
+  round-precision     = 2, % to 2 places
+}
+\usepackage{rotating}
+\begin{document}
+{\fontfamily{phv}\selectfont}
+\title{\Huge Individual Report: TREEminator\\ \LARGE  A Phylogenetic Tree Creation and Interactive Viewing Tool\vspace{12cm}}
+% * <steven.hargreaves17@ic.ac.uk> 2018-03-20T16:27:53.008Z:
+% oh come on now...!
+% ^.
+\date{}
+%\begin{figure}[!b]
+%\centering 
+%\includegraphics[width=0.5\textwidth]{images/2000px-Imperial_College_London_crest_svg.png}
+%\end{figure}
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.5\textwidth]{images/2000px-Imperial_College_London_crest_svg.png}
+%\end{figure}
+%\vspace{1cm}
+
+\author{\Large Steven Hargreaves\\\vspace{0.5cm}
+		\normalsize Imperial College London \\
+       	\normalsize Department of Life Sciences}
+
+
+\maketitle
+%\setcitestyle{numbers}
+\newpage
+\begin{abstract}
+\doublespacing
+The study of viral infections entails, amongst other things, a detailed consideration of the repertoire of protein domains present in virus species, as well as how the number of particular domains varies within a virus family across evolutionary time. In this report, we describe both a method of generating a phylogenetic tree for any chosen virus family, including domain copy number variation information, and also a web application which presents a comprehensive, interactive visualisation of the tree and its domains.
+\end{abstract}
+
+\newpage
+\begin{center}
+\section*{Acknowledgements}
+\doublespacing
+Many thanks to John Pinney and Anderson Brito for their supervision and guidance during this project, and to my co-workers Claire Dunican, Heather Jackson, and Sabina Nowakowska. Thanks also to Christian Zmasek for help with the Archaeopteryx Javascript code, and Suhail Islam for technical assistance.
+\end{center}
+\newpage
+\tableofcontents
+\newpage
+\section*{Abbreviations}
+\doublespacing
+\textit{CNV:} Copy Number Variation\\
+\textit{CSS:} Cascading Style Sheets\\
+\textit{dsDNA:} Double-Stranded Deoxyribonucleic Acid\\
+\textit{HGT:} Horizontal Gene Transfer\\
+\textit{HTTP:} Hypertext Transfer Protocol\\
+\textit{JS:} JavaScript\\
+\textit{MVC:} Model View Controller\\
+\textit{PIN:} Protein Interaction Network\\
+\textit{SVG:} Scalable Vector Graphics\\
+\textit{URL:} Uniform Resource Locator\\
+\textit{XML:} Extensible Markup Language
+\addcontentsline{toc}{section}{Abbreviations} %adds it to the table of contents
+
+\newpage
+\section*{Glossary}
+\addcontentsline{toc}{section}{Glossary}
+\label{sec:glossary}
+\doublespacing
+\noindent{\textit{Clade:} A group of all organisms sharing one common ancestor.}\\\\
+\textit{Copy numbers:} The number of times identical or near identical genomic regions are found in a genome.\\\\
+\textit{Domain gain:} The introduction of a Pfam domain into a genome. This also includes increases in domain copy number.\\\\
+\textit{Domain loss:} When a Pfam domain is no longer present in a genome, or when the copy number decreases.\\\\
+\textit{Pfam domains:} Functional autonomous genomic regions stored within the Pfam database.\\\\
+\textit{Phylogenetic tree:} A graphical representation of the evolutionary relationships between different organisms.\\\\
+\textit{Protopteryx.js:} Software developed from Archeopteryx.js which visualizes phylogenetic trees alongside large amounts of Pfam domain copy number data.\\\\
+\textit{TREEminator:} A multi-faceted tool consisting of a pipeline and user interface which generates and presents phylogenetic trees, respectively.\\
+
+\newpage
+\section{Introduction}
+Key to gaining insights into the mechanisms of viral infections is the study of virus-host protein interactions -- in particular, the competition between pathogen and cellular proteins for binding partners. Proteins able to bind to multiple partners are known as ``hub proteins'', and may be subdivided into two categories -- ``party hubs'', with multiple interfaces, evolve slowly, whereas ``date hubs'' have few interfaces and evolve more rapidly. The binding affinities at protein interfaces can be changed by mutations, and virus-host protein interaction networks (PINs) may evolve via gene duplication (paralogy), conservation (orthology), horizontal gene transfer (HGT), and molecular mimicry (convergence). The resulting repertoire of protein domains encoded by viruses enables them to cause extensive changes in cellular processes \citep{Brito2017}.
+
+An important aspect of genome evolution is gene duplication and loss, otherwise known as copy number variation (CNV). CNV has been linked to a number of diseases \citep{lupski2007genomic}, and to drug resistance \citep{nair2008adaptive}, and has also been shown to be under selection in \textit{Drosophila} \citep{emerson2008natural}.
+
+In order to understand functional evolution, we must establish a deeper understanding of CNV. Mapping duplications and losses to branches of a phylogenetic tree allows us to identify lineage specific gains and loss, and to gain insight into ongoing adaptation to particular environments \citep{ames2010gene,Ames2012}.
+
+Whilst several software tools and libraries exist for the visualisation of phylogenetic trees, to the author's knowledge none are capable of visualising domain gains, losses, and names on a per-node basis. The aim of this project, then, is to produce a software tool which enables interested scientists to explore the domain repertoires of entire virus families. The tool consists of two major components -- a pipeline able to generate the phylogenetic tree for a given virus family, and a web application which facilitates new ways of visualising domain numbers per species, as well as gains and losses throughout the evolution of the the family.\\
+
+\subsection{Objectives}
+\label{sec:objectives}
+Formally, we state here the objectives of the project:
+\begin{enumerate}
+\item For a given double-stranded DNA (dsDNA) virus family, identify the Pfam domains that are present in each fully-sequenced genome.
+\item Construct a reliable phylogeny based on the domains shared between all members of the family.
+\item Infer the gain/duplication/loss events for each domain on the phylogeny.
+\item Produce a website to allow a user to explore and visualise these results in an effective way.
+\end{enumerate}
+
+This project was carried out by four co-workers, all MSc students at Imperial College London -- Claire Dunican (CD), Heather Jackson (HJ), Sabina Nowakowska (SN), and the current author (SH). Objectives one, two and part of three were undertaken by HJ and SN, and the reader is referred to the group report and those authors' individual reports for further details. Objectives four, and part of three, were undertaken by CD and SH. The rest of this report describes the work undertaken by SH.
+
+\section{Functional Requirements}
+\label{sec:reqs}
+Our website must satisfy certain criteria, including for example the ability to visualise the phylogenetic tree produced in the final step of the pipeline software, which takes the form of an xml file conforming to the phyloXML schema\footnote{\url{http://www.phyloxml.org/1.20/phyloxml.xsd}}. In order to guide the development of the website, we list here our functional requirements.
+
+\singlespace
+\begin{itemize}
+\item Parse and manipulate phyloXML data
+\item Visualise a phylogenetic tree in a web browser:
+\begin{itemize}
+\item Linearly
+\item Radially
+\item As phylogram
+\item As cladogram
+\item Colour nodes by domain
+\item Shape nodes by domain
+\item Utilise a colour blind friendly palette
+\item Zoom in and out
+\item Taxonomy Information
+\item Branch lengths
+\item Domain gains, losses and duplications
+\item Manipulate the tree visualisation:
+\begin{itemize}
+\item Collapse / expand nodes
+\item Re-root
+\item Export data
+\item Export as image
+\end{itemize}
+\item Create and visualise a subtree by subfamily, genus and/or species
+\item Provide links from protein domains to Pfam\footnote{\url{https://pfam.xfam.org}}
+\end{itemize}
+\end{itemize}
+\doublespace
+
+Much of this functionality is developed from scratch, however we also leverage existing software for the webserver and the phylogenetic tree visualisation. Given that an extensive Python library (Biopython\footnote{\url{http://biopython.org}}) exists for manipulating phyloXML files, we choose the Python-based, mature, and widely-used Django\footnote{\url{https://www.djangoproject.com}} framework within which to build our web application.
+
+Selecting web-enabled phylogenetic tree visualisation software is less straightforward, and consequently we describe in the following section a slightly more formal approach to evaluating the choices available.
+
+\section{Evaluating Tree Visualisation Software}
+
+The following open-source, web-enabled, phylogenetic tree visualisation software libraries form the candidates for further evaluation:
+
+\singlespace
+\begin{enumerate}
+\item {\bf dndTree.js} \small \url{http://bl.ocks.org/robschmuecker/7880033} \normalsize
+\item {\bf phylotree.js} \small \url{http://phylotree.hyphy.org/#} \normalsize
+\item {\bf Phylogenetic Tree of Life} \small \url{https://www.jasondavies.com/tree-of-life/} \normalsize
+\item {\bf d3.phylogram.js} \small \url{http://bl.ocks.org/kueda/1036776} \normalsize
+\item {\bf PhyD3} \small \url{https://phyd3.bits.vib.be} \normalsize
+\item {\bf IcyTree} \small \url{https://icytree.org} \normalsize
+\item {\bf EvolView} \small \url{http://www.evolgenius.info/evolview/#mytrees/} \normalsize
+\item {\bf Archaeopteryx.js} \small \url{https://github.com/cmzmasek/archaeopteryx-js} \normalsize
+\end{enumerate}
+\doublespace
+
+The results of our evaluation of these tree viewers against our previously stated requirements are shown in Table \ref{tab:tree_vis_eval}, and we find that choice 8 (Archaeopteryx) scores most highly. There are nevertheless still certain aspects of functionality missing, and consequently we extended the functionality of this open source software in order to fulfil overcome these shortcomings, creating in the process a new version, which we call Protopteryx.js.\\
+
+\begin{table}[h]
+\centering
+%\resizebox{\columnwidth}{!}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|} \hline
+\multirow{2}{*} & \multicolumn{8}{c|}{\bf Candidate} \\  \cline{2-9}
+{\bf Functionality} & {\bf 1} & {\bf 2} & {\bf 3} & {\bf 4} & {\bf 5} & {\bf 6} & {\bf 7} & {\bf 8} 	\\ \hline
+Handles phyloXML & n & n & n & n & y & n & y & y \\ \hline
+Linear & n & y & n & y & y & y & y & y \\ \hline
+Radial & n & y & y & y & n & n & y & n \\ \hline
+Phylogram & n & y & y & y & y & y & y & y \\ \hline
+Cladogram & n & n & n & n & y & y & y & y \\ \hline
+Colour nodes by domain & n & n & n & n & y & y & y & y \\ \hline
+Shape nodes by domain & n & n & n & n & y & n & n & y \\ \hline
+Colour blind friendly & y & y & y & n & n & n & n & n \\ \hline
+Zoom & y & y & n & y & y & y & y & y \\ \hline
+Taxonomy info & n & n & n & y & y & y & y & y \\ \hline
+Branch lengths & n & y & n & y & y & y & y & y \\ \hline
+Domain gains, losses and duplications & n & n & n & n & n & n & n & n \\ \hline
+Collapse / expand nodes & y & y & n & y & y & y & y & y \\ \hline
+Re-root & n & y & n & y & y & y & y & y \\ \hline
+Export data & n & n & n & n & y & y & y & y \\ \hline
+Export as image & n & n & n & n & y & y & y & y \\ \hline
+Code clarity & n & n & n & n & n & y & n & y \\ \hline
+{\bf Score} & {\bf 3} & {\bf 8} & {\bf 3} & {\bf 8} & {\bf 13} & {\bf 12} & {\bf 13} & {\bf 14} \\ \hline
+\end{tabular}
+\caption{Phylogenetic tree visualisation software evaluation results.}
+\label{tab:tree_vis_eval}
+\end{table}
+
+\section{The Web Application}
+\label{sec:webserver}
+Web applications are often considered as comprising of two major and distinct components -- the back-end, comprising code and databases which reside on a server, and the front-end, which, although originating on the server, is sent to client web browsers in the form of Hypertext Transfer Protocol (HTTP) responses. These are sent in response to HTTP requests from client web browsers. The HTTP responses themselves typically contain a mixture of different forms of web content -- Hypertext Markup Language (HTML) files, Cascading Style Sheets (CSS), and JavaScript (JS). We may consider then the front-end (i.e. content interpreted by the web browser, which the user sees and interacts with) as being the HTML files and their associated CSS and JS which are accessible via Uniform Resource Locators (URLs) over the web. These HTML files though are not necessarily static -- that is, some aspects of their content may change depending upon processing undertaken either on the server or within the client. Often, the nature of the processing carried out on the server is in response to some parameters contained within the HTTP request sent from the client, for example, as the result of choices made by the user when presented with drop-down menus or check-boxes.
+
+The back-end consists of the web server itself, which is configured to `listen' for certain HTTP requests, and which undertakes whatever processing necessary in order to send back an HTTP response. This processing may, for example, involve querying and/or writing to a database or files, or performing algorithmic computations. A response is frequently formed by taking static template HTML files, and inserting snippets of content generated by code residing on server. In the following sections we describe the back and front-ends of our web server\footnote{\url{https://github.com/ImperialCollegeLondon/phylo}}, and the links between them, before describing our particular web application in terms of a `walk-through', with descriptions of the front and back-end processing which takes place in order to produce each web page. Figure \ref{fig:webserver} shows the overall architecture of the web server.\\
+
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.6]{images/webserver.pdf} 
+\caption{Web server overview}
+\label{fig:webserver}
+\end{figure}
+
+\subsection{Back-End}
+\label{sec:back_end}
+A comprehensive description of the back-end of the web application, written by the current author, is provided in the group report. We provide only a shortened summary here, along with some further details regarding how to startup the application and our implementation of `custom tags'. The web server is an instance of a python Django application, configured to run our web application, named `phylo'.
+
+\subsubsection{Application Startup}
+\label{sec:startup}
+To start the application, we navigate to the root directory \texttt{msc\_site} using a command-line terminal, and, ensuring we are using the Python 3 environment, issue the command:
+
+\begin{verbatim}
+python manage.py runserver
+\end{verbatim}
+
+\noindent The landing page of the web application is then accessible via the following URL:
+
+\begin{verbatim}
+http://msc.bc.ic.ac.uk:20183/phylo/index
+\end{verbatim}
+
+\subsubsection{Django Basics}
+\label{sec:django_basics}
+The Django framework closely follows the Model View Controller (MVC) \citep{krasner1988description} design pattern commonly employed in web applications. In subsequent sections we briefly describe the `model' and `view' components of our application. Full Django documentation is available at the url given as a footnote\footnote{\url{https://docs.djangoproject.com/en/2.0/}} at the bottom of this page.
+
+\subsubsection{Caching Data on Application Startup}
+\label{sec:startup}
+The data used in our web application is first produced by the tree-generating pipeline code (see the group report), and takes the form of xml files. Specifically, phyloXML files, the schema for which can be found at the url given in this footnote\footnote{\url{http://www.phyloxml.org/1.10/phyloxml.xsd}}. Additionally, the modified javascript library used for visualising and manipulating phylogenetic trees (see Section \ref{sec:front_end}) also takes as input phyloXML files. Consequently, rather than employing a traditional relational database, we adopt a strategy of reading phyloXML files on application startup and caching their contents in memory.
+
+\subsubsection{The Model}
+\label{sec:model}
+Our Django model is defined by two classes in the file \texttt{msc\_site/phylo/models.py}. Both are simple classes with a number of attributes, and corresponding `getter' and `setter' methods, which help us to deliver structured data to the various views defined in Section \ref{sec:views} below. The two classes are:
+
+\begin{enumerate}
+\item {\bf ProteinDomain} has attributes \texttt{name} and \texttt{pfam\_accession}, and is used within the `tree' view (Section \ref{sec:views}) to generate lists of protein domain names and corresponding hyperlinks to the Pfam\footnote{\url{https://pfam.xfam.org}} database.
+\item {\bf NodeVisualizationJsCode} The javascript library we extend and use to visualise phylogenetic trees (see Section \ref{sec:front_end}) has existing functionality which allows us to change the colour and/or shape of the nodes in the tree according to some numerical quantity (in our case, the copy number associated with a specific protein domain). In order to activate this functionality, the html page displaying the tree must contain a set of javascript objects named \texttt{nodeVisualizations}, each of which must have a distinct key, and a specific set of enumerated values relevant to the visualisation, e.g. `description', `shapes', `colors' etc. This python class has attributes with the same names as the required enumeration values in the javascript visualisation library, and is used to pass the required data to the `tree' view such that we may dynamically create the necessary set of javascript objects required for colouring and/or altering the shape of nodes in the tree according to protein domain copy number.
+\end{enumerate}
+
+These classes may be employed elsewhere in the code (typically in the `views', see below) by simply importing them from \texttt{models.py}.
+
+\subsubsection{The Views}
+\label{sec:views}
+In this section we describe the views of the MVC. Each view is implemented as a function within the \texttt{msc\_site/phylo/views.py} file, and there is a one-to-one mapping between these methods and the template html files described in Section \ref{sec:front_end}. Each template html page is a mixture of static html (as well as other common web components such as javascript or css style directives) and snippets of python code which are executed when the page is requested. The final line of each view function is a return statement, which specifies which template html file is to be used as the http response, and the values of any variables which need to be supplied to the template. Below we list and describe the functionality of each of our views (the reader is advised to cross-reference with the corresponding descriptions of the template html files in Section \ref{sec:front_end}):
+
+\begin{itemize}
+\item {\bf index} serves our application's homepage, and features a drop-down menu from which the user may select a virus family before proceeding to the next page (\texttt{choose\_root.html}). As such it requires a python list of strings, each denoting a virus family name. This list is generated by retrieving the \texttt{phylo\_trees} dictionary from the cache, and iterating through its keys.
+\item {\bf about} serves mostly static help and contextual information about the web application, but does also provide a clickable list of virus family names which forward the user to \texttt{choose\_root.html}. This list is generated in exactly the same way as for the `index' view.
+\item {\bf choose\_root} provides the user with two alternative methods of proceeding to the phylogenetic tree visualisation. One is a simple hyperlink which includes a parameter indicating the virus family name previously chosen by the user. This value is obtained from the http request object, and will have been supplied by whichever page the user visited prior to arriving here. The second is via a set of checkboxes and a submit button, where each checkbox represents a specific subfamily, genus, or species within our virus family tree. The purpose of this latter method is to facilitate a view of a subtree, rather than the full phylogenetic tree. The subtree will be the tree whose root node is the most recent common ancestor of the subfamilies/genera/species selected by the user. 
+
+Generation of this list of checkboxes, and the ability to align them on the web page according to taxonomic rank, requires each node in the phylogenetic tree to be assigned to a taxonomic rank. For the tree produced by the pipeline, all terminal nodes have an assigned species, however only a subset of internal nodes have any taxonomic rank. Consequently, we use an algorithm to recursively traverse the tree from the root clade (or node) downwards, applying a taxonomic rank of unknown + subfamily/genus/species to each node found until we encounter a node of known taxonomic rank. Furthermore, a unique ID is applied to these `unknown' classifications, in order that different `unknown' rank clades may be distinguished from one another. This algorithm is implemented by the function \texttt{traverse\_nodes\_by\_taxonomy} within \texttt{views.py}.
+
+%*** DETAILS OF OR REF TO DETAILS OF NODE\_DICT GENERATION.
+Additionally, as with all of the views in our web application, this view also provides a clickable list of virus family names which forward the user back to \texttt{choose\_root.html}, generated in the same way as for the `index' view, albeit we exclude the currently selected virus family. Consequently this view supplies a dictionary containing three items to the template html page -- \texttt{virus\_family}, the virus family name as a string, \texttt{node\_dict}, a dictionary containing nested lists and dictionaries expressing the taxonomic hierarchy of family, subfamily, genus and species names, and \texttt{virus\_family\_list}, a python list of strings, each denoting a virus family name.
+
+\item {\bf tree} visualises the tree described by a phyloXML file using a D3\footnote{\url{https://d3js.org}}-based javascript library (described in Section \ref{sec:front_end}). The javascript library takes as input an xml file with the specific name and location \path{/msc_site/phylo/static/phylo/my_new_tree.xml}. This file is newly generated each time this page is requested, and depending on whether the user clicked on the link to view the full phylogeny, or checked a selection of subfamily/genus/species check-boxes, either describes the full tree, or the subtree formed with the most recent common ancestor of the selected items as root. Additionally, the template supported by this view displays two different protein domain lists -- \texttt{p\_doms\_used\_for\_virus\_family}, the protein domains originally used to create this virus family tree (see the group report), \texttt{protein\_domain\_list}, the protein domains present in this virus family (excluding those used to create the tree), as well as \texttt{virus\_family} (the virus family name), a virus family names list \texttt{virus\_family\_list} (excluding currently selected), and \texttt{node\_vis\_list} (see also Section \ref{sec:model}).
+\end{itemize}
+
+\subsubsection{Template Tags}
+\label{sec:template_tags}
+As stated in Section \ref{sec:views}, Django allows us to use python code snippets (known as tags and filters) in template html files, such as variable expressions, for-loops, or if-statements. The set of built-in tags and filters is limited though -- for example, there is no filter equivalent to the python function \texttt{isinstance}. Such a filter is necessary for the correct interpretation of the dictionary and list combination used in the \texttt{choose\_root.html} template. Django does however allow us to create custom tags and filters, and we describe here our implementation of an \texttt{isinstance} filter.
+
+In order to create a custom \texttt{isinstance} filter, we create the directory \path{/msc_site/phylo/templatetags}, within which two files are required. The first, \path{__init__.py} is simply an empty file which instructs python to treat this directory as one containing packages. The second, \path{phylo_extras.py}, defines our filter in a function \texttt{isinst}, and registers this in the template library. We are now able to use this filter in any template html file by including the line \texttt{\{\% load phylo\_extras \%\}} anywhere before the first use of the filter. An example use of the filter in \texttt{choose\_root.html} is shown in Figure \ref{fig:custom_filter_code} below:
+
+\singlespace
+\begin{figure}[H]
+\begin{verbatim}
+{% load phylo_extras %}
+{% for subfamily in subfamily_val %}
+    {% if subfamily|isinst:"dict" %}
+        <ul>
+        ...
+        </ul>
+    {% endif %}
+{% endfor %}
+\end{verbatim}
+\caption{Example use of a custom Django filter in a template html file}
+\label{fig:custom_filter_code}
+\end{figure}
+\doublespace
+
+%and choose_root.html:{% load phylo_extras %}
+
+\subsection{Front-End}
+\label{sec:front_end}
+In this section we describe the web pages seen by the user in a web browser, how to navigate through them, and their functionality. Referring back to Figure \ref{fig:webserver}, we see that a user can access four different webpages -- \texttt{index.html}, \texttt{about.html}, \texttt{choose\_root.html}, and \texttt{tree.html}. The possible navigation paths are illustrated below in Figure \ref{fig:navigation}. In each of the following subsections, the reader is referred back to Section \ref{sec:views} for details of how the back-end of the web server generates the necessary data required for the web page in question.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.7]{images/navigation.pdf}
+\caption{Web site navigation.}
+\label{fig:navigation}
+\end{figure}
+
+\subsubsection{The Langing Page (index.html)}
+The main landing page of our application, \texttt{index.html}, shown in Figure \ref{fig:index}, is accessed via the following URL:
+
+\begin{verbatim}
+http://msc.bc.ic.ac.uk:20183/phylo/tree
+\end{verbatim}
+
+The page displays some introductory information, and contains a drop-down menu of virus family names. Selecting one of these and clicking on the `Go' button takes us to the next page, \texttt{choose\_root.html}. As with all the web pages, there is a navigation bar along the top, with links to the \texttt{about.html} page, and a searchable list of the different virus family names available (see Figure \ref{sec:vf_name_search}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.36]{images/index.png}
+\caption{Home page.}
+\label{fig:index}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.36]{images/vf_search_bar.png}
+\caption{Virus family search box.}
+\label{sec:vf_name_search}
+\end{figure}
+
+\subsubsection{Selecting a Tree (choose\_root.html)}
+This page, shown in Figure \ref{fig:choose_root} for \textit{Poxviridae}, provides the user with two alternative methods of proceeding to the phylogenetic tree visualisation page. The first is a hyperlink, displayed on the left as a circular image of a phylogenetic tree, which results in the full tree being displayed on the next web page. The second is a series of checkboxes, rendered in such a way as to reflect the taxonomic rank of the nodes in the tree. Section \ref{sec:views} details the algorithm used to determine a rank label for nodes where no rank is currently known. The tree subsequently displayed on the next web page will have as its root the most recent common ancestor of the selected nodes.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.3]{images/choose_root.png}
+\caption{Selecting a full virus family tree or a sub-tree.}
+\label{fig:choose_root}
+\end{figure}
+
+\subsubsection{Interactive Tree Visualisation (tree.html)}
+The key page of our web application, \texttt{tree.html}, provides us with an interactive visualisation of the phylogenetic tree produced by the pipeline (see the group report), including domain names and copy numbers per species, and total domain gain and loss events for every node in the tree. Domain names and copy numbers are extracted from the phyloXML file generated by the pipeline. Figure \ref{fig:full_pox} shows the full phylogentic tree for \textit{Poxviridae}. The page also displays scrollable lists of protein domain names (1) and domains originally used to create the phylogeny (2), both of which open the corresponding page in Pfam in a new tab when clicked. The rectangles (3) represent domains per species, colour-coded according to copy number, and display the full domain name in a popup when clicked on (see Figure \ref{fig:domain_info}). Using a mouse the image may be moved around the page and zoomed in or out of.
+
+\begin{sidewaysfigure}
+\centering
+\includegraphics[scale=0.85]{images/full_pox_tree_annotated.pdf}
+\caption{The full \textit{Poxviridae} phylogenetic tree, with scrollable list of protein domain names (1), scrollable list of domains originally used to create the phylogeny(2), and clickable rectangles representing domains per species (3), colour-coded according to copy number.}
+\label{fig:full_pox}
+\end{sidewaysfigure}
+\clearpage
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{images/domain_info.pdf}
+\caption{Protein domain information popup.}
+\label{fig:domain_info}
+\end{figure}
+
+In Figure \ref{fig:subtree}, we see a subtree of \textit{Poxviridae}, with some notable features. Here, each node is coloured according to the number copies of one particular domain present, and shaped according to the copy number of another domain. The two domains are chosen using a drop-down menu, as shown in Figure \ref{fig:domain_vis}. Section \ref{sec:model} provides details on the use of \texttt{nodeVizualizations} to achieve this effect.\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{images/subtree.pdf}
+\caption{A sub-tree of \textit{Poxviridae}.}
+\label{fig:subtree}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{images/subtree_vis_choice.pdf}
+\caption{Sub-tree node visualisation choices.}
+\label{fig:domain_vis}
+\end{figure}
+
+Figure \ref{fig:gains_losses} shows the total amount of domain gains and losses against each node in a tree both as numbers and as proportionally-sized coloured rectangles. These numbers are calculated in Protopteryx.js, and  an example of the code used to determine the width of the coloured bar representing gains is shown in Appendix \ref{sec:gains_js_code}. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{images/gains_losses.pdf}
+\caption{Node-specific total domain gains and losses (purple for gains, green for losses).}
+\label{fig:gains_losses}
+\end{figure}
+
+\section{Future Work}
+The sheer volume of protein domain information attached to every node of the tree imposes a heavy memory burden on the client web browser, often resulting in sluggish behaviour when the user attempts to use the interactive features of the visualisation. Reducing this burden would improve the usability of the application -- one possible way to achieve this might be the use of Asynchronous JavaScript (AJAX), which allows data to be sent to and received from the web server in the background, without unduly affecting the behaviour of the web page. Currently the entire phyloXML file is loaded into the memory of the client browser, and re-factoring the code to use AJAX would constitute a reasonably significant development task.
+
+Additionally, certain components of the visualisation interface are prone to clashing with one another -- for example the copy number colour scale sometimes obscures the species-specific protein domain rectangles. Re-designing aspects of the interface according to user interface design guidelines \citep{shneiderman2016designing} would have both aesthetic and usability benefits.
+
+\section{Conclusions}
+In this project we set out to meet certain objectives, as listed in Section \ref{sec:objectives}. With the successful creation of both the phylogenetic tree generating pipeline, and the web-based interactive visualisation application, we have satisfied those objectives. The overarching focus is this work has been to develop, rather than to gain scientific insight from, the software. Nevertheless, preliminary trials of the web application with the two virus family trees generated so far (\textit{Baculoviridae} and \textit{Poxviridae}), suggest that useful at-a-glance insights may be gained regarding which clades of a virus family's tree are evolving either rapidly or slowly. We are optimistic that the application will prove to be of significant benefit to researchers wishing to enhance their understanding of the mechanisms of viral infection.
+
+\newpage
+\appendix
+\section{Example JavaScript Code}
+\label{sec:gains_js_code}
+JavaScript code for determining the width of a rectangle representing total domain gains for each node. The function \texttt{domian\_count} loops through all of the xml property tags associated with a node, parses their content, and returns a dictionary with domain names as keys, and their copy number as the values. The function \texttt{calc\_dom\_deltas} takes the domain count dictionaries of both a parent and a child node, and calculates the total gains and losses across all domains from the parent to the child. The in-line \texttt{function(n)} of the \texttt{nodeEnter} code is called by the underlying D3 library for every node in our data object (which has previously been created from a phyloXML file), and, using the two functions \texttt{domian\_count} and \texttt{calc\_dom\_deltas}, determines which numeric value to apply to the `width' attribute of a rectangle to be displayed alongside the node.
+\singlespace
+\footnotesize
+\begin{verbatim}
+function domain_count(anode) {
+  var domain_counts = {};
+  if (anode) {
+    if (anode.properties && anode.properties.length > 0) {
+      var propertiesLength = anode.properties.length;
+      for (var i = 0; i < propertiesLength; ++i) {
+        var property = anode.properties[i];
+        var prop_ref_components = property.ref.split(":")
+        var prop_ref_prefix = prop_ref_components[0]
+        var prop_id_ref = property.id_ref;
+        if (prop_ref_prefix == "idr" && property.value) {
+          domain_counts[prop_id_ref] = property.value;
+        }
+      }
+    }
+  }
+  return domain_counts;
+}
+\end{verbatim}
+\newpage
+\begin{verbatim}
+// calculates the total gains and losses of protein domains from
+// a parent to its child,
+// returned as a dictionary with keys 'losses' and 'gains'
+function calc_dom_deltas(parent_domain_counts, node_domain_counts) {
+  // check both dictionaries are of the same length
+  if (parent_domain_counts.length != node_domain_counts.length) {
+    alert("Unequal number of doamins between parent and child")
+  }
+
+  var dom_deltas = {losses: 0, gains: 0};
+  var dom_losses = 0;
+  var dom_gains = 0;
+  for (var key in parent_domain_counts) {
+    var parent_dom_count = parent_domain_counts[key];
+    var node_dom_count = node_domain_counts[key];
+    var dom_delta = node_dom_count - parent_dom_count;
+    if (dom_delta < 0) {
+      dom_deltas.losses += Math.abs(dom_delta);
+    } else if (dom_delta > 0) {
+      dom_deltas.gains += dom_delta;
+    }
+  }
+  return dom_deltas;
+}
+
+nodeEnter.append('rect') //gains
+  .attr('width', function(n) {
+    // count each domain both for this node's parent and this node.
+    // calculate the loss or gain for each domain from the parent to this node.
+    // only do this if the node has a parent
+    if (typeof n.parent != 'undefined' && n.parent.children.length == 2) {
+      var parent_domain_counts = domain_count(n.parent);
+      var node_domain_counts = domain_count(n);
+      var dom_deltas = calc_dom_deltas(parent_domain_counts, node_domain_counts);
+      return dom_deltas.gains /10;
+    } else {
+      return 0;
+    }
+  })
+\end{verbatim}
+\normalsize
+\doublespace
+
+\newpage
+\bibliographystyle{agsm}
+\bibliography{bibliography}
+\end{document}
