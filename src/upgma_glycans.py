@@ -98,12 +98,16 @@ if __name__ == "__main__":
         reaction_distance_lower_tri_list.append(row[0:i].tolist())
         i += 1
 
+    print('calculating DistanceMatrix...')
     dmm = DistanceMatrix(names=glycan_distance_cols, matrix=reaction_distance_lower_tri_list)
+    print('...done')
 
     calculator = DistanceCalculator('identity')
     constructor = DistanceTreeConstructor()
     tree = constructor.upgma(dmm)
 
+    print('pickling tree...')
     pickle.dump(tree, open(data_dir + "/" + tree_with_motif_names_pickle_file, "wb"))
+    print('...done')
 
-    Phylo.draw(tree)
+    # Phylo.draw(tree)
