@@ -36,7 +36,6 @@ if __name__ == "__main__":
 
     include_zero_motif_glycans = config['DEFAULT'].getboolean('IncludeZeroMotifGlycans')
     use_reaction_quantities = True if config['DEFAULT']['ReactionCountMethod'] == 'List' else False
-    use_reaction_quantities = False
     tree_with_motif_names_pickle_file = config['DEFAULT']['TreeWithMotifNamesPickleFile']
     tree_coloured_by_motif_names_phyloxml_file = config['DEFAULT']['TreeColouredByMotifNamesPhyloXmlFile']
 

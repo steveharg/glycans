@@ -58,8 +58,8 @@
 \begin{abstract}
 \pagenumbering{arabic}
 \doublespacing
-\noindent
-RE-WRITE\\
+\noindent RE-WRITE\\
+Include some numbers for Sternberg\\
 Glycans are tree-like polysaccharides that are frequently found attached to specific sites on eukaryotic cell surface and cellular matrix proteins, with diverse functions including protein folding, cell-cell signaling and immune response. Large databases describing observed glycan structures are now available, which provide an excellent resource for describing and exploring the space of naturally occurring glycans. In this project you will apply tree kernel methods to calculate distances between these structures and thereby develop clustering and data reduction methods to capture the most important differences between subsets of glycans, such as those observed in cancerous vs non-cancerous tissue.
 \end{abstract}
 
@@ -87,68 +87,143 @@ Many thanks to John Pinney for his supervision and guidance during this project,
 \textit{Phylogenetic tree:} Blah blah.\\\\
 \textit{Archeopteryx.js:} ...phylogenetic trees .\\\\
 
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Introduction}
-Set in context of related research here \citep{Brito2017}.
+\label{sec:intro}
 
-An important aspect of genome evolution is gene duplication and loss, otherwise known as copy number variation (CNV). CNV has been linked to a number of diseases \citep{lupski2007genomic}, and to drug resistance \citep{nair2008adaptive}, and has also been shown to be under selection in \textit{Drosophila} \citep{emerson2008natural}.
+** Max 12 figures and tables\\
 
-In order to understand functional evolution, we must establish a deeper understanding of CNV. Mapping duplications and losses to branches of a phylogenetic tree allows us to identify lineage specific gains and loss, and to gain insight into ongoing adaptation to particular environments \citep{ames2010gene,Ames2012}.
+- Set in context of related research here. Don't mention \textit{Drosophila}
 
-Whilst several software tools and libraries exist for the visualisation of phylogenetic trees, to the author's knowledge none are capable of visualising domain gains, losses, and names on a per-node basis. The aim of this project, then, is to produce a software tool which enables interested scientists to explore the domain repertoires of entire virus families. The tool consists of two major components -- a pipeline able to generate the phylogenetic tree for a given virus family, and a web application which facilitates new ways of visualising domain numbers per species, as well as gains and losses throughout the evolution of the the family.\\
+
+
+- Describe glycans:\\
+
+As a minimum, say -- Glycans are chains of sugars, forming tree structures, with links like (blah), which can be alpha/beta etc. They're found (blah), and are used in cell signalling (and blah).\\
+
+sugars attached to proteins and lipids \citep{10.1371/journal.pcbi.1002813}\\
+
+
+Monosaccharides are carbohydrates which cannot be further hydrolyzed to simpler compounds, such as glucose, fructose, and galactose. Glycans, synonymous with polysaccharides, are compounds of monosaccharides (usually more than ten) linked glycosidically \citep{mcnaught1997compendium}, which exist in free form or in covalent complexes with proteins or lipids \citep{doi:10.1093/bioinformatics/btm090}.\\
+
+(move this detail further down)\\
+When glycans are linked with proteins or lipids, they are characterised as being either N-linked, in which a monosaccharide is attached to a nitrogen atom of a protein \citep{taylor2011introduction}, or O-linked, in which a glycosidic oxygen links the glycoside to the aglycone or reducing end sugar (LOOK FOR AN ALTERNATIVE, CITABLE EXPLANATION OF THIS, E.G. IN ALBERTS OR THE BIG BIOCHEM BOOK).
+When dissolved in an aqueous environment, the monosaccharides of which glycans are comprised, primarily exist in the cyclic (or hemiacetal) form. In this form, the monosaccharides are further characterised by their anomeric configurations -- either the $\alpha$-anomer (axial OH-group at C-1) or the $\beta$-anomer (equatorial OH-group at C-1).
+
+
+(can be N-linked or O-linked)\\
+(from wikipedia, no citation - "Glycans can be found attached to proteins as in glycoproteins and proteoglycans. In general, they are found on the exterior surface of cells. O- and N-linked glycans are very common in eukaryotes but may also be found, although less commonly, in prokaryotes.")\\
+
+(more material on wikipedia if you need it)\\
+(lots of useful info here https://www.sciencedirect.com/science/article/pii/B9780444533494002466 including the chemistry of polysaccharides, which might be useful wrt using glycan reactions.)\\
+
+
+(Could also use "Sugars, Mono/poly-saccharide definitions in Alberts chapter 2, 'Biochemistry - The chemistry of Life' David Plummer chapter 3")\\
+
+- Fig 1: Some / a glycan(s)\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Where do we find them\\
+
+These highly variable and structurally diverse sugar chains confer distinctive characteristics to the cell surface \citep{10.1371/journal.pcbi.1002813} \\
+
+
+
+-- What do they do\\
+
+Recent research has revealed that these glycan profiles can represent important signatures of disease states and thus understanding glycan processing and structures in cells is an important systems biology goal \citep{10.1371/journal.pcbi.1002813}\\
+
+(glycans) draw attention as the third type of biological chain next to DNA and proteins, since they play key roles in many biological processes such as fertilization (Vo et al., 2003), embryogenesis (Schachter et al., 2002), immunity (Rudd et al., 2001) and diseases (Birkle et al., 2003; Brockhausen et al., 1998; Hakomori, 2002). It is well known that some pathogenic bacteria and viruses infect their hosts via glycan-receptor interactions (Cossart and Sansonetti, 2004; Sacks and Kamhawi, 2001). Since glycans may have many functions such as localization signaling, protein stabilization, degradation signaling, signal transduction and immune reaction via glycan-glycan (Bucior and Burger, 2004) and/or glycan-protein interaction (Kogelberg et al., 2003; Weis and Drickamer, 1996), it is important to understand glycan functions for understanding life. \citep{doi:10.1093/bioinformatics/bti666}. \\
+
+Although a growing body of evidence supports crucial roles for glycans in many cellular processes, including cell-cell communication, immune system, protein interaction or tumor progression (Fuster and Esko, 2005; Varki et al., 1999), \citep{doi:10.1093/bioinformatics/btm090}
+
+(Glycans) are known to play numerous biological roles related to energy storage and metabolism, protein and lipid modification, cellular structure, signal transduction, as well as mediators of cell-cell interactions and host-pathogen interactions \citep{SONG2012137}
+
+
+-- Why are we interested\\
+
+-- How have they been analysed up until now, and what are the problems in analysing them\\
+
+Glycan structures are often characterized through mass spectral analysis while their glycosylation processing enzymes are characterized using gene expression profiling. Unfortunately, due to the complexity of glycosylational processing, it has been difficult to relate these disparate data sets until now. In this paper we demonstrate for the first time the ability of a systems glycobiology model to link glycan structural data obtained from mass spectral analysis with mRNA expression data in terms of enzyme activities catalyzing the glycosylation reactions in the cells. We show that such a systems biology model enables identification of distinctive and subtle glycan fingerprints differences between prostate cancer cell stages (androgen-dependent and more metastatic androgen independent). This systems approach will enable us to use high throughput glycomics and gene expression data sets in order to specify glycan-based signatures as important diagnostic markers of disease and potential therapeutic targets \citep{10.1371/journal.pcbi.1002813}.\\
+
+To understand glycan functions, determination of their structures (sequences) like DNA and proteins is required. In spite of the improvements in purification and analytical methods for glycans such as high performance liquid chromatography, capillary electrophoresis, mass spectrometry and nuclear magnetic resonance technology (von der Lieth et al., 2004), the determination of the glycan structure is still difficult. Glycans have more complicated structures compared to nucleotide and amino acid sequences. While nucleotide and amino acid chains are linear and consist of 4 and 20 elementary components, respectively, glycan chains are branched structures and consist of various monosaccharides. In addition, they are multivalent, and linkages have anomeric configurations (alpha and beta). These complexities make it difficult to determine glycan structure. Furthermore, the amplification method of glycan is not yet fully established, while DNA and proteins are easy to amplify using polymerase chain reactions and cloning-expression systems, respectively. This means that only a few samples are available for glycan structure analysis. Therefore, a reasonable prediction method for glycan structures is useful for glycomics research. While the amino acid sequence of proteins is determined by the genetic code and the templates in the genome, the carbohydrate sequence of glycans is determined by the biosynthetic code, which is a specific set of biosynthetic reactions catalyzed by different types of glycosyltransferases (GTs). Each GT catalyzes formation of a glycosidic-bond between the glycan precursor as an accepter and the nucleotide-activated sugar as a donor (Varki et al., 1999). Thus, once we know the repertoire of GTs in the genome, in the transcriptome or in the proteome, it should, in principle, be possible to predict the repertoire of possible glycan structures in an organism or at a specific stage of the cell (von der Lieth et al., 2004). Here, we construct a reaction pattern library consisting of bond-formation patterns of GT reactions to link genome to glycome, and we predict glycan structures from gene expression profiles.
+
+However, gene set on DNA chips is incomplete, and gene expression data is noisy. To obtain appropriate prediction result, we extract knowledge of glycan structure from the glycan database and apply it to our prediction method. In particular, a co-occurrence frequency of reaction patterns is calculated from the KEGG GLYCAN database, which is a comprehensive resource encapsulating the latest knowledge of glycans and a part of the KEGG resource containing genomic information and pathways (Kanehisa et al., 2004; Hashimoto et al., 2005a), and we use it together with the reaction pattern library. First, we evaluate the prediction method using virtual expression data generated from the KEGG GLYCAN database. Then, we apply our method to publicly available DNA microarray expression data and find characteristic glycan structures in a particular cell. (Results) First, we constructed a reaction pattern library consisting of bond-formation patterns of GT reactions and investigated the co-occurrence frequencies of all reaction patterns in the glycan database. This was followed by the prediction of glycan structures using this library and a co-occurrence score. A penalty score was also implemented in the prediction method. Then we examined the performance of prediction by the leave-one-out cross validation method using individual reaction pattern profiles in the KEGG GLYCAN database as virtual expression profiles. The accuracy of prediction was 81\% \citep{doi:10.1093/bioinformatics/bti666}. \\
+
+Understanding the biological functions of glycans and relating them to their structure remains challenging experimentally. Unlike genes or protein sequences, for which a number of well-established algorithms are now available for various data-mining tasks such as similarity detection, clustering, supervised classification, structure prediction or functional motif extraction, glycans are generally not linear polymers. They have more complex structures, that can be represented by rooted ordered trees, with monosaccharides as labeled vertices and sugar bounds as labeled edges. As a result, specific approaches have recently been developed for comparison of glycans (Aoki et al., 2004, 2005), probabilistic modeling of glycan families (Ueda et al., 2005), and analysis of MS/MS spectra of oligosaccharides (Tang et al., 2005). There is still an incentive to develop efficient methods for the automatic classification of glycans, and the extraction of biologically relevant substructures. Glycans exhibit a large diversity of structures in different organisms, and in different tissues and organs of a given organism. Recently, a computational approach to the supervised classification of glycans into blood components and to the detection of leukemia-specific glycan substructures has been proposed (Hizukuri et al., 2005). The approach is based on the extraction of short linear substructures from the glycan structures, resulting in a quantitative measure of similarity between glycans based on the count of shared substructures. This measure of similarity is then used as an input to a support vector machine (SVM) classifier which is trained to discriminate between different blood components and blood types. The goal of this article is to extend this framework to a broader class of structure representations, with the motivation of both increasing the accuracy of glycan classification, and providing a framework for the extraction of biologically relevant glycan substructures.
+
+More precisely, we investigate different high-dimensional representations for glycan structures and use them for supervised classification with SVM. In SVM jargon, we define new kernels for trees, adapted to the classification of glycans. Our tree kernels are based on the indexation of a glycan tree structure by a set of subtrees it contains. We investigate different variants in the definition of subtrees, in the importance placed on the depth of a subtree in the glycan tree, and in the size of the subtrees. In spite of their large dimensions, these vector representations are adapted to the supervised classification of glycans by kernel methods and in particular the SVM, in the spirit of earlier work on convolution kernels for tree structures (Collins and Duffy, 2001; Haussler, 1999). We perform a thorough analysis of the classification performance obtained by different representations on the problem of predicting the blood origin of glycans among leukemia cell, erythrocyte, plasma and serum. We then apply feature selection methods to find discriminative subtree motifs in glycans, and relate the selected substructures to biologically known facts. Finally, in order to combine the information provided by different representations we apply recently developed methods for multiple kernel learning (Bach et al.,2005), resulting in an optimal weighting of each representation for each classification task. As shown in Section 4, the methods developed in this article not only lead to better classification performance than previously reported results, but also provide additional biological insights in the role and structure of glycans, through the substructures extracted by feature selection and the weights learned by multiple kernel learning. The proposed methods are tested on their ability to classify human glycans into four blood components: leukemia cells, erythrocytes, plasma and serum. They are shown to outperform a previously published method. We also applied a feature selection approach to extract glycan motifs which are characteristic of each blood component. We confirmed that some leukemia-specific glycan motifs detected by our method corresponded to several results in the literature \citep{doi:10.1093/bioinformatics/btm090}.\\
+
+--- describe/list existing databases\\
+
+
+-- What do we propose to do here, and why/how will it be helpful\\
+--- breakdown by reactions, form glycan reaction collections (set / list)\\
+---- Fig 2: Glycan reaction(s)\\
+--- describe the database(s) we'll use\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Objectives}
 \label{sec:objectives}
+Do I want this bit?\\
 Formally, we state here the objectives of the project:
 \begin{enumerate}
-\item For a given double-stranded DNA (dsDNA) virus family, identify the Pfam domains that are present in each fully-sequenced genome.
-\item Construct a reliable phylogeny based on the domains shared between all members of the family.
-\item Infer the gain/duplication/loss events for each domain on the phylogeny.
-\item Produce a website to allow a user to explore and visualise these results in an effective way.
+\item Objective 1.
+\item Objective 2.
 \end{enumerate}
 
-This project was carried out by four co-workers, all MSc students at Imperial College London -- Claire Dunican (CD), Heather Jackson (HJ), Sabina Nowakowska (SN), and the current author (SH). Objectives one, two and part of three were undertaken by HJ and SN, and the reader is referred to the group report and those authors' individual reports for further details. Objectives four, and part of three, were undertaken by CD and SH. The rest of this report describes the work undertaken by SH.
+Here's a footnote (Biopython\footnote{\url{http://biopython.org}}).
 
-\section{Functional Requirements}
-\label{sec:reqs}
-Our website must satisfy certain criteria, including for example the ability to visualise the phylogenetic tree produced in the final step of the pipeline software, which takes the form of an xml file conforming to the phyloXML schema\footnote{\url{http://www.phyloxml.org/1.20/phyloxml.xsd}}. In order to guide the development of the website, we list here our functional requirements.
-
-\singlespace
-\begin{itemize}
-\item Parse and manipulate phyloXML data
-\item Visualise a phylogenetic tree in a web browser:
-\begin{itemize}
-\item Linearly
-\item Radially
-\item As phylogram
-\item As cladogram
-\item Colour nodes by domain
-\item Shape nodes by domain
-\item Utilise a colour blind friendly palette
-\item Zoom in and out
-\item Taxonomy Information
-\item Branch lengths
-\item Domain gains, losses and duplications
-\item Manipulate the tree visualisation:
-\begin{itemize}
-\item Collapse / expand nodes
-\item Re-root
-\item Export data
-\item Export as image
-\end{itemize}
-\item Create and visualise a subtree by subfamily, genus and/or species
-\item Provide links from protein domains to Pfam\footnote{\url{https://pfam.xfam.org}}
-\end{itemize}
-\end{itemize}
-\doublespace
-
-Much of this functionality is developed from scratch, however we also leverage existing software for the webserver and the phylogenetic tree visualisation. Given that an extensive Python library (Biopython\footnote{\url{http://biopython.org}}) exists for manipulating phyloXML files, we choose the Python-based, mature, and widely-used Django\footnote{\url{https://www.djangoproject.com}} framework within which to build our web application.
-
-Selecting web-enabled phylogenetic tree visualisation software is less straightforward, and consequently we describe in the following section a slightly more formal approach to evaluating the choices available.
-
-\section{Evaluating Tree Visualisation Software}
-
-The following open-source, web-enabled, phylogenetic tree visualisation software libraries form the candidates for further evaluation:
+You can swap to singlespace for a list like this and back to doublespace afterwards:
 
 \singlespace
 \begin{enumerate}
@@ -163,7 +238,7 @@ The following open-source, web-enabled, phylogenetic tree visualisation software
 \end{enumerate}
 \doublespace
 
-The results of our evaluation of these tree viewers against our previously stated requirements are shown in Table \ref{tab:tree_vis_eval}, and we find that choice 8 (Archaeopteryx) scores most highly. There are nevertheless still certain aspects of functionality missing, and consequently we extended the functionality of this open source software in order to fulfil overcome these shortcomings, creating in the process a new version, which we call Protopteryx.js.\\
+And here's Table \ref{tab:tree_vis_eval}, blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.\\
 
 \begin{table}[h]
 \centering
@@ -172,21 +247,6 @@ The results of our evaluation of these tree viewers against our previously state
 \multirow{2}{*} & \multicolumn{8}{c|}{\bf Candidate} \\  \cline{2-9}
 {\bf Functionality} & {\bf 1} & {\bf 2} & {\bf 3} & {\bf 4} & {\bf 5} & {\bf 6} & {\bf 7} & {\bf 8} 	\\ \hline
 Handles phyloXML & n & n & n & n & y & n & y & y \\ \hline
-Linear & n & y & n & y & y & y & y & y \\ \hline
-Radial & n & y & y & y & n & n & y & n \\ \hline
-Phylogram & n & y & y & y & y & y & y & y \\ \hline
-Cladogram & n & n & n & n & y & y & y & y \\ \hline
-Colour nodes by domain & n & n & n & n & y & y & y & y \\ \hline
-Shape nodes by domain & n & n & n & n & y & n & n & y \\ \hline
-Colour blind friendly & y & y & y & n & n & n & n & n \\ \hline
-Zoom & y & y & n & y & y & y & y & y \\ \hline
-Taxonomy info & n & n & n & y & y & y & y & y \\ \hline
-Branch lengths & n & y & n & y & y & y & y & y \\ \hline
-Domain gains, losses and duplications & n & n & n & n & n & n & n & n \\ \hline
-Collapse / expand nodes & y & y & n & y & y & y & y & y \\ \hline
-Re-root & n & y & n & y & y & y & y & y \\ \hline
-Export data & n & n & n & n & y & y & y & y \\ \hline
-Export as image & n & n & n & n & y & y & y & y \\ \hline
 Code clarity & n & n & n & n & n & y & n & y \\ \hline
 {\bf Score} & {\bf 3} & {\bf 8} & {\bf 3} & {\bf 8} & {\bf 13} & {\bf 12} & {\bf 13} & {\bf 14} \\ \hline
 \end{tabular}
@@ -194,79 +254,53 @@ Code clarity & n & n & n & n & n & y & n & y \\ \hline
 \label{tab:tree_vis_eval}
 \end{table}
 
-\section{The Web Application}
-\label{sec:webserver}
-Web applications are often considered as comprising of two major and distinct components -- the back-end, comprising code and databases which reside on a server, and the front-end, which, although originating on the server, is sent to client web browsers in the form of Hypertext Transfer Protocol (HTTP) responses. These are sent in response to HTTP requests from client web browsers. The HTTP responses themselves typically contain a mixture of different forms of web content -- Hypertext Markup Language (HTML) files, Cascading Style Sheets (CSS), and JavaScript (JS). We may consider then the front-end (i.e. content interpreted by the web browser, which the user sees and interacts with) as being the HTML files and their associated CSS and JS which are accessible via Uniform Resource Locators (URLs) over the web. These HTML files though are not necessarily static -- that is, some aspects of their content may change depending upon processing undertaken either on the server or within the client. Often, the nature of the processing carried out on the server is in response to some parameters contained within the HTTP request sent from the client, for example, as the result of choices made by the user when presented with drop-down menus or check-boxes.
+\section{Method}
+\label{sec:method}
 
-The back-end consists of the web server itself, which is configured to `listen' for certain HTTP requests, and which undertakes whatever processing necessary in order to send back an HTTP response. This processing may, for example, involve querying and/or writing to a database or files, or performing algorithmic computations. A response is frequently formed by taking static template HTML files, and inserting snippets of content generated by code residing on server. In the following sections we describe the back and front-ends of our web server\footnote{\url{https://github.com/ImperialCollegeLondon/phylo}}, and the links between them, before describing our particular web application in terms of a `walk-through', with descriptions of the front and back-end processing which takes place in order to produce each web page. Figure \ref{fig:webserver} shows the overall architecture of the web server.\\
+Include flowchart for Sternberg?\\
+- Fig 3: Method flowchart\\
+- as in notes.docx. relate to python code\\
+- get data\\
+-- RDF, SPARQL\\
+- parse it\\
+- similarity matrix (two methods, reaction set and list), threshold, network\\
+- assortativity coeff\\
+
+- UPGMA hierarchical clustering\\
+-- creating the tree\\
+-- colouring the nodes \& branches\\
+
+
+Figure \ref{fig:webserver} shows the overall architecture of the web server.\\
 
 \begin{figure}[H]
 \centering 
-\includegraphics[scale=0.6]{images/webserver.pdf} 
+\includegraphics[scale=0.6]{images/glycosidic_linkage.pdf} 
 \caption{Web server overview}
 \label{fig:webserver}
 \end{figure}
 
-\subsection{Back-End}
-\label{sec:back_end}
-A comprehensive description of the back-end of the web application, written by the current author, is provided in the group report. We provide only a shortened summary here, along with some further details regarding how to startup the application and our implementation of `custom tags'. The web server is an instance of a python Django application, configured to run our web application, named `phylo'.
-
 \subsubsection{Application Startup}
 \label{sec:startup}
-To start the application, we navigate to the root directory \texttt{msc\_site} using a command-line terminal, and, ensuring we are using the Python 3 environment, issue the command:
+To use code--style text in-line, use \texttt{msc\_site}, or to apply to a section, use:
 
 \begin{verbatim}
 python manage.py runserver
 \end{verbatim}
 
-\noindent The landing page of the web application is then accessible via the following URL:
-
-\begin{verbatim}
-http://msc.bc.ic.ac.uk:20183/phylo/index
-\end{verbatim}
-
-\subsubsection{Django Basics}
-\label{sec:django_basics}
-The Django framework closely follows the Model View Controller (MVC) \citep{krasner1988description} design pattern commonly employed in web applications. In subsequent sections we briefly describe the `model' and `view' components of our application. Full Django documentation is available at the url given as a footnote\footnote{\url{https://docs.djangoproject.com/en/2.0/}} at the bottom of this page.
-
-\subsubsection{Caching Data on Application Startup}
-\label{sec:startup}
-The data used in our web application is first produced by the tree-generating pipeline code (see the group report), and takes the form of xml files. Specifically, phyloXML files, the schema for which can be found at the url given in this footnote\footnote{\url{http://www.phyloxml.org/1.10/phyloxml.xsd}}. Additionally, the modified javascript library used for visualising and manipulating phylogenetic trees (see Section \ref{sec:front_end}) also takes as input phyloXML files. Consequently, rather than employing a traditional relational database, we adopt a strategy of reading phyloXML files on application startup and caching their contents in memory.
-
-\subsubsection{The Model}
-\label{sec:model}
-Our Django model is defined by two classes in the file \texttt{msc\_site/phylo/models.py}. Both are simple classes with a number of attributes, and corresponding `getter' and `setter' methods, which help us to deliver structured data to the various views defined in Section \ref{sec:views} below. The two classes are:
+Another list example:
 
 \begin{enumerate}
-\item {\bf ProteinDomain} has attributes \texttt{name} and \texttt{pfam\_accession}, and is used within the `tree' view (Section \ref{sec:views}) to generate lists of protein domain names and corresponding hyperlinks to the Pfam\footnote{\url{https://pfam.xfam.org}} database.
-\item {\bf NodeVisualizationJsCode} The javascript library we extend and use to visualise phylogenetic trees (see Section \ref{sec:front_end}) has existing functionality which allows us to change the colour and/or shape of the nodes in the tree according to some numerical quantity (in our case, the copy number associated with a specific protein domain). In order to activate this functionality, the html page displaying the tree must contain a set of javascript objects named \texttt{nodeVisualizations}, each of which must have a distinct key, and a specific set of enumerated values relevant to the visualisation, e.g. `description', `shapes', `colors' etc. This python class has attributes with the same names as the required enumeration values in the javascript visualisation library, and is used to pass the required data to the `tree' view such that we may dynamically create the necessary set of javascript objects required for colouring and/or altering the shape of nodes in the tree according to protein domain copy number.
+\item {\bf ProteinDomain} has attributes \texttt{name} and \texttt{pfam\_accession}.
+\item {\bf NodeVisualizationJsCode} The javascript library blah blah.
 \end{enumerate}
 
-These classes may be employed elsewhere in the code (typically in the `views', see below) by simply importing them from \texttt{models.py}.
 
-\subsubsection{The Views}
-\label{sec:views}
-In this section we describe the views of the MVC. Each view is implemented as a function within the \texttt{msc\_site/phylo/views.py} file, and there is a one-to-one mapping between these methods and the template html files described in Section \ref{sec:front_end}. Each template html page is a mixture of static html (as well as other common web components such as javascript or css style directives) and snippets of python code which are executed when the page is requested. The final line of each view function is a return statement, which specifies which template html file is to be used as the http response, and the values of any variables which need to be supplied to the template. Below we list and describe the functionality of each of our views (the reader is advised to cross-reference with the corresponding descriptions of the template html files in Section \ref{sec:front_end}):
+This uses the path thing dsafdsdaf dsfadsf dfsfsd \path{/msc_site/phylo/static/phylo/my_new_tree.xml} to make sure that kind of text doesn't go off the end of the page. 
 
-\begin{itemize}
-\item {\bf index} serves our application's homepage, and features a drop-down menu from which the user may select a virus family before proceeding to the next page (\texttt{choose\_root.html}). As such it requires a python list of strings, each denoting a virus family name. This list is generated by retrieving the \texttt{phylo\_trees} dictionary from the cache, and iterating through its keys.
-\item {\bf about} serves mostly static help and contextual information about the web application, but does also provide a clickable list of virus family names which forward the user to \texttt{choose\_root.html}. This list is generated in exactly the same way as for the `index' view.
-\item {\bf choose\_root} provides the user with two alternative methods of proceeding to the phylogenetic tree visualisation. One is a simple hyperlink which includes a parameter indicating the virus family name previously chosen by the user. This value is obtained from the http request object, and will have been supplied by whichever page the user visited prior to arriving here. The second is via a set of checkboxes and a submit button, where each checkbox represents a specific subfamily, genus, or species within our virus family tree. The purpose of this latter method is to facilitate a view of a subtree, rather than the full phylogenetic tree. The subtree will be the tree whose root node is the most recent common ancestor of the subfamilies/genera/species selected by the user. 
-
-Generation of this list of checkboxes, and the ability to align them on the web page according to taxonomic rank, requires each node in the phylogenetic tree to be assigned to a taxonomic rank. For the tree produced by the pipeline, all terminal nodes have an assigned species, however only a subset of internal nodes have any taxonomic rank. Consequently, we use an algorithm to recursively traverse the tree from the root clade (or node) downwards, applying a taxonomic rank of unknown + subfamily/genus/species to each node found until we encounter a node of known taxonomic rank. Furthermore, a unique ID is applied to these `unknown' classifications, in order that different `unknown' rank clades may be distinguished from one another. This algorithm is implemented by the function \texttt{traverse\_nodes\_by\_taxonomy} within \texttt{views.py}.
-
-%*** DETAILS OF OR REF TO DETAILS OF NODE\_DICT GENERATION.
-Additionally, as with all of the views in our web application, this view also provides a clickable list of virus family names which forward the user back to \texttt{choose\_root.html}, generated in the same way as for the `index' view, albeit we exclude the currently selected virus family. Consequently this view supplies a dictionary containing three items to the template html page -- \texttt{virus\_family}, the virus family name as a string, \texttt{node\_dict}, a dictionary containing nested lists and dictionaries expressing the taxonomic hierarchy of family, subfamily, genus and species names, and \texttt{virus\_family\_list}, a python list of strings, each denoting a virus family name.
-
-\item {\bf tree} visualises the tree described by a phyloXML file using a D3\footnote{\url{https://d3js.org}}-based javascript library (described in Section \ref{sec:front_end}). The javascript library takes as input an xml file with the specific name and location \path{/msc_site/phylo/static/phylo/my_new_tree.xml}. This file is newly generated each time this page is requested, and depending on whether the user clicked on the link to view the full phylogeny, or checked a selection of subfamily/genus/species check-boxes, either describes the full tree, or the subtree formed with the most recent common ancestor of the selected items as root. Additionally, the template supported by this view displays two different protein domain lists -- \texttt{p\_doms\_used\_for\_virus\_family}, the protein domains originally used to create this virus family tree (see the group report), \texttt{protein\_domain\_list}, the protein domains present in this virus family (excluding those used to create the tree), as well as \texttt{virus\_family} (the virus family name), a virus family names list \texttt{virus\_family\_list} (excluding currently selected), and \texttt{node\_vis\_list} (see also Section \ref{sec:model}).
-\end{itemize}
-
-\subsubsection{Template Tags}
+\subsubsection{Singlespace Verbatim}
 \label{sec:template_tags}
-As stated in Section \ref{sec:views}, Django allows us to use python code snippets (known as tags and filters) in template html files, such as variable expressions, for-loops, or if-statements. The set of built-in tags and filters is limited though -- for example, there is no filter equivalent to the python function \texttt{isinstance}. Such a filter is necessary for the correct interpretation of the dictionary and list combination used in the \texttt{choose\_root.html} template. Django does however allow us to create custom tags and filters, and we describe here our implementation of an \texttt{isinstance} filter.
-
-In order to create a custom \texttt{isinstance} filter, we create the directory \path{/msc_site/phylo/templatetags}, within which two files are required. The first, \path{__init__.py} is simply an empty file which instructs python to treat this directory as one containing packages. The second, \path{phylo_extras.py}, defines our filter in a function \texttt{isinst}, and registers this in the template library. We are now able to use this filter in any template html file by including the line \texttt{\{\% load phylo\_extras \%\}} anywhere before the first use of the filter. An example use of the filter in \texttt{choose\_root.html} is shown in Figure \ref{fig:custom_filter_code} below:
-
+Like this:
 \singlespace
 \begin{figure}[H]
 \begin{verbatim}
@@ -284,102 +318,38 @@ In order to create a custom \texttt{isinstance} filter, we create the directory 
 \end{figure}
 \doublespace
 
-%and choose_root.html:{% load phylo_extras %}
+\section{Results}
+\label{sec:results}
+(Discuss them as you present them)\\
 
-\subsection{Front-End}
-\label{sec:front_end}
-In this section we describe the web pages seen by the user in a web browser, how to navigate through them, and their functionality. Referring back to Figure \ref{fig:webserver}, we see that a user can access four different webpages -- \texttt{index.html}, \texttt{about.html}, \texttt{choose\_root.html}, and \texttt{tree.html}. The possible navigation paths are illustrated below in Figure \ref{fig:navigation}. In each of the following subsections, the reader is referred back to Section \ref{sec:views} for details of how the back-end of the web server generates the necessary data required for the web page in question.
+- Similarity matrix\\
+-- Fig 4: Similarity matrix\\
+- Walk through the network\\
+-- Figs 5 to 10: Glycan (un)connected components\\
+- Assortativity coeff for set vs list method\\
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.7]{images/navigation.pdf}
-\caption{Web site navigation.}
-\label{fig:navigation}
-\end{figure}
+- explore the UPGMA tree\\
+-- use different depths / zooms\\
+--- Fig 11: full tree\\
+--- Fig 12: zoomed-in tree\\
+-- describe the clades, relate them to the network if poss\\
+--- therefore make a comparison between jaccard + network and UPGMA tree methods\\
 
-\subsubsection{The Langing Page (index.html)}
-The main landing page of our application, \texttt{index.html}, shown in Figure \ref{fig:index}, is accessed via the following URL:
 
-\begin{verbatim}
-http://msc.bc.ic.ac.uk:20183/phylo/tree
-\end{verbatim}
+\section{Discussion}
+\label{sec:discussion}
+(On the bigger picture)\\
 
-The page displays some introductory information, and contains a drop-down menu of virus family names. Selecting one of these and clicking on the `Go' button takes us to the next page, \texttt{choose\_root.html}. As with all the web pages, there is a navigation bar along the top, with links to the \texttt{about.html} page, and a searchable list of the different virus family names available (see Figure \ref{sec:vf_name_search}).
+\section{Further Work}
+\label{sec:further_work}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.36]{images/index.png}
-\caption{Home page.}
-\label{fig:index}
-\end{figure}
+- New dataset, samples by cell / tissue\\
+-- Work already done (web scraping for data)\\
+-- Format conversion problems\\
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.36]{images/vf_search_bar.png}
-\caption{Virus family search box.}
-\label{sec:vf_name_search}
-\end{figure}
-
-\subsubsection{Selecting a Tree (choose\_root.html)}
-This page, shown in Figure \ref{fig:choose_root} for \textit{Poxviridae}, provides the user with two alternative methods of proceeding to the phylogenetic tree visualisation page. The first is a hyperlink, displayed on the left as a circular image of a phylogenetic tree, which results in the full tree being displayed on the next web page. The second is a series of checkboxes, rendered in such a way as to reflect the taxonomic rank of the nodes in the tree. Section \ref{sec:views} details the algorithm used to determine a rank label for nodes where no rank is currently known. The tree subsequently displayed on the next web page will have as its root the most recent common ancestor of the selected nodes.
-
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.3]{images/choose_root.png}
-\caption{Selecting a full virus family tree or a sub-tree.}
-\label{fig:choose_root}
-\end{figure}
-
-\subsubsection{Interactive Tree Visualisation (tree.html)}
-The key page of our web application, \texttt{tree.html}, provides us with an interactive visualisation of the phylogenetic tree produced by the pipeline (see the group report), including domain names and copy numbers per species, and total domain gain and loss events for every node in the tree. Domain names and copy numbers are extracted from the phyloXML file generated by the pipeline. Figure \ref{fig:full_pox} shows the full phylogentic tree for \textit{Poxviridae}. The page also displays scrollable lists of protein domain names (1) and domains originally used to create the phylogeny (2), both of which open the corresponding page in Pfam in a new tab when clicked. The rectangles (3) represent domains per species, colour-coded according to copy number, and display the full domain name in a popup when clicked on (see Figure \ref{fig:domain_info}). Using a mouse the image may be moved around the page and zoomed in or out of.
-
-\begin{sidewaysfigure}
-\centering
-\includegraphics[scale=0.85]{images/full_pox_tree_annotated.pdf}
-\caption{The full \textit{Poxviridae} phylogenetic tree, with scrollable list of protein domain names (1), scrollable list of domains originally used to create the phylogeny(2), and clickable rectangles representing domains per species (3), colour-coded according to copy number.}
-\label{fig:full_pox}
-\end{sidewaysfigure}
-\clearpage
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.7]{images/domain_info.pdf}
-\caption{Protein domain information popup.}
-\label{fig:domain_info}
-\end{figure}
-
-In Figure \ref{fig:subtree}, we see a subtree of \textit{Poxviridae}, with some notable features. Here, each node is coloured according to the number copies of one particular domain present, and shaped according to the copy number of another domain. The two domains are chosen using a drop-down menu, as shown in Figure \ref{fig:domain_vis}. Section \ref{sec:model} provides details on the use of \texttt{nodeVizualizations} to achieve this effect.\\
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.3]{images/subtree.pdf}
-\caption{A sub-tree of \textit{Poxviridae}.}
-\label{fig:subtree}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.5]{images/subtree_vis_choice.pdf}
-\caption{Sub-tree node visualisation choices.}
-\label{fig:domain_vis}
-\end{figure}
-
-Figure \ref{fig:gains_losses} shows the total amount of domain gains and losses against each node in a tree both as numbers and as proportionally-sized coloured rectangles. These numbers are calculated in Protopteryx.js, and  an example of the code used to determine the width of the coloured bar representing gains is shown in Appendix \ref{sec:gains_js_code}. 
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.5]{images/gains_losses.pdf}
-\caption{Node-specific total domain gains and losses (purple for gains, green for losses).}
-\label{fig:gains_losses}
-\end{figure}
-
-\section{Future Work}
-The sheer volume of protein domain information attached to every node of the tree imposes a heavy memory burden on the client web browser, often resulting in sluggish behaviour when the user attempts to use the interactive features of the visualisation. Reducing this burden would improve the usability of the application -- one possible way to achieve this might be the use of Asynchronous JavaScript (AJAX), which allows data to be sent to and received from the web server in the background, without unduly affecting the behaviour of the web page. Currently the entire phyloXML file is loaded into the memory of the client browser, and re-factoring the code to use AJAX would constitute a reasonably significant development task.
-
-Additionally, certain components of the visualisation interface are prone to clashing with one another -- for example the copy number colour scale sometimes obscures the species-specific protein domain rectangles. Re-designing aspects of the interface according to user interface design guidelines \citep{shneiderman2016designing} would have both aesthetic and usability benefits.
 
 \section{Conclusions}
-In this project we set out to meet certain objectives, as listed in Section \ref{sec:objectives}. With the successful creation of both the phylogenetic tree generating pipeline, and the web-based interactive visualisation application, we have satisfied those objectives. The overarching focus is this work has been to develop, rather than to gain scientific insight from, the software. Nevertheless, preliminary trials of the web application with the two virus family trees generated so far (\textit{Baculoviridae} and \textit{Poxviridae}), suggest that useful at-a-glance insights may be gained regarding which clades of a virus family's tree are evolving either rapidly or slowly. We are optimistic that the application will prove to be of significant benefit to researchers wishing to enhance their understanding of the mechanisms of viral infection.
+\label{sec:conclusions}
 
 \newpage
 \appendix
