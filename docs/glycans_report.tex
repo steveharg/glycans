@@ -29,6 +29,7 @@
 }
 \usepackage{rotating}
 \usepackage{subcaption}
+\usepackage[table]{xcolor}
 
 \newcounter{subfloat}
 \renewcommand{\thesubfloat}{\alph{subfloat}}
@@ -38,6 +39,9 @@
   #2 \\
   \end{tabular}%
 }
+
+\definecolor{lightgray}{gray}{0.9}
+\definecolor{lightblue}{rgb}{0.93,0.95,1.0}
 
 \begin{document}
 \pagenumbering{gobble}
@@ -69,10 +73,19 @@
 \begin{abstract}
 \pagenumbering{arabic}
 \doublespacing
-\noindent RE-WRITE\\
-Include some numbers for Sternberg\\
-e.g. no. glycans (pre/post filtering steps), no. motifs, assortativity coeffs?
-Glycans are tree-like polysaccharides that are frequently found attached to specific sites on eukaryotic cell surface and cellular matrix proteins, with diverse functions including protein folding, cell-cell signaling and immune response. Large databases describing observed glycan structures are now available, which provide an excellent resource for describing and exploring the space of naturally occurring glycans. In this project you will apply tree kernel methods to calculate distances between these structures and thereby develop clustering and data reduction methods to capture the most important differences between subsets of glycans, such as those observed in cancerous vs non-cancerous tissue.
+% \noindent RE-WRITE\\
+% IMPOTANT - BEAR IN MIND THE EXAMINER WILL PROB ONLY SPEND ABOUT 20 MINS READING THIS, SO NEED TO GRAN THEIR ATTENTION AND CONVINCE THEM QUICKLY IN ABSTRACT AND INTRO. USE GOOD SUMMARY DIAGRAMS AND TEXT.\\
+% Include some numbers for Sternberg\\
+% e.g. no. glycans (pre/post filtering steps), no. motifs, assortativity coeffs?\\
+% IMPORTANT - what's my contribution?\\
+% Each major new section (e.g. Methods) should start on a new page\\
+% The project report must include the word count on the title page (the number of words will be checked and failure to comply with the word limit will incur penalties)\\
+% critically evaluated your results\\
+% The Abstract
+% should be structured (i.e. aims, methods, results, conclusion), be no more 
+% than  one  side  of  paper  (in  written  reports).  Ideally  the  Abstract  should  cite  some  key numerical  results  rather  than  just  generalities.    Making  a  point  in  an  abstract  does  not remove  the  requirement  for  it  to  be  made  elsewhere  in  the  report.  The  report  must  be comprehensible even if the abstract is removed.  \\
+% etc. etc. - see course handbook\\
+% Glycans are tree-like polysaccharides that are frequently found attached to specific sites on eukaryotic cell surface and cellular matrix proteins, with diverse functions including protein folding, cell-cell signaling and immune response. Large databases describing observed glycan structures are now available, which provide an excellent resource for describing and exploring the space of naturally occurring glycans. In this project you will apply tree kernel methods to calculate distances between these structures and thereby develop clustering and data reduction methods to capture the most important differences between subsets of glycans, such as those observed in cancerous vs non-cancerous tissue.
 \end{abstract}
 
 \newpage
@@ -86,8 +99,8 @@ Many thanks to John Pinney for his supervision and guidance during this project,
 \newpage
 \section*{Abbreviations}
 \doublespacing
-\textit{ABC:} A Big Charlie\\
-\textit{DEF:} Dazzling Ear Fountain\\
+% \textit{ABC:} A Big Charlie\\
+% \textit{DEF:} Dazzling Ear Fountain\\
 \addcontentsline{toc}{section}{Abbreviations} %adds it to the table of contents
 
 \newpage
@@ -95,9 +108,9 @@ Many thanks to John Pinney for his supervision and guidance during this project,
 \addcontentsline{toc}{section}{Glossary}
 \label{sec:glossary}
 \doublespacing
-\noindent{\textit{Clade:} Blah.}\\\\
-\textit{Phylogenetic tree:} Blah blah.\\\\
-\textit{Archeopteryx.js:} ...phylogenetic trees .\\\\
+% \noindent{\textit{Clade:} Blah.}\\\\
+% \textit{Phylogenetic tree:} Blah blah.\\\\
+% \textit{Archeopteryx.js:} ...phylogenetic trees .\\\\
 
 
 
@@ -168,7 +181,7 @@ When dissolved in an aqueous environment, the monosaccharides (or sugars) of whi
         \includegraphics[scale=0.55]{images/glycosidic_linkage_cellobiose.pdf}
         \caption{Cellobiose}
     \end{subfigure}
-    \caption{FIX THE BETA SYMBOL Pairs of the same monosaccharide (Glucose) glycosidically linked with different anomericity form different disaccharides (a) maltose and (b) cellobiose.}
+    \caption{Pairs of the same monosaccharide (Glucose) glycosidically linked with different anomericity form different disaccharides (a) maltose and (b) cellobiose. Image based on Figure 4 from \citep{SONG2012137}.}
 \label{fig:glycosidic_linkage}
 \end{figure*}
 
@@ -266,7 +279,14 @@ To mitigate for these experimental shortcomings, in much the same way as sequenc
 \label{sec:proposed_method}
 Intrinsic to the method of predicting of glycan structures from gene expression profiles cited above \citep{doi:10.1093/bioinformatics/bti666}, is a recognition of the fact that a specific set of glycosyltransferases (GTs) are required to catalyze the reactions necessary for synthesising specific glycans. By building a library of the bond formation patterns of GT reactions, and determining a co-occurence score of the reaction patterns in a glycan database, the authors predicted glycan structures with an accuracy of 81\%. Additionally, using gene expression data from the human carcinoma cell, the authors predicted the presence of sialic acid and the Sialyl Lewis X motif.
 
-Expanding upon that approach, in this paper we describe a method of exploring glycan similarity from biochemical reaction similarity. More specifically, to compare any two glycans we calculate the Jaccard distance between the two sets of biochemical reactions necessary for the synthesis of each glycan in the pair. We visualise clusters of similar glycans via the use of networks, which allows us to explore whether or not glycans which we have judged to be similar in terms of their biochemical synthesis reactions are also similar in terms of their constituent motif sets. Furthermore, we perform hierarchical clustering using the Unweighted Pair Group Method with Arithmetic Mean (UPGMA), allowing us to form a dendogram / cladogram ???, from which we compare the groups of similar glycans found using the two alternative methods - THIS NEEDS RE-THINKING.
+Expanding upon that approach, in this paper we describe a method of exploring glycan similarity from biochemical reaction similarity. More specifically, to compare any two glycans we calculate the Jaccard distance between the two sets of biochemical reactions necessary for the synthesis of each glycan in the pair. We visualise clusters of similar glycans via the use of networks, which allows us to explore whether or not glycans which we have judged to be similar in terms of their biochemical synthesis reactions are also similar in terms of their constituent motif sets. Furthermore, we perform hierarchical clustering using the Unweighted Pair Group Method with Arithmetic Mean (UPGMA), allowing us to form a dendogram / cladogram ???, from which we compare the groups of similar glycans found using the two alternative methods - THIS NEEDS RE-THINKING - SAY MORE ABOUT REACTIONS, INCLUDE A DIAGRAM LIKE Figure \ref{fig:gt_reaction_pattern}.
+
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.8]{images/gt_reaction_pattern.png} 
+\caption{NEED TO RE-DRAW THIS}
+\label{fig:gt_reaction_pattern}
+\end{figure}
 
 The rest of this paper is organised as follows -- in Section \ref{sec:method} we describe, in sufficient detail for a Bioinformatician or Computer Scientist to be able to reproduce our results, the databases and computational methods used, before presenting and discussing our results in Section \ref{sec:results}. In Section \ref{sec:discussion} we discuss our findings within the bigger picture of glycan analysis, before providing suggestions for further work and our conclusions in Sections \ref{sec:further_work} and \ref{sec:conclusions} respectively.
 
@@ -279,16 +299,16 @@ The rest of this paper is organised as follows -- in Section \ref{sec:method} we
 
 
 
-\subsection{Objectives}
-\label{sec:objectives}
-Do I want this bit?\\
-Formally, we state here the objectives of the project:
-\begin{enumerate}
-\item Objective 1.
-\item Objective 2.
-\end{enumerate}
+% \subsection{Objectives}
+% \label{sec:objectives}
+% Do I want this bit?\\
+% Formally, we state here the objectives of the project:
+% \begin{enumerate}
+% \item Objective 1.
+% \item Objective 2.
+% \end{enumerate}
 
-You can swap to singlespace for a list like this and back to doublespace afterwards:
+% You can swap to singlespace for a list like this and back to doublespace afterwards:
 
 % \singlespace
 % \begin{enumerate}
@@ -319,76 +339,207 @@ You can swap to singlespace for a list like this and back to doublespace afterwa
 % \label{tab:tree_vis_eval}
 % \end{table}
 
+\newpage
 \section{Method}
 \label{sec:method}
 
-Include flowchart for Sternberg?\\
-- Fig 3: Method flowchart\\
-- as in notes.docx. relate to python code\\
-- get data\\
--- describe the database(s) we do (and don't?) use\\
--- RDF, SPARQL\\
-- parse it\\
--- breakdown by reactions
---- Fig 2: Glycan reaction(s)\\
--- form glycan reaction collections (set / list)
-- similarity matrix (two methods, reaction set and list), threshold, network\\
-- assortativity coeff\\
+Figure \ref{fig:flowchart} illustrates, at a high level, the methods used in this research.
 
-- UPGMA hierarchical clustering\\
--- creating the tree\\
--- colouring the nodes \& branches\\
-
-
-\subsection{Blank}
-
-\subsubsection{Application Startup}
-\label{sec:startup}
-To use code--style text in-line, use \texttt{msc\_site}, or to apply to a section, use:
-
-\begin{verbatim}
-python manage.py runserver
-\end{verbatim}
-
-Another list example:
-
-\begin{enumerate}
-\item {\bf ProteinDomain} has attributes \texttt{name} and \texttt{pfam\_accession}.
-\item {\bf NodeVisualizationJsCode} The javascript library blah blah.
-\end{enumerate}
-
-
-This uses the path thing dsafdsdaf dsfadsf dfsfsd \path{/msc_site/phylo/static/phylo/my_new_tree.xml} to make sure that kind of text doesn't go off the end of the page. 
-
-\subsubsection{Singlespace Verbatim}
-\label{sec:template_tags}
-Like this:
-\singlespace
 \begin{figure}[H]
-\begin{verbatim}
-{% load phylo_extras %}
-{% for subfamily in subfamily_val %}
-    {% if subfamily|isinst:"dict" %}
-        <ul>
-        ...
-        </ul>
-    {% endif %}
-{% endfor %}
-\end{verbatim}
-\caption{Example use of a custom Django filter in a template html file}
-\label{fig:custom_filter_code}
+\centering 
+\includegraphics[scale=0.12]{images/flowchart.JPG} 
+\caption{Method flowchart}
+\label{fig:flowchart}
 \end{figure}
-\doublespace
 
+\subsection{Glycan Databases}
+\label{sec:glycan_databases}
+These exist:\\
+
+\path{https://www.genome.jp/dbget-bin/www_bfind_sub?mode=bfind&max_hit=1000&locale=en&serv=gn&dbkey=glycan&keywords=*&page=1} \\
+
+what's this one? \path{https://glyconnect.expasy.org/browser/structures/2259} \\
+
+Note - GlycoCT seems to be 'dead' - was an EBI thing but funding ran out. Subsumed by \path{http://unicarb-db.expasy.org/} ? \\
+
+We chose GlyTouCan, because ?? \\
+
+Different glycan structure formats exist. The number of glycans in GlyTouCan for each format are shown in Table \ref{tab:glycan_format_counts}.
+
+- GlycoCT\\
+-- Verbose\\
+-- Past EBI project, no longer supported / funded\\
+-- Possibly subsumed by unicarb-db.expasy.org\\
+- IUPAC \\
+- IUPAC condensed \\
+- IUPAC extended \\
+- WURCS \\
+
+\begin{table}[h]
+\centering
+\rowcolors{1}{}{lightblue}
+\begin{tabular}{|c|c|} \hline
+{\bf Format Name} & {\bf Number of Glycans} \\ \hline
+GlycoCT   &               45438 \\ \hline
+IUPAC    &             14517 \\ \hline
+IUPAC condensed       &   73329 \\ \hline
+IUPAC extended   &           73329 \\ \hline
+WURCS   &     105050 \\ \hline
+\end{tabular}
+\caption{Glycan counts in the GlyTouCan database for different glycan structure formats.}
+\label{tab:glycan_format_counts}
+\end{table}
+
+We chose GlyTouCan as DB.\\
+- 105050 glycans, 61 motifs, RDF database, SPARQL endpoint.\\
+-- give some RDF \& SPARL background\\
+-- explain how your queries work, e.g. the need to query across multiple graphs to get motif data.\\
+--- Glytoucan SPARQL endpoint uses GlycoRDF (I think) - ontology info here \path{https://github.com/ReneRanzinger/GlycoRDF} \\
+
+Queried databse for list of glycan ID / Sequence (WURCS string) / Motif ID\\
+- all saved to a json file \\
+- there can be multiple Motif IDs per glycan ID, so describe how we handle that\\
+
+\subsection{Extracting Reactions from Glycan Structure Data}
+\label{sec:extracting_reactions}
+
+The WURCS spec\\
+- v1.0\\
+-- extremely terse, not easily human readable\\
+- v2.0\\
+-- can handle ???\\
+
+Parse the WURCS string for each glycan to get collection of reactions\\
+- Problems: see python code (uncertainties etc.)\\
+- Ignore those we can't parse (state this as a limitation in conclusions, and something for further work)\\
+
+\subsection{Calculating Distances Between Glycan Reaction Collections}
+\label{sec:distance_calc_set}
+
+Use Jaccard (both methods) to create similarity matrix of glycans in terms of reaction collection similarity\\
+- see handwritten notes (photo in email)\\
+-- Jaccard set method Figure \ref{fig:heatmap_set_method} \\
+\begin{figure}[H]
+\centering 
+% \includegraphics[scale=1.0]{images/heatmap_set_method.png} 
+\includegraphics[scale=0.5]{images/heatmap_set_method.pdf} 
+\caption{Glycan Reaction Sets Heatmap CROP IMAGE. Each axis is a list of Glycans IDs, not shown here because there are too many to display.}
+\label{fig:heatmap_set_method}
+\end{figure}
+
+-- Jaccard list method\\
+- make sure None - None matches (i.e. no reactions?) are marked as 0 rather than 100\% similarity\\
+- describe algorithm, e.g. the use of sets etc.\\
+- matrix is saved, not re-calculated every time\\
+
+(check python code - do we ignore >1 motifs? at what point are zero connection nodes taken out? in the most connected components?)\\
+
+\subsection{Binary Adjacency Matrix}
+\label{sec:thresholding}
+
+Apply threshold to make a binary distinction between similar / dissimilar \\
+
+\subsection{Glycan Network Creation}
+\label{sec:network_creation}
+
+Treat this as an adjacency matrix, and, using a column-labelled dataframe, create a (networkx) graph\\
+
+Choose suitable layout\\
+
+assortativity coeff\\
+
+get X most connected components \\
+
+Redo using reaction quantities (modified Jaccard)\\
+- ensure new network has same no. of edges\\
+-- use weighted edges, order, trim\\
+- * generate some new network images? (low priority, might just show more compact clusters) \\
+
+\subsection{Hierarchical Clustering}
+\label{sec:clustering}
+
+UPGMA hierarchical clustering\\
+
+- apply motif sets to terminal node names\\
+- colour the nodes \& branches\\
+-- describe how\\
+--- e.g. manipulating phyloxml to produce coloured trees in archeopteryx\\
+- does it highlight possible mistakes? e.g. the isolated Galalpha1 somewhere in tree for method one (set)\\
+- images: circular if poss, otherwise cladogram cos branch lengths meaningless\\
+
+
+\subsection{Reproducibility}
+\label{sec:reproducibility}
+The computer program code used to produce the results described in this paper is available from a GitHub software repository. Details of how to obtain the code, as well as the Python package dependencies, can be found in Appendix \ref{sec:software_dependencies}.
+
+
+% \subsection{Blank}
+
+% \subsubsection{Application Startup}
+% \label{sec:startup}
+% To use code--style text in-line, use \texttt{msc\_site}, or to apply to a section, use:
+
+% \begin{verbatim}
+% python manage.py runserver
+% \end{verbatim}
+
+% Another list example:
+
+% \begin{enumerate}
+% \item {\bf ProteinDomain} has attributes \texttt{name} and \texttt{pfam\_accession}.
+% \item {\bf NodeVisualizationJsCode} The javascript library blah blah.
+% \end{enumerate}
+
+% \subsubsection{Singlespace Verbatim}
+% \label{sec:template_tags}
+% Like this:
+% \singlespace
+% \begin{figure}[H]
+% \begin{verbatim}
+% {% load phylo_extras %}
+% {% for subfamily in subfamily_val %}
+%     {% if subfamily|isinst:"dict" %}
+%         <ul>
+%         ...
+%         </ul>
+%     {% endif %}
+% {% endfor %}
+% \end{verbatim}
+% \caption{Example use of a custom Django filter in a template html file}
+% \label{fig:custom_filter_code}
+% \end{figure}
+% \doublespace
+
+\newpage
 \section{Results}
 \label{sec:results}
 (Discuss them as you present them)\\
 
-- Similarity matrix\\
--- Fig 4: Similarity matrix\\
 - Walk through the network\\
 -- Figs 5 to 10: Glycan (un)connected components\\
+
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.5]{threshold_87_conn_comp_1_method_set/threshold_87_full_network_method_set.eps} 
+\caption{Full network of glycans, with similarity determined using the reaction set method. CROP.}
+\label{fig:threshold_87_full_network_method_set}
+\end{figure}
+
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.3]{threshold_87_conn_comp_1_method_set/threshold_87_conn_comp_1_method_set.eps} 
+\caption{Most connected component of a network of glycans, with similarity determined using the reaction set method. CROP and TURN THIS SIDEWAYS.}
+\label{fig:threshold_87_conn_comp_1_method_set}
+\end{figure}
+
+--- Several obvious communities apparent\\
+--- In moving from community A to B, we gain/lose motif X
+--- The fact that nodes with the same motif sets are spaced out reflects the fact that the glycans have more structure than the motifs alone, and our method is showing that, so that's added value.\\
+
 - Assortativity coeff for set vs list method\\
+-- statistically significant?
+--- either do this calc, or write about it in Discussion \\
+---- see if there's an easy way to get a number from networkx. Otherwise, bootstrap / jacknife etc. \\
 
 - explore the UPGMA tree\\
 -- use different depths / zooms\\
@@ -396,94 +547,156 @@ Like this:
 --- Fig 12: zoomed-in tree\\
 -- describe the clades, relate them to the network if poss\\
 --- therefore make a comparison between jaccard + network and UPGMA tree methods\\
+---- Are there similarities between tree and network? (network is only a vis tool, the tree is the real deal) \\
 
-
+\newpage
 \section{Discussion}
 \label{sec:discussion}
 (On the bigger picture)\\
+Should have calculated statistical significance of assortativity coeffs. Could use bootstrap etc.
 
+\newpage
 \section{Further Work}
 \label{sec:further_work}
 
+Can use more advanced SPARQL query to get reaction breakdown (so should increase both number of glycans and accuracy)\\
+
+Bi-clustering\\
+
+Kernel methods\\
+
 - New dataset, samples by cell / tissue\\
+- details on what we would do
 -- Work already done (web scraping for data)\\
 -- Format conversion problems\\
+--- conversion software breaks for linearcode to WURCS (can't handle uncertainties)\\
 
+Compare full structures, not just reactions\\
 
+Compare sets of structures\\
+
+Use neighbour joining or K-means instead of UPGMA (can you say why that might be useful?)\\
+
+Other glycan databases?\\
+
+KEGG?\\
+
+Use LGL, organic cytoscape for vis\\
+
+chi-squared to compare two (quantified) reaction profiles\\
+
+\newpage
 \section{Conclusions}
 \label{sec:conclusions}
 
 \newpage
+\section*{Appendices}
 \appendix
-\section{Example JavaScript Code}
-\label{sec:gains_js_code}
-JavaScript code for determining the width of a rectangle representing total domain gains for each node. The function \texttt{domian\_count} loops through all of the xml property tags associated with a node, parses their content, and returns a dictionary with domain names as keys, and their copy number as the values. The function \texttt{calc\_dom\_deltas} takes the domain count dictionaries of both a parent and a child node, and calculates the total gains and losses across all domains from the parent to the child. The in-line \texttt{function(n)} of the \texttt{nodeEnter} code is called by the underlying D3 library for every node in our data object (which has previously been created from a phyloXML file), and, using the two functions \texttt{domian\_count} and \texttt{calc\_dom\_deltas}, determines which numeric value to apply to the `width' attribute of a rectangle to be displayed alongside the node.
-\singlespace
-\footnotesize
-\begin{verbatim}
-function domain_count(anode) {
-  var domain_counts = {};
-  if (anode) {
-    if (anode.properties && anode.properties.length > 0) {
-      var propertiesLength = anode.properties.length;
-      for (var i = 0; i < propertiesLength; ++i) {
-        var property = anode.properties[i];
-        var prop_ref_components = property.ref.split(":")
-        var prop_ref_prefix = prop_ref_components[0]
-        var prop_id_ref = property.id_ref;
-        if (prop_ref_prefix == "idr" && property.value) {
-          domain_counts[prop_id_ref] = property.value;
-        }
-      }
-    }
-  }
-  return domain_counts;
-}
-\end{verbatim}
-\newpage
-\begin{verbatim}
-// calculates the total gains and losses of protein domains from
-// a parent to its child,
-// returned as a dictionary with keys 'losses' and 'gains'
-function calc_dom_deltas(parent_domain_counts, node_domain_counts) {
-  // check both dictionaries are of the same length
-  if (parent_domain_counts.length != node_domain_counts.length) {
-    alert("Unequal number of doamins between parent and child")
-  }
+\section{Software Dependencies}
+\label{sec:software_dependencies}
+Table \ref{tab:software_dependencies} lists the packages necessary to run the python code used to produce the results described in this paper. The program code itself can be cloned into the current directory by typing the following command in a command window (assuming the Git\footnote{\url{https://git-scm.com/}} application is already installed):
 
-  var dom_deltas = {losses: 0, gains: 0};
-  var dom_losses = 0;
-  var dom_gains = 0;
-  for (var key in parent_domain_counts) {
-    var parent_dom_count = parent_domain_counts[key];
-    var node_dom_count = node_domain_counts[key];
-    var dom_delta = node_dom_count - parent_dom_count;
-    if (dom_delta < 0) {
-      dom_deltas.losses += Math.abs(dom_delta);
-    } else if (dom_delta > 0) {
-      dom_deltas.gains += dom_delta;
-    }
-  }
-  return dom_deltas;
-}
-
-nodeEnter.append('rect') //gains
-  .attr('width', function(n) {
-    // count each domain both for this node's parent and this node.
-    // calculate the loss or gain for each domain from the parent to this node.
-    // only do this if the node has a parent
-    if (typeof n.parent != 'undefined' && n.parent.children.length == 2) {
-      var parent_domain_counts = domain_count(n.parent);
-      var node_domain_counts = domain_count(n);
-      var dom_deltas = calc_dom_deltas(parent_domain_counts, node_domain_counts);
-      return dom_deltas.gains /10;
-    } else {
-      return 0;
-    }
-  })
+\begin{verbatim}
+git clone https://github.com/ImperialCollegeLondon/glycans.git
 \end{verbatim}
-\normalsize
-\doublespace
+
+\begin{table}[h]
+\centering
+%\resizebox{\columnwidth}{!}
+\rowcolors{1}{}{lightblue}
+\begin{tabular}{|c|c|} \hline
+{\bf Package Name} & {\bf Version} \\ \hline
+biopython   &               1.72 \\ \hline
+fontconfig    &             2.12.6 \\ \hline
+glypy       &               0.12.2 \\ \hline
+html5lib   &                1.0.1 \\ \hline
+httplib2   &                0.11.3 \\ \hline
+matplotlib &                2.2.2 \\ \hline
+networkx  &                 2.1 \\ \hline
+numpy    &                  1.14.3 \\ \hline
+numpy-base   &              1.14.5 \\ \hline
+pandas  &                   0.23.2 \\ \hline
+python   &                  3.6.6 \\ \hline
+rdflib  &                   4.2.2 \\ \hline
+scipy   &                   1.1.0 \\ \hline
+seaborn  &                  0.8.1 \\ \hline
+sparqlwrapper   &           1.8.0 \\ \hline
+urllib3      &              1.23 \\ \hline
+\end{tabular}
+\caption{Python software packages necessary to run the program code associated with this project.}
+\label{tab:software_dependencies}
+\end{table}
+
+
+% \section{Example JavaScript Code}
+% \label{sec:gains_js_code}
+% JavaScript code for determining the width of a rectangle representing total domain gains for each node. The function \texttt{domian\_count} loops through all of the xml property tags associated with a node, parses their content, and returns a dictionary with domain names as keys, and their copy number as the values. The function \texttt{calc\_dom\_deltas} takes the domain count dictionaries of both a parent and a child node, and calculates the total gains and losses across all domains from the parent to the child. The in-line \texttt{function(n)} of the \texttt{nodeEnter} code is called by the underlying D3 library for every node in our data object (which has previously been created from a phyloXML file), and, using the two functions \texttt{domian\_count} and \texttt{calc\_dom\_deltas}, determines which numeric value to apply to the `width' attribute of a rectangle to be displayed alongside the node.
+% \singlespace
+% \footnotesize
+% \begin{verbatim}
+% function domain_count(anode) {
+%   var domain_counts = {};
+%   if (anode) {
+%     if (anode.properties && anode.properties.length > 0) {
+%       var propertiesLength = anode.properties.length;
+%       for (var i = 0; i < propertiesLength; ++i) {
+%         var property = anode.properties[i];
+%         var prop_ref_components = property.ref.split(":")
+%         var prop_ref_prefix = prop_ref_components[0]
+%         var prop_id_ref = property.id_ref;
+%         if (prop_ref_prefix == "idr" && property.value) {
+%           domain_counts[prop_id_ref] = property.value;
+%         }
+%       }
+%     }
+%   }
+%   return domain_counts;
+% }
+% \end{verbatim}
+% \newpage
+% \begin{verbatim}
+% // calculates the total gains and losses of protein domains from
+% // a parent to its child,
+% // returned as a dictionary with keys 'losses' and 'gains'
+% function calc_dom_deltas(parent_domain_counts, node_domain_counts) {
+%   // check both dictionaries are of the same length
+%   if (parent_domain_counts.length != node_domain_counts.length) {
+%     alert("Unequal number of doamins between parent and child")
+%   }
+
+%   var dom_deltas = {losses: 0, gains: 0};
+%   var dom_losses = 0;
+%   var dom_gains = 0;
+%   for (var key in parent_domain_counts) {
+%     var parent_dom_count = parent_domain_counts[key];
+%     var node_dom_count = node_domain_counts[key];
+%     var dom_delta = node_dom_count - parent_dom_count;
+%     if (dom_delta < 0) {
+%       dom_deltas.losses += Math.abs(dom_delta);
+%     } else if (dom_delta > 0) {
+%       dom_deltas.gains += dom_delta;
+%     }
+%   }
+%   return dom_deltas;
+% }
+
+% nodeEnter.append('rect') //gains
+%   .attr('width', function(n) {
+%     // count each domain both for this node's parent and this node.
+%     // calculate the loss or gain for each domain from the parent to this node.
+%     // only do this if the node has a parent
+%     if (typeof n.parent != 'undefined' && n.parent.children.length == 2) {
+%       var parent_domain_counts = domain_count(n.parent);
+%       var node_domain_counts = domain_count(n);
+%       var dom_deltas = calc_dom_deltas(parent_domain_counts, node_domain_counts);
+%       return dom_deltas.gains /10;
+%     } else {
+%       return 0;
+%     }
+%   })
+% \end{verbatim}
+% \normalsize
+% \doublespace
 
 \newpage
 \bibliographystyle{agsm}
