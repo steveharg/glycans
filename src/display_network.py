@@ -81,14 +81,15 @@ if __name__ == "__main__":
 
         print("plotting heatmaps...")
         sns.set()
-        plt.subplot(1,2,1)
+        # plt.subplot(1,2,1)
 
-        ax_reactions = sns.heatmap(reaction_distance_df, annot=False, fmt=".2f", square=True)
-        plt.title('pairwise glycan similarity by reactions')
+        ax_reactions = sns.heatmap(reaction_distance_df, annot=False, fmt=".2f", square=True, xticklabels=False,
+                                   yticklabels=False)
+        plt.title('Glycan Similarity by Reactions')
 
-        plt.subplot(1,2,2)
-        ax_motifs = sns.heatmap(motif_distance_df, annot=False, fmt=".2f", square=True)
-        plt.title('pairwise glycan similarity by motifs')
+        # plt.subplot(1,2,2)
+        # ax_motifs = sns.heatmap(motif_distance_df, annot=False, fmt=".2f", square=True)
+        # plt.title('glycan similarity by motifs')
 
         plt.show()
         print("...done")
