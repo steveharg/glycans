@@ -73,6 +73,16 @@
 \begin{abstract}
 \pagenumbering{arabic}
 \doublespacing
+contributions\\
+
+- identify mis-laballed motifs\\
+
+- we can determine glycan structure similarity\\
+-- without needing to model the precise tree structure\\
+-- so could also predict structure of unknown glycans from GE data or enzyme abundance\\
+
+remove URLs from refs\\
+
 % \noindent RE-WRITE\\
 % IMPOTANT - BEAR IN MIND THE EXAMINER WILL PROB ONLY SPEND ABOUT 20 MINS READING THIS, SO NEED TO GRAN THEIR ATTENTION AND CONVINCE THEM QUICKLY IN ABSTRACT AND INTRO. USE GOOD SUMMARY DIAGRAMS AND TEXT.\\
 % Include some numbers for Sternberg\\
@@ -343,7 +353,19 @@ The rest of this paper is organised as follows -- in Section \ref{sec:method} we
 \section{Method}
 \label{sec:method}
 
-Figure \ref{fig:flowchart} illustrates, at a high level, the methods used in this research.
+Figure \ref{fig:flowchart} illustrates, at a high level, the methods used in this research. In brief, we:
+
+\begin{itemize}
+\item Extract glycan structure and motif information from a public Glycan database (GlyTouCan)
+\item Save the data locally
+\item Parse the structure data, extracting the collection of reactions necessary to construct each glycan
+\item Use the Jaccard distance measure to determine similarity between all pairs of glycans in terms of their reactions collections
+\item Convert the similarity measurements to binary similar / dissimilar by application of a threshold
+\item Create, visualise, and explore a network of similar glycans 
+\item Construct, visualise and explore a cladogram via the use of hierarchical clustering
+\end{itemize}
+
+In the following sub-sections we describe each of these steps in more detail.
 
 \begin{figure}[H]
 \centering 
@@ -356,13 +378,19 @@ Figure \ref{fig:flowchart} illustrates, at a high level, the methods used in thi
 \label{sec:glycan_databases}
 These exist:\\
 
-\path{https://www.genome.jp/dbget-bin/www_bfind_sub?mode=bfind&max_hit=1000&locale=en&serv=gn&dbkey=glycan&keywords=*&page=1} \\
+KEGG Glycan database\footnote{\url{https://www.genome.jp/dbget-bin/www_bfind_sub?mode=bfind&max_hit=1000&locale=en&serv=gn&dbkey=glycan&keywords=*&page=1}} contains 504 glycans. Formats: KCF ?\\
 
-what's this one? \path{https://glyconnect.expasy.org/browser/structures/2259} \\
+GlyConnect\footnote{\url{https://glyconnect.expasy.org/browser/structures/2259}} contains 3768 glycans. Formats: IUPAC.\\
 
-Note - GlycoCT seems to be 'dead' - was an EBI thing but funding ran out. Subsumed by \path{http://unicarb-db.expasy.org/} ? \\
+UniCarbKB\footnote{\url{http://www.unicarbkb.org/}} somewhat confusing interface. 3238 GlycoSuite Structures, 899 Glycoproteins.
 
-We chose GlyTouCan, because ?? \\
+GlyTouCan\footnote{\url{https://glytoucan.org/}} 105050 glycans. Formats: WURCS, GlycoCT, IUPAC Condensed, IUPAC Extended. Also motifs.
+
+Note - GlycoCT format seems to be 'dead' - was an EBI thing but funding ran out. Subsumed by \path{http://unicarb-db.expasy.org/} ? \\
+
+More glycan resources here \path{https://biosciencedbc.jp/en/db-link/d09-dblink}, here \path{http://www.functionalglycomics.org/static/consortium/links.shtml}, and here \path{https://biosciencedbc.jp/en/db-link/d09-dblink}.
+
+We chose GlyTouCan, because most glycans, most formats, motif info, easy to query. \\
 
 Different glycan structure formats exist. The number of glycans in GlyTouCan for each format are shown in Table \ref{tab:glycan_format_counts}.
 
@@ -378,13 +406,13 @@ Different glycan structure formats exist. The number of glycans in GlyTouCan for
 \begin{table}[h]
 \centering
 \rowcolors{1}{}{lightblue}
-\begin{tabular}{|c|c|} \hline
-{\bf Format Name} & {\bf Number of Glycans} \\ \hline
-GlycoCT   &               45438 \\ \hline
-IUPAC    &             14517 \\ \hline
-IUPAC condensed       &   73329 \\ \hline
-IUPAC extended   &           73329 \\ \hline
-WURCS   &     105050 \\ \hline
+\begin{tabular}{|c|c|c|} \hline
+{\bf Format Name} & {\bf Number of Glycans} & {\bf Comments} \\ \hline
+GlycoCT & 45438 & Verbose, no longer supported\\ \hline
+IUPAC & 14517 & \\ \hline
+IUPAC condensed & 73329 & \\ \hline
+IUPAC extended & 73329 & \\ \hline
+WURCS & 105050 & Most recently published \\ \hline
 \end{tabular}
 \caption{Glycan counts in the GlyTouCan database for different glycan structure formats.}
 \label{tab:glycan_format_counts}
@@ -459,7 +487,7 @@ Redo using reaction quantities (modified Jaccard)\\
 \label{sec:clustering}
 
 UPGMA hierarchical clustering\\
-
+- how does it work
 - apply motif sets to terminal node names\\
 - colour the nodes \& branches\\
 -- describe how\\
@@ -525,12 +553,42 @@ The computer program code used to produce the results described in this paper is
 \label{fig:threshold_87_full_network_method_set}
 \end{figure}
 
-\begin{figure}[H]
+\begin{sidewaysfigure}
 \centering 
-\includegraphics[scale=0.3]{threshold_87_conn_comp_1_method_set/threshold_87_conn_comp_1_method_set.eps} 
+\includegraphics[scale=0.5]{threshold_87_conn_comp_1_method_set/threshold_87_conn_comp_1_method_set.eps} 
 \caption{Most connected component of a network of glycans, with similarity determined using the reaction set method. CROP and TURN THIS SIDEWAYS.}
 \label{fig:threshold_87_conn_comp_1_method_set}
+\end{sidewaysfigure}
+\clearpage
+
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.7]{motif_similarity_exploration/LacDiNAc_vs_Lactosamine_motif_LacDiNAc.pdf} 
+\caption{LacDiNAc vs Lactosamine motif,LacDiNAc. CROP.}
+\label{fig:LacDiNAc_vs_Lactosamine motif,LacDiNAc}
 \end{figure}
+
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.7]{motif_similarity_exploration/Galalpha1-3Gal_epitope_Lactosamine_motif_Blood_group_H_vs_Lactosamine_motif_Blood_group_H.pdf} 
+\caption{Galalpha1-3Gal epitope, Lactosamine motif, Blood group H vs Lactosamine motif, Blood group H. CROP.}
+\label{fig:Galalpha1-3Gal_epitope_Lactosamine_motif_Blood_group_H_vs_Lactosamine_motif_Blood_group_H}
+\end{figure}
+
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.7]{motif_similarity_exploration/N-Glycan_core_basic_vs_Lactosamine_motif.pdf} 
+\caption{N-Glycan core basic vs Lactosamine motif. CROP.}
+\label{fig:N-Glycan_core_basic_vs_Lactosamine_motif}
+\end{figure}
+
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.7]{motif_similarity_exploration/Neo_Lactosamine_vs_LacDiNAc.pdf} 
+\caption{Neo Lactosamine vs LacDiNAc. CROP.}
+\label{fig:Neo_Lactosamine_vs_LacDiNAc}
+\end{figure}
+
 
 --- Several obvious communities apparent\\
 --- In moving from community A to B, we gain/lose motif X
@@ -544,10 +602,58 @@ The computer program code used to produce the results described in this paper is
 - explore the UPGMA tree\\
 -- use different depths / zooms\\
 --- Fig 11: full tree\\
+
+\begin{sidewaysfigure}
+\centering 
+\includegraphics[scale=0.3]{trees/zoomed_full_tree_cladogram.png} 
+\caption{Full UPGMA tree (zoomed in). CROP and TURN THIS SIDEWAYS.}
+\label{fig:full_tree}
+\end{sidewaysfigure}
+\clearpage
+
+
 --- Fig 12: zoomed-in tree\\
 -- describe the clades, relate them to the network if poss\\
 --- therefore make a comparison between jaccard + network and UPGMA tree methods\\
 ---- Are there similarities between tree and network? (network is only a vis tool, the tree is the real deal) \\
+
+\begin{sidewaysfigure}
+\centering 
+\includegraphics[scale=0.3]{trees/rogue_LacDiNAc_in_tree.png} 
+\caption{Rogue LacDiNAc. CROP and TURN THIS SIDEWAYS.}
+\label{fig:full_tree}
+\end{sidewaysfigure}
+\clearpage
+
+\begin{figure*}[ht!]
+    \centering
+    \begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics[scale=0.6]{trees/rogue_LacDiNAc_structure.png}
+        \caption{Rogue LacDiNAc structure. CROP}
+    \end{subfigure}%
+    \\
+    \bigbreak
+    ~ 
+	\\
+    \begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics[scale=0.6]{trees/LacDiNAc_motif.png}
+        \caption{LacDiNAc motif}
+    \end{subfigure}
+    \\
+    \bigbreak
+    ~ 
+	\\
+    \begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics[scale=0.6]{trees/N-Glycan_truncated_motif__First_GlcpNAC_cut_off_motif.png}
+        \caption{N-Glycan truncated motif First GlcpNAC cut off motif}
+    \end{subfigure}
+    \caption{Rogue LacDiNAc and motifs.}
+\label{fig:rogue_lacdinac}
+\end{figure*}
+
 
 \newpage
 \section{Discussion}
