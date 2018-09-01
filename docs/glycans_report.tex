@@ -109,8 +109,8 @@ Many thanks to John Pinney for his supervision and guidance during this project,
 \newpage
 \section*{Abbreviations}
 \doublespacing
-% \textit{ABC:} A Big Charlie\\
-% \textit{DEF:} Dazzling Ear Fountain\\
+\textit{RDF:} Resource Description Framework\\
+\textit{SPARQL:} A recursive acronym for SPARQL Protocol and RDF Query Language\\
 \addcontentsline{toc}{section}{Abbreviations} %adds it to the table of contents
 
 \newpage
@@ -374,98 +374,91 @@ In the following sub-sections we describe each of these steps in more detail.
 \label{fig:flowchart}
 \end{figure}
 
+\subsection{Reproducibility}
+\label{sec:reproducibility}
+The computer program code referenced throughout this report, and which was used to produce the results described, is available from a GitHub software repository. Details of how to obtain the code, as well as the Python package dependencies, can be found in Appendix \ref{sec:software_dependencies}. 
+
 \subsection{Glycan Databases}
 \label{sec:glycan_databases}
-These exist:\\
 
-KEGG Glycan database\footnote{\url{https://www.genome.jp/dbget-bin/www_bfind_sub?mode=bfind&max_hit=1000&locale=en&serv=gn&dbkey=glycan&keywords=*&page=1}} contains 504 glycans. Formats: KCF ?\\
+A number of different publicly accessible glycan databases exist, as well as multiple different formats for expressing glycan structure. The details of these databases and formats are listed in Tables \ref{tab:glycan_databases} and \ref{tab:glycan_format_counts} in Appendix \ref{sec:glycan_dbs_and_formats}. We use the GlyTouCan database, given its larger number of glycans and supported formats compared to the other databases, as well as the fact that it also contains motif information. In our trials it was also found to have the most suitable query method. We also chose to work with the Web3 Unique Representation of Carbohydrate Structures (WURCS) glycan structure format, which is the most recently devised format and which has been designed to address various shortcomings of the other existing formats \citep{matsubara2017wurcs}.
 
-GlyConnect\footnote{\url{https://glyconnect.expasy.org/browser/structures/2259}} contains 3768 glycans. Formats: IUPAC.\\
+GlyTouCan is a semantic web graph database, rather than a relational database. Such databases contain Resource Description Framework (RDF) data, in which all data items take the form of \emph{triples}, and the database is queried using the query language SPARQL (a recursive acronym for SPARQL Protocol and RDF Query Language). A full description of this type of data is beyond the scope of this report, however some useful primers are available at the following URLs:
 
-UniCarbKB\footnote{\url{http://www.unicarbkb.org/}} somewhat confusing interface. 3238 GlycoSuite Structures, 899 Glycoproteins.
+\singlespace
+\begin{itemize}
+\item RDF Primer \path{https://www.w3.org/TR/rdf11-primer/}
+\item SPARQL 1.1 overview \path{https://www.w3.org/TR/sparql11-overview/}
+\end{itemize}
+\doublespace
 
-GlyTouCan\footnote{\url{https://glytoucan.org/}} 105050 glycans. Formats: WURCS, GlycoCT, IUPAC Condensed, IUPAC Extended. Also motifs.
-
-Note - GlycoCT format seems to be 'dead' - was an EBI thing but funding ran out. Subsumed by \path{http://unicarb-db.expasy.org/} ? \\
-
-More glycan resources here \path{https://biosciencedbc.jp/en/db-link/d09-dblink}, here \path{http://www.functionalglycomics.org/static/consortium/links.shtml}, and here \path{https://biosciencedbc.jp/en/db-link/d09-dblink}.
-
-We chose GlyTouCan, because most glycans, most formats, motif info, easy to query. \\
-
-Different glycan structure formats exist. The number of glycans in GlyTouCan for each format are shown in Table \ref{tab:glycan_format_counts}.
-
-- GlycoCT\\
--- Verbose\\
--- Past EBI project, no longer supported / funded\\
--- Possibly subsumed by unicarb-db.expasy.org\\
-- IUPAC \\
-- IUPAC condensed \\
-- IUPAC extended \\
-- WURCS \\
-
-\begin{table}[h]
-\centering
-\rowcolors{1}{}{lightblue}
-\begin{tabular}{|c|c|c|} \hline
-{\bf Format Name} & {\bf Number of Glycans} & {\bf Comments} \\ \hline
-GlycoCT & 45438 & Verbose, no longer supported\\ \hline
-IUPAC & 14517 & \\ \hline
-IUPAC condensed & 73329 & \\ \hline
-IUPAC extended & 73329 & \\ \hline
-WURCS & 105050 & Most recently published \\ \hline
-\end{tabular}
-\caption{Glycan counts in the GlyTouCan database for different glycan structure formats.}
-\label{tab:glycan_format_counts}
-\end{table}
-
-We chose GlyTouCan as DB.\\
-- 105050 glycans, 61 motifs, RDF database, SPARQL endpoint.\\
--- give some RDF \& SPARL background\\
--- explain how your queries work, e.g. the need to query across multiple graphs to get motif data.\\
---- Glytoucan SPARQL endpoint uses GlycoRDF (I think) - ontology info here \path{https://github.com/ReneRanzinger/GlycoRDF} \\
-
-Queried databse for list of glycan ID / Sequence (WURCS string) / Motif ID\\
-- all saved to a json file \\
-- there can be multiple Motif IDs per glycan ID, so describe how we handle that\\
+The data we wish to extract from GlyTouCan is a list of glycan IDs, the text string (in WURCS format) describing the structure of each glycan, and the IDs of the motifs which each glycan contains. Separately, we also wish to extract a list of the motif names associated with each motif ID. The two SPARQL queries we use for these tasks are given in Appendix \ref{sec:sparql_queries}, and the Python scripts used to execute them are called \texttt{glytoucan\_rdf\_to\_json.py} and \texttt{motif\_rdf\_to\_json.py} respectively. After execution the results are saved locally to JavaScript Object Notation (JSON) files.
 
 \subsection{Extracting Reactions from Glycan Structure Data}
 \label{sec:extracting_reactions}
 
-The WURCS spec\\
-- v1.0\\
--- extremely terse, not easily human readable\\
-- v2.0\\
--- can handle ???\\
+As described in Section \ref{sec:proposed_method}, we wish to characterise our glycans in terms of the biochemical reactions necessary for their synthesis. We do this by parsing the WURCS string describing each glycan structure, and, recalling that glycans exhibit a tree-like structure, we extract collections of `child' and `parent' monosaccharides, and the type of the link that joins them (i.e. the carbon numbers of the child and parent) for every glycan. For some of the glycan entries in the database there is uncertainty regarding aspects of the glycan structure -- for example the number of links or the carbon numbers expressed with only a percentage of certainty. We reject these. The Python script which parses the WURCS strings is \texttt{parse\_glytoucan\_results.py}.
 
-Parse the WURCS string for each glycan to get collection of reactions\\
-- Problems: see python code (uncertainties etc.)\\
-- Ignore those we can't parse (state this as a limitation in conclusions, and something for further work)\\
 
 \subsection{Calculating Distances Between Glycan Reaction Collections}
 \label{sec:distance_calc_set}
 
-Use Jaccard (both methods) to create similarity matrix of glycans in terms of reaction collection similarity\\
-- see handwritten notes (photo in email)\\
--- Jaccard set method Figure \ref{fig:heatmap_set_method} \\
+We determine a measure of glycan similarity using two alternatives methods, which we compare in Section \ref{sec:results}. Firstly, by calculating the Jaccard similarity coefficient between all pairs of reaction \emph{sets} (that is, we only count each reaction belonging to a glycan once, regardless of whether or not it occurs multiple times), and secondly, by calculating a modified version of the Jaccard similarity coefficient between all pairs of reaction \emph{lists} (i.e. in this case we do count the number of times each reaction occurs).
+
+The Jaccard similarity coefficient between two sets $A$ and $B$ is given by:
+
+\begin{equation}
+\label{eq:precall}
+	J(A,B)=\frac{|A \cap B|}{|A \cup B|}=\frac{|A \cap B|}{|A|+|B|-|A \cap B|}
+\end{equation}
+
+As an example, consider two Glycans, $G_1$ and $G_2$. Let $G_1$ contain the set of reactions $r_1$, $r_3$, $r_5$ and $r_5$, whilst $G_2$ contains reactions $r_4$ and $r_5$ (neither glycan contains reaction $r_2$). We want to count the number of reactions shared by $G_1$ and $G_2$ as a fraction of the total number of unique reactions present in both sets. Table \ref{tab:jaccard_set_example} illustrates the two sets.
+
+\begin{table}[h]
+\centering
+%\resizebox{\columnwidth}{!}
+\rowcolors{1}{}{lightblue}
+\begin{tabular}{|c|c|c|c|c|} \hline
+\multirow{2}{*}{\bf Glycan} & \multicolumn{4}{|c|}{\bf Reaction}\\  \cline{2-5}
+& {\bf $r_1$} & {\bf $r_3$} & {\bf $r_4$} & {\bf $r_5$} \\ \hline
+$G_1$ & 1 & 1 & 0 & 2 \\ \hline
+$G_2$ & 0 & 0 & 1 & 1 \\ \hline
+{\bf Present in both} & 0 & 0 & 0 & 1 \\ \hline
+\end{tabular}
+\caption{Jaccard similarity coefficient calculation for glycans $G_1$ and $G_2$.}
+\label{tab:jaccard_set_example}
+\end{table}
+
+In this case the two glycans have just one reaction in common out of a total of four different reactions present in both glycans, and so the Jaccard similarity coefficient is $1/4$, or 25\%.
+
+In the modified Jaccard case, where we wish to take into account reaction quantities, instead of scoring one when both glycans share a reaction, we calculate the score for the shared reaction as the smaller reaction quantity divide by the larger one, as illustrated in Table \ref{tab_jaccard_list_example}.
+
+\begin{table}[h]
+\centering
+%\resizebox{\columnwidth}{!}
+\rowcolors{1}{}{lightblue}
+\begin{tabular}{|c|c|c|c|c|} \hline
+\multirow{2}{*}{\bf Glycan} & \multicolumn{4}{|c|}{\bf Reaction}\\  \cline{2-5}
+& {\bf $r_1$} & {\bf $r_3$} & {\bf $r_4$} & {\bf $r_5$} \\ \hline
+$G_1$ & 1 & 1 & 0 & 2 \\ \hline
+$G_2$ & 0 & 0 & 1 & 1 \\ \hline
+{\bf Shared fractional score} & 0 & 0 & 0 & $1/2$ \\ \hline
+\end{tabular}
+\caption{Modified Jaccard similarity coefficient calculation for glycans $G_1$ and $G_2$.}
+\label{tab:jaccard_list_example}
+\end{table}
+
+The modified Jaccard similarity coefficient is then $\frac{1/2}{4}$, or 12.5\%. Hence a penalty is incurred when glycans share reactions, but in unequal quantities, with the penalty proportional to the quantity difference.
+
+For both methods, we calculate the similarity coefficient for all pairs of glycans, resulting in two similarity matrices. We will use these similarity matrices directly when performing hierarchical clustering as described in Section \ref{sec:clustering}, but for the purposes of creating a network of glycans to explore, we separately create a binary adjacency matrix by applying a heuristically chosen threshold to the values in the similarity matrix, such that any values falling below the threshold now score 0\% similarity, whilst any falling on or above the threshold score 100\% similarity.
+
 \begin{figure}[H]
 \centering 
 % \includegraphics[scale=1.0]{images/heatmap_set_method.png} 
 \includegraphics[scale=0.5]{images/heatmap_set_method.pdf} 
-\caption{Glycan Reaction Sets Heatmap CROP IMAGE. Each axis is a list of Glycans IDs, not shown here because there are too many to display.}
+\caption{REMOVE THIS??? Glycan Reaction Sets Heatmap CROP IMAGE. Each axis is a list of Glycans IDs, not shown here because there are too many to display.}
 \label{fig:heatmap_set_method}
 \end{figure}
-
--- Jaccard list method\\
-- make sure None - None matches (i.e. no reactions?) are marked as 0 rather than 100\% similarity\\
-- describe algorithm, e.g. the use of sets etc.\\
-- matrix is saved, not re-calculated every time\\
-
-(check python code - do we ignore >1 motifs? at what point are zero connection nodes taken out? in the most connected components?)\\
-
-\subsection{Binary Adjacency Matrix}
-\label{sec:thresholding}
-
-Apply threshold to make a binary distinction between similar / dissimilar \\
 
 \subsection{Glycan Network Creation}
 \label{sec:network_creation}
@@ -495,10 +488,6 @@ UPGMA hierarchical clustering\\
 - does it highlight possible mistakes? e.g. the isolated Galalpha1 somewhere in tree for method one (set)\\
 - images: circular if poss, otherwise cladogram cos branch lengths meaningless\\
 
-
-\subsection{Reproducibility}
-\label{sec:reproducibility}
-The computer program code used to produce the results described in this paper is available from a GitHub software repository. Details of how to obtain the code, as well as the Python package dependencies, can be found in Appendix \ref{sec:software_dependencies}.
 
 
 % \subsection{Blank}
@@ -563,28 +552,28 @@ The computer program code used to produce the results described in this paper is
 
 \begin{figure}[H]
 \centering 
-\includegraphics[scale=0.7]{motif_similarity_exploration/LacDiNAc_vs_Lactosamine_motif_LacDiNAc.pdf} 
+\includegraphics[scale=0.9]{motif_similarity_exploration/LacDiNAc_vs_Lactosamine_motif_LacDiNAc.pdf} 
 \caption{LacDiNAc vs Lactosamine motif,LacDiNAc. CROP.}
 \label{fig:LacDiNAc_vs_Lactosamine motif,LacDiNAc}
 \end{figure}
 
 \begin{figure}[H]
 \centering 
-\includegraphics[scale=0.7]{motif_similarity_exploration/Galalpha1-3Gal_epitope_Lactosamine_motif_Blood_group_H_vs_Lactosamine_motif_Blood_group_H.pdf} 
+\includegraphics[scale=0.85]{motif_similarity_exploration/Galalpha1-3Gal_epitope__Lactosamine_motif__Blood_group_H_vs_Lactosamine_motif__Blood_group_H.pdf} 
 \caption{Galalpha1-3Gal epitope, Lactosamine motif, Blood group H vs Lactosamine motif, Blood group H. CROP.}
 \label{fig:Galalpha1-3Gal_epitope_Lactosamine_motif_Blood_group_H_vs_Lactosamine_motif_Blood_group_H}
 \end{figure}
 
 \begin{figure}[H]
 \centering 
-\includegraphics[scale=0.7]{motif_similarity_exploration/N-Glycan_core_basic_vs_Lactosamine_motif.pdf} 
+\includegraphics[scale=0.9]{motif_similarity_exploration/N-Glycan_core_basic_vs_Lactosamine_motif.pdf} 
 \caption{N-Glycan core basic vs Lactosamine motif. CROP.}
 \label{fig:N-Glycan_core_basic_vs_Lactosamine_motif}
 \end{figure}
 
 \begin{figure}[H]
 \centering 
-\includegraphics[scale=0.7]{motif_similarity_exploration/Neo_Lactosamine_vs_LacDiNAc.pdf} 
+\includegraphics[scale=0.9]{motif_similarity_exploration/Neo_Lactosamine_vs_LacDiNAc.pdf} 
 \caption{Neo Lactosamine vs LacDiNAc. CROP.}
 \label{fig:Neo_Lactosamine_vs_LacDiNAc}
 \end{figure}
@@ -659,13 +648,17 @@ The computer program code used to produce the results described in this paper is
 \section{Discussion}
 \label{sec:discussion}
 (On the bigger picture)\\
-Should have calculated statistical significance of assortativity coeffs. Could use bootstrap etc.
+Should have calculated statistical significance of assortativity coeffs. Could use bootstrap etc.\\
+
+Uncertainties in the glycan db (carbon numbers, no. of links etc.) limit our coverage.
 
 \newpage
 \section{Further Work}
 \label{sec:further_work}
 
 Can use more advanced SPARQL query to get reaction breakdown (so should increase both number of glycans and accuracy)\\
+
+Deal with uncertainties in DB.\\
 
 Bi-clustering\\
 
@@ -698,6 +691,7 @@ chi-squared to compare two (quantified) reaction profiles\\
 \newpage
 \section*{Appendices}
 \appendix
+%\chapter{}
 \section{Software Dependencies}
 \label{sec:software_dependencies}
 Table \ref{tab:software_dependencies} lists the packages necessary to run the python code used to produce the results described in this paper. The program code itself can be cloned into the current directory by typing the following command in a command window (assuming the Git\footnote{\url{https://git-scm.com/}} application is already installed):
@@ -732,6 +726,108 @@ urllib3      &              1.23 \\ \hline
 \caption{Python software packages necessary to run the program code associated with this project.}
 \label{tab:software_dependencies}
 \end{table}
+\clearpage
+
+%\chapter{}
+\section{Glycan Databases and Structure Formats}
+\label{sec:glycan_dbs_and_formats}
+Table \ref{tab:glycan_databases} lists some glycan databases, the number of glycans they contain, and the glycan structure formats they provide.
+
+\begin{table}[h]
+\begin{minipage}{\textwidth}
+\centering
+%\resizebox{\columnwidth}{!}
+\rowcolors{1}{}{lightblue}
+\begin{tabular}{|c|c|p{7cm}|} \hline
+{\bf Database Name} & {\bf No. glycans}  & {\bf Formats} \\ \hline
+KEGG Glycan\footnote{\url{https://www.genome.jp/dbget-bin/www_bfind_sub?mode=bfind&max_hit=1000&locale=en&serv=gn&dbkey=glycan&keywords=*&page=1}} & 504 & KCF \\ \hline
+GlyConnect\footnote{\url{https://glyconnect.expasy.org/browser/structures/2259}} & 3768 & IUPAC \\ \hline
+UniCarbKB\footnote{\url{http://www.unicarbkb.org/}} & 3238 & note\footnote{Website not working at time of publication} \\ \hline
+GlyTouCan\footnote{\url{https://glytoucan.org/}} & 105050 & WURCS, GlycoCT, IUPAC Condensed, IUPAC Extended \\ \hline
+\end{tabular}
+\caption{Glycan databases, and the structure formats they provide.}
+\label{tab:glycan_databases}
+\end{minipage}
+\end{table}
+
+\noindent Different glycan structure formats exist. The number of glycans in the GlyTouCan database for each format it supports are shown in Table \ref{tab:glycan_format_counts}.
+
+\begin{table}[h]
+\centering
+\rowcolors{1}{}{lightblue}
+\begin{tabular}{|c|c|c|} \hline
+{\bf Format Name} & {\bf Number of Glycans} & {\bf Comments} \\ \hline
+GlycoCT & 45438 & Verbose, no longer supported\\ \hline
+IUPAC & 14517 & \\ \hline
+IUPAC condensed & 73329 & \\ \hline
+IUPAC extended & 73329 & \\ \hline
+WURCS & 105050 & Most recently published \\ \hline
+\end{tabular}
+\caption{Glycan counts in the GlyTouCan database for different glycan structure formats.}
+\label{tab:glycan_format_counts}
+\end{table}
+
+\singlespace
+\noindent Additional glycan resources can be found at the following URLs:
+\begin{itemize}
+\item \path{https://biosciencedbc.jp/en/db-link/d09-dblink}
+\item \path{http://www.functionalglycomics.org/static/consortium/links.shtml}
+\item \path{https://biosciencedbc.jp/en/db-link/d09-dblink}
+\end{itemize}
+\doublespace
+\clearpage
+
+\section{SPARQL queries}
+\label{sec:sparql_queries}
+SPARQL queries may be run programmatically, or against the GlyTouCan database at the following `SPARQL Endpoint' (a web query interface):\\
+
+\noindent \path{https://ts.glytoucan.org/sparql}\\
+
+\noindent The following SPARQL query returns all Glycan IDs, WURCS format strings, and motif IDs. Results for glycans with multiple motifs will be spread across multiple lines:\\
+
+\singlespace
+\begin{verbatim}
+  PREFIX glycan: <http://purl.jp/bio/12/glyco/glycan#>
+  PREFIX glytoucan:  <http://www.glytoucan.org/glyco/owl/glytoucan#>
+
+  SELECT DISTINCT ?Saccharide ?PrimaryId ?Sequence 
+                  ?Motif ?MotifPrimaryId
+  FROM <http://rdf.glytoucan.org/core>
+  FROM <http://rdf.glytoucan.org/sequence/wurcs>
+  FROM <http://rdf.glytoucan.org/motif>
+  WHERE {
+    ?Saccharide glytoucan:has_primary_id ?PrimaryId .
+    ?Saccharide glycan:has_glycosequence ?GlycoSequence .
+    ?GlycoSequence glycan:has_sequence ?Sequence .
+    ?GlycoSequence glycan:in_carbohydrate_format 
+      glycan:carbohydrate_format_wurcs.
+    OPTIONAL { ?Saccharide glycan:has_motif ?Motif .
+               ?Motif glytoucan:has_primary_id ?MotifPrimaryId } .
+  }
+  ORDER BY ?PrimaryId
+\end{verbatim}
+\doublespace
+
+\newpage
+\noindent This SPARQL query returns all Motif IDs and motif labels:\\
+
+\singlespace
+\begin{verbatim}
+  PREFIX glycan: <http://purl.jp/bio/12/glyco/glycan#>
+  PREFIX glytoucan:  <http://www.glytoucan.org/glyco/owl/glytoucan#>
+
+  SELECT DISTINCT ?Motif ?MotifPrimaryId ?MotifLabel
+  FROM <http://rdf.glytoucan.org/core>
+  FROM <http://rdf.glytoucan.org/sequence/wurcs>
+  FROM <http://rdf.glytoucan.org/motif>
+  WHERE {
+    ?Saccharide glycan:has_motif ?Motif .
+    ?Motif glytoucan:has_primary_id ?MotifPrimaryId.
+      ?Motif rdfs:label ?MotifLabel
+  }
+  ORDER BY ?MotifPrimaryId
+\end{verbatim}
+\doublespace
 
 
 % \section{Example JavaScript Code}
