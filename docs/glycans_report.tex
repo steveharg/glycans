@@ -83,6 +83,8 @@ contributions\\
 
 remove URLs from refs\\
 
+use spell-checker\\
+
 % \noindent RE-WRITE\\
 % IMPOTANT - BEAR IN MIND THE EXAMINER WILL PROB ONLY SPEND ABOUT 20 MINS READING THIS, SO NEED TO GRAN THEIR ATTENTION AND CONVINCE THEM QUICKLY IN ABSTRACT AND INTRO. USE GOOD SUMMARY DIAGRAMS AND TEXT.\\
 % Include some numbers for Sternberg\\
@@ -102,7 +104,7 @@ remove URLs from refs\\
 \begin{center}
 \section*{Acknowledgements}
 \doublespacing
-Many thanks to John Pinney for his supervision and guidance during this project, and Suhail Islam for technical assistance.
+Many thanks to John Pinney for his supervision and guidance during this project, and Suhail Islam for technical assistance. Database and JSON file icons used in Figure \ref{fig:flowchart} designed by Smashicons from Flaticon.
 \end{center}
 \newpage
 \tableofcontents
@@ -150,7 +152,7 @@ Many thanks to John Pinney for his supervision and guidance during this project,
 
 \subsection{Glycans}
 \label{sec:glycans_description}
-Monosaccharides are carbohydrates which cannot be further hydrolyzed to simpler compounds, such as glucose, fructose, and galactose. Glycans, synonymous with polysaccharides, are compounds of monosaccharides (usually more than ten) linked glycosidically \citep{mcnaught1997compendium}, which exist in free form or in covalent complexes with proteins or lipids \citep{doi:10.1093/bioinformatics/btm090}. In both cases, glycans exhibit a tree-like structure, which can be described in terms of its component monosaccharides and the glycosidic links between them. Figure \ref{fig:example_glycan} shows an example glycan, in which the differently coloured and shaped nodes represent different monosaccharides, and the labelled edges represent the glycosidic links.\\
+Monosaccharides are carbohydrates which cannot be further hydrolyzed to simpler compounds, such as glucose, fructose, and galactose. Glycans, synonymous with polysaccharides, are compounds of monosaccharides (usually more than ten) linked glycosidically \citep{mcnaught1997compendium}, which exist in free form or in covalent complexes with proteins or lipids \citep{doi:10.1093/bioinformatics/btm090}. In both cases, glycans exhibit a tree-like structure, which can be described in terms of its component monosaccharides and the glycosidic links between them. Figure \ref{fig:example_glycan} shows an example glycan, in which the differently coloured and shaped nodes represent different monosaccharides, and the labelled edges represent the glycosidic links (see \path{https://www.ncbi.nlm.nih.gov/glycans/snfg.html} for a list of monosaccharide symbols).
 
 \begin{figure}[H]
 \centering 
@@ -161,9 +163,7 @@ Monosaccharides are carbohydrates which cannot be further hydrolyzed to simpler 
 
 \footnotetext{\url{https://glytoucan.org/Structures/Glycans/G31576LD}}
 
-ALSO SHOW MONOSACCHARIDE KEY?\\
-
-When dissolved in an aqueous environment, the monosaccharides (or sugars) of which glycans are comprised, primarily exist in the cyclic (or hemiacetal) form. In this form, the sugars are further characterised by their anomeric \mbox{configurations -- either} the $\alpha$-anomer, with an axial OH-group at carbon 1, or the $\beta$-anomer, with an equatorial OH-group at carbon 1 \citep{SONG2012137}. The glycosidic links between the sugars exist between carbon 1 (the anomeric carbon) of one sugar, and some other, non-anomeric carbon of another. Hence the links are defined by their anomericity ($\alpha$ or $\beta$), and the carbon number of the non-anomeric carbon on the second sugar. This can be seen more clearly in Figure \ref{fig:example_glycan}, where, for example, the XXX (purple diamond) is glycosidically linked via its $\alpha$-anomer carbon 1 to carbon 6 of the XXX (yellow circle), and therefore labelled as `$\alpha$ 6'. This anomericity is significant -- two pairs of monosaccharides glycosidically linked via the same carbons but with different anomeric configurations result in two stereochemically distinct disaccharides, as illustrated in Figure \ref{fig:glycosidic_linkage}. Here, the polymeric form of the maltose disaccharide (starch) is digestible by humans, whereas cellulose, formed from basic repeats of cellobiose, is not \citep{SONG2012137}.\\
+When dissolved in an aqueous environment, the monosaccharides (or sugars) of which glycans are comprised, primarily exist in the cyclic (or hemiacetal) form. In this form, the sugars are further characterised by their anomeric \mbox{configurations -- either} the $\alpha$-anomer, with an axial OH-group at carbon 1, or the $\beta$-anomer, with an equatorial OH-group at carbon 1 \citep{SONG2012137}. The glycosidic links between the sugars exist between carbon 1 (the anomeric carbon) of one sugar, and some other, non-anomeric carbon of another. Hence the links are defined by their anomericity ($\alpha$ or $\beta$), and the carbon number of the non-anomeric carbon on the second sugar. This can be seen more clearly in Figure \ref{fig:example_glycan}, where, for example, the N-Acetyl-Neuraminic Acid (purple diamond) is glycosidically linked via its $\alpha$-anomer carbon 1 to carbon 6 of the D-Galactose (yellow circle), and therefore labelled as `$\alpha$ 6'. This anomericity is significant -- two pairs of monosaccharides glycosidically linked via the same carbons but with different anomeric configurations result in two stereochemically distinct disaccharides, as illustrated in Figure \ref{fig:glycosidic_linkage}. Here, the polymeric form of the maltose disaccharide (starch) is digestible by humans, whereas cellulose, formed from basic repeats of cellobiose, is not \citep{SONG2012137}.\\
 
 % \image{maltose}
 % {%
@@ -268,7 +268,7 @@ Given the important and diverse functions attributed to glycans, the ability not
 
 Glycan analysis though remains highly problematic -- unlike the comparatively mature techniques regularly applied to DNA and RNA analysis, whose nucleotide chains are both linear and contain only 4 elementary components, and which are easy to amplify using (for example) polymerase chain reactions, glycans are tree-like in nature, and the large number of component monosaccharides involved together with the wide range of possible glycosidic links makes glycan structure determination challenging. Consequently only a small number of samples are available for analysis \citep{doi:10.1093/bioinformatics/bti666}.
 
-To mitigate for these experimental shortcomings, in much the same way as sequence homology and multiple alignments may be exploited to construct complete genomes from DNA fragments (REF), there is a need for reliable computational techniques of glycan structure and prevalence prediction. Examples of research towards this end include probabilistic modelling of glycan families \citep{ueda2005probabilistic}, identification of glycan fingerprint differences between prostate cancer cell stages \citep{10.1371/journal.pcbi.1002813}, prediction of glycan structures from gene expression profiles \citep{doi:10.1093/bioinformatics/bti666}, and glycan comparison \citep{aoki2004score, aoki2004kcam} MAYBE A BIT MORE DETAIL ABOUT THESE TECHNIQUES AND RESULTS.
+To mitigate for these experimental shortcomings, in much the same way as sequence homology and multiple alignments may be exploited to construct complete genomes from DNA fragments (REF needed), there is a need for reliable computational techniques of glycan structure and prevalence prediction. Examples of research towards this end include probabilistic modelling of glycan families \citep{ueda2005probabilistic}, identification of glycan fingerprint differences between prostate cancer cell stages \citep{10.1371/journal.pcbi.1002813}, prediction of glycan structures from gene expression profiles \citep{doi:10.1093/bioinformatics/bti666}, and glycan comparison \citep{aoki2004score, aoki2004kcam} MAYBE A BIT MORE DETAIL ABOUT THESE TECHNIQUES AND RESULTS.
 
 
 
@@ -355,7 +355,7 @@ The rest of this paper is organised as follows -- in Section \ref{sec:method} we
 
 Figure \ref{fig:flowchart} illustrates, at a high level, the methods used in this research. In brief, we:
 
-\begin{itemize}
+\begin{enumerate}
 \item Extract glycan structure and motif information from a public Glycan database (GlyTouCan)
 \item Save the data locally
 \item Parse the structure data, extracting the collection of reactions necessary to construct each glycan
@@ -363,13 +363,13 @@ Figure \ref{fig:flowchart} illustrates, at a high level, the methods used in thi
 \item Convert the similarity measurements to binary similar / dissimilar by application of a threshold
 \item Create, visualise, and explore a network of similar glycans 
 \item Construct, visualise and explore a cladogram via the use of hierarchical clustering
-\end{itemize}
+\end{enumerate}
 
 In the following sub-sections we describe each of these steps in more detail.
 
 \begin{figure}[H]
 \centering 
-\includegraphics[scale=0.12]{images/flowchart.JPG} 
+\includegraphics[scale=0.83]{images/flowchart.pdf} 
 \caption{Method flowchart}
 \label{fig:flowchart}
 \end{figure}
@@ -398,6 +398,10 @@ The data we wish to extract from GlyTouCan is a list of glycan IDs, the text str
 \label{sec:extracting_reactions}
 
 As described in Section \ref{sec:proposed_method}, we wish to characterise our glycans in terms of the biochemical reactions necessary for their synthesis. We do this by parsing the WURCS string describing each glycan structure, and, recalling that glycans exhibit a tree-like structure, we extract collections of `child' and `parent' monosaccharides, and the type of the link that joins them (i.e. the carbon numbers of the child and parent) for every glycan. For some of the glycan entries in the database there is uncertainty regarding aspects of the glycan structure -- for example the number of links or the carbon numbers expressed with only a percentage of certainty. We reject these. The Python script which parses the WURCS strings is \texttt{parse\_glytoucan\_results.py}.
+
+\subsection{Filtering the Glycan Dataset}
+\label{sec:filtering_glycans}
+The previous step produces 33142 glycans. As we shall see in the next step, we wish to create a similarity matrix for these glycans -- that will be a $33142\times33142$ matrix of 64 bit floats, which requires approximately 8 gigabytes of RAM. This amount of RAM, whilst easily obtainable on current server clusters, is approaching the limit of desktop machines. Additionally, the computation time required for calculating all of the values in such a matrix is excessive. Consequently, using the Python script \texttt{filter\_by\_common\_motifs.py}, we perform a filtering step on the dataset. We determine the top 10 most frequently observed motifs (from single-motif glycans), and eliminate from our our list any glycans whose motifs are not from the top 10 list. The result is a more tractable list of 4111 glycans.
 
 
 \subsection{Calculating Distances Between Glycan Reaction Collections}
@@ -431,7 +435,7 @@ $G_2$ & 0 & 0 & 1 & 1 \\ \hline
 
 In this case the two glycans have just one reaction in common out of a total of four different reactions present in both glycans, and so the Jaccard similarity coefficient is $1/4$, or 25\%.
 
-In the modified Jaccard case, where we wish to take into account reaction quantities, instead of scoring one when both glycans share a reaction, we calculate the score for the shared reaction as the smaller reaction quantity divide by the larger one, as illustrated in Table \ref{tab_jaccard_list_example}.
+In the modified Jaccard case, where we wish to take into account reaction quantities, instead of scoring one when both glycans share a reaction we calculate the score for the shared reaction as the smaller reaction quantity divided by the larger one, as illustrated in Table \ref{tab:jaccard_list_example}.\\
 
 \begin{table}[h]
 \centering
@@ -463,31 +467,24 @@ For both methods, we calculate the similarity coefficient for all pairs of glyca
 \subsection{Glycan Network Creation}
 \label{sec:network_creation}
 
-Treat this as an adjacency matrix, and, using a column-labelled dataframe, create a (networkx) graph\\
+The binary adjacency matrix created in the previous step enables us to form a network, or undirected graph, representing glycan similarity, in which each of our glycans is a node and two nodes are joined by an edge if their glycans are marked as similar in the adjacency matrix. We use the Python package NetworkX \citep{hagberg2008exploring} for this purpose.
 
-Choose suitable layout\\
+In our Python script \texttt{glycan\_reaction\_distances\_to\_network.py} we create a graph using the \texttt{from\_pandas\_adjacency} function from the NetworkX package. For the purposes of visualising this graph, we also need to assign each node to a point in the two-dimensional Euclidean plane. NetworkX provides several node positioning algorithms for this purpose, each of which takes a different approach to laying out the nodes in two-dimensional space according to various network metrics. The choice of any particular algorithm here does not altar the network topology, but can subjectively result in more or less informative graph visualisations. We choose the Fruchterman-Reingold force-directed algorithm \citep{fruchterman1991graph}.
 
-assortativity coeff\\
+We would like some method of judging if the relationships present in our network do indeed correlate with glycan similarity. From our original data query (see Section \ref{sec:glycan_databases}), we know which motifs are present in each glycan structure (according to the annotations in the GlyTouCan database). In the Python script \texttt{display\_network.py} we use this information to colour each node according to the set of motifs its glycan contains, and accordingly we would hope to see nodes of equal colour appearing in obvious clusters or communities in our graph.
 
-get X most connected components \\
+In Section \ref{sec:distance_calc_set} we described two alternative methods of measuring similarity between glycans -- the Jaccard similarity coefficient applied to a glycan's reaction set, and the modified version applied to its reaction list (i.e. including reaction quantities). We asses the relative merits of these two methods via the \texttt{attribute\_assortativity\_coefficient} function in NetworkX, after setting a `motif' attribute for each node, whose value is the list of motifs which that glycan contains. The assortativity coefficient measures the similarity of connections in the graph with respect to a given attribute \citep{newman2003mixing}. However, the two graphs resulting from the two methods will almost certainly contain an unequal number of edges. In order to make the comparison fair, when creating the graph for the second method, rather than using the adjacency matrix, we use the similarity matrix (i.e. before thresholding has been applied) and the NetworkX function \texttt{from\_numpy\_array}, applying the similarity coefficients as edge weights. We then restrict our graph to only the $X$ highest weight edges, where $X$ is the number of edges found in the graph created using the first method, thus ensuring that both graphs have an equal number of edges.
 
-Redo using reaction quantities (modified Jaccard)\\
-- ensure new network has same no. of edges\\
--- use weighted edges, order, trim\\
-- * generate some new network images? (low priority, might just show more compact clusters) \\
+Given the amount of glycans in our dataset, the resulting graph is large, and therefore can be uninformative when visualised as a whole. We are particularly interested in discovering groups of glycans deemed to be similar to each other, and so we use the \texttt{connected\_components} function in NetworkX to obtain lists of nodes which are connected to each other. Ordering these lists according to the number of nodes they contain allows us to select and visualise only the largest groups of connected components found in our graph. 
 
 \subsection{Hierarchical Clustering}
 \label{sec:clustering}
 
-UPGMA hierarchical clustering\\
-- how does it work
-- apply motif sets to terminal node names\\
-- colour the nodes \& branches\\
--- describe how\\
---- e.g. manipulating phyloxml to produce coloured trees in archeopteryx\\
-- does it highlight possible mistakes? e.g. the isolated Galalpha1 somewhere in tree for method one (set)\\
-- images: circular if poss, otherwise cladogram cos branch lengths meaningless\\
+When plotted on a computer, the graphs described above can be explored by zooming in to focus on particular groups of nodes/glycans, potentially revealing interesting relationships between (for example) glycans sharing the same or similar motifs. The method though is dependent upon choosing a threshold value at which to make the binary choice between similar or dissimilar for any two glycans. An alternative method of clustering, avoiding this limitation, is the Unweighted Pair Group Method with Arithmetic Mean (UPGMA) \citep{gronau2007optimal}. This algorithm represents the structure of a pairwise similarity matrix as a rooted dendogram. The algorithm proceeds in s step-wise manner, calculating the average of the distances between all elements in two clusters $A$ and $B$. At the first step, each individual element (glycan, in our case) of the similarity matrix forms an individual cluster. The most similar clusters in any step are combined to form a new cluster, and the process is repeated until all clusters have been paired. The Python script \texttt{upgma\_glycans.py} creates one of these trees using the \texttt{DistanceTreeConstructor.upgma} function from the BioPython package.
 
+The resulting tree is given in the form of an XML file, specifically phyloXML\footnote{\url{http://www.phyloxml.org}}. In order to aid visualisation, in our script \texttt{colour\_tree\_by\_motif\_group.py} we apply colour labels to all terminal nodes according to the motif sets belonging to the glycan represented by each node. We then traverse the tree from the terminal nodes upwards, applying the same colour labels if and only if the two children of a parent node have been labelled with the same colour. This provides a useful at-a-glance mechanism of identify clades of glycans sharing motif groups.
+
+Finally, we use the phylogenetic tree visualisation software Archeopteryx\footnote{\url{https://sites.google.com/site/cmzmasek/home/software/archaeopteryx}} to visualise and explore the tree.
 
 
 % \subsection{Blank}
@@ -530,22 +527,30 @@ UPGMA hierarchical clustering\\
 \newpage
 \section{Results}
 \label{sec:results}
-(Discuss them as you present them)\\
 
-- Walk through the network\\
--- Figs 5 to 10: Glycan (un)connected components\\
+Possibly the most effective way to explore the landscape of glycan structure using the techniques described above in Section \ref{sec:method}, is to manipulate them in real-time on a computer, where it is possible to zoom in to examine regions of interest and to (in the case of the Archeopteryx tree viewer ) re-draw the tree in a multitude of different ways. In this section we present a selection of static images as we explore the glycan network and tree, illustrating both the validity of the techniques and some of the insights into glycan structure they provide.
 
-\begin{figure}[H]
-\centering 
-\includegraphics[scale=0.5]{threshold_87_conn_comp_1_method_set/threshold_87_full_network_method_set.eps} 
-\caption{Full network of glycans, with similarity determined using the reaction set method. CROP.}
-\label{fig:threshold_87_full_network_method_set}
-\end{figure}
+% (Discuss them as you present them)\\
+
+% - Walk through the network\\
+% -- Figs 5 to 10: Glycan (un)connected components\\
+
+% \begin{figure}[H]
+% \centering 
+% \includegraphics[scale=0.5]{threshold_87_conn_comp_1_method_set/threshold_87_full_network_method_set.eps} 
+% \caption{Full network of glycans, with similarity determined using the reaction set method. CROP.}
+% \label{fig:threshold_87_full_network_method_set}
+% \end{figure}
+
+\subsection{Glycan Network}
+\label{sec:glycan_network}
+
+Figures \ref{fig:threshold_87_conn_comp_1_method_set} through to \ref{fig:Neo_Lactosamine_vs_LacDiNAc} below were all produced using the reaction set method (see Section \ref{sec:distance_calc_set}). Figure \ref{fig:threshold_87_conn_comp_1_method_set} shows the most connected component of the network, with nodes (representing glycans) coloured according to the sets of motifs they contain. The figure legend details the colours assigned to each motif set. It is immediately apparent that, as hoped for, similarly coloured nodes exist in distinct communities, with mutual connections and often in close proximity, indicating high numbers of connections between glycans sharing the same motif sets. The fact that individual nodes of the same colour are still spatially separate indicates that despite sharing the same motifs, there are nevertheless structural differences between those glycans -- this is exactly as we would expect, given that all glycans taken from the database are structurally distinct, albeit many show similarity in terms of their motifs. In order to examine the relationships between these groups more closely, we need to zoom in and inspect the network in more detail.
 
 \begin{sidewaysfigure}
 \centering 
 \includegraphics[scale=0.5]{threshold_87_conn_comp_1_method_set/threshold_87_conn_comp_1_method_set.eps} 
-\caption{Most connected component of a network of glycans, with similarity determined using the reaction set method. CROP and TURN THIS SIDEWAYS.}
+\caption{Most connected component of a network of glycans, with similarity determined using the reaction set method. CROP.}
 \label{fig:threshold_87_conn_comp_1_method_set}
 \end{sidewaysfigure}
 \clearpage
@@ -553,53 +558,63 @@ UPGMA hierarchical clustering\\
 \begin{figure}[H]
 \centering 
 \includegraphics[scale=0.9]{motif_similarity_exploration/LacDiNAc_vs_Lactosamine_motif_LacDiNAc.pdf} 
-\caption{LacDiNAc vs Lactosamine motif,LacDiNAc. CROP.}
+\caption{Glycans containing the LacDiNAc motif (orange nodes) are connected solely to glycans containing the LacDiNAc and Lactosamine motifs (purple nodes).}
 \label{fig:LacDiNAc_vs_Lactosamine motif,LacDiNAc}
 \end{figure}
+
+In Figure \ref{fig:LacDiNAc_vs_Lactosamine motif,LacDiNAc}, we highlight only two groups of glycans -- those containing the single motif LacDiNAc (coloured orange), and those containing two motifs -- LacDiNAc and the Lactosamine motif (coloured purple). All other glycans are coloured grey. In the same figure, we also display the glycan motifs. The two motif sets are similar to each other in two respects -- firstly, they both share exactly the same motif, LacDiNAc, and secondly, Lactosamine and LacDiNAc have in common a $\beta$ anomeric N-Acetyl-D-Glucosamine monosaccharide (the blue square). It is reasonable then to assume that glycans containing either of these motif sets would be structurally similar, and indeed the figure illustrates that the glycans in our network with just the LacDiNAc motif  (orange) are solely connected either to each other or to glycans containing the LacDiNAc and Lactosamine motifs.
+
+Another example is shown in Figure \ref{fig:Galalpha1-3Gal_epitope_Lactosamine_motif_Blood_group_H_vs_Lactosamine_motif_Blood_group_H}, this time highlighting glycans containing the Galalpha1-3Gal epitope, Lactosamine, and Blood group H motifs (orange), and those containing Lactosamine, and Blood group H motifs (green). Direct connections exist between the two groups, as we would expect given that one group contains two out of the three motifs present in the other.
 
 \begin{figure}[H]
 \centering 
 \includegraphics[scale=0.85]{motif_similarity_exploration/Galalpha1-3Gal_epitope__Lactosamine_motif__Blood_group_H_vs_Lactosamine_motif__Blood_group_H.pdf} 
-\caption{Galalpha1-3Gal epitope, Lactosamine motif, Blood group H vs Lactosamine motif, Blood group H. CROP.}
+\caption{Glycans containing the Galalpha1-3Gal epitope, Lactosamine, and Blood group H motifs (orange nodes) are connected to glycans containing the Lactosamine, and Blood group H motifs (green nodes).}
 \label{fig:Galalpha1-3Gal_epitope_Lactosamine_motif_Blood_group_H_vs_Lactosamine_motif_Blood_group_H}
 \end{figure}
+
+Conversely, in each of Figures \ref{fig:N-Glycan_core_basic_vs_Lactosamine_motif} and \ref{fig:Neo_Lactosamine_vs_LacDiNAc}, we highlight two groups of glycans which do not share similar motifs. In these instances, there are no direct connections between the two glycan groups, implying significant structural differences, as we would expect given the differences in motifs. Network graphs created using the reactions list method, as opposed to the reactions set method, exhibit the same types of relationships and we omit them here.
 
 \begin{figure}[H]
 \centering 
 \includegraphics[scale=0.9]{motif_similarity_exploration/N-Glycan_core_basic_vs_Lactosamine_motif.pdf} 
-\caption{N-Glycan core basic vs Lactosamine motif. CROP.}
+\caption{Glycans containing the N-Glycan core basic motif (green nodes) are not directly connected to glycans containing the Lactosamine motif (blue nodes).}
 \label{fig:N-Glycan_core_basic_vs_Lactosamine_motif}
 \end{figure}
 
 \begin{figure}[H]
 \centering 
 \includegraphics[scale=0.9]{motif_similarity_exploration/Neo_Lactosamine_vs_LacDiNAc.pdf} 
-\caption{Neo Lactosamine vs LacDiNAc. CROP.}
+\caption{Glycans containing the Neo Lactosamine motif (orange nodes) are not directly connected to glycans containing the LacDiNAc motif (violet nodes).}
 \label{fig:Neo_Lactosamine_vs_LacDiNAc}
 \end{figure}
 
+\newpage
+\subsection{Assortativity Coefficient}
+\label{sec:assortativity_coefficient}
 
---- Several obvious communities apparent\\
---- In moving from community A to B, we gain/lose motif X
---- The fact that nodes with the same motif sets are spaced out reflects the fact that the glycans have more structure than the motifs alone, and our method is showing that, so that's added value.\\
+The assortativity coefficients calculated for the two alternative similarity measures are:\\
 
-- Assortativity coeff for set vs list method\\
--- statistically significant?
---- either do this calc, or write about it in Discussion \\
----- see if there's an easy way to get a number from networkx. Otherwise, bootstrap / jacknife etc. \\
+Reaction set method: {\bf 0.93}\\
+\indent Reaction list method {\bf 0.97}\\
 
-- explore the UPGMA tree\\
--- use different depths / zooms\\
---- Fig 11: full tree\\
+The higher value for the reaction list method suggests that there is a benefit to taking into account reaction quantities, rather than just presence, when measuring glycan similarity.
+
+\subsection{UPGMA Hierarchical Clustering}
+\label{sec:clustering_results}
+
+Figure \ref{fig:full_tree_zoomed} shows a magnified section of the full tree (in cladogram form) produced using UPGMA hierarchical clustering, applied to the distance matrix obtained using the reaction list method. The terminal nodes, which represent individual glycans, are labelled with both the names of the motifs present in each glycan, and, in brackets, the glycan ID (as taken from the GlyTouCan database). The visualisation software dynamically adjusts the number of terminal nodes for which it displays labels in order to avoid clutter. We can see via the terminal labels and the branch colours that there are distinct clades of glycans which share the same motif sets, providing further evidence of the suitability of our method for determining glycan similarity. Furthermore, adjacent clades of different colours often have motifs in common, analogous to the connected nodes we observed in the glycan network.
 
 \begin{sidewaysfigure}
 \centering 
 \includegraphics[scale=0.3]{trees/zoomed_full_tree_cladogram.png} 
-\caption{Full UPGMA tree (zoomed in). CROP and TURN THIS SIDEWAYS.}
-\label{fig:full_tree}
+\caption{Full depth UPGMA tree (zoomed in to subsection). Clades of equal colour indicate clusters of glycans sharing the same motifs sets.}
+\label{fig:full_tree_zoomed}
 \end{sidewaysfigure}
 \clearpage
 
+subsubsection{Motif Discovery}
+A detailed inspection of the UPGMA tree reveals some features which, initially, seem to be at odds with the notion of shared motifs between simlar glycans observed so far. For example, in Figure \ref{fig:full_tree_LacDiNAc}, a glycan with the sole motif LacDiNAc (highlighted in red) appears amongst a cluster of glycans containing only the `N-Glycan truncated motif first GlcpNAC cut off' motif. However, looking up the structure of this glycan in the GlyTouCan database reveals that this glycan does in fact contain the `N-Glycan truncated motif first GlcpNAC cut off' motif as well as LacDiNAc, it just has not been annotated as containing it. Figure \ref{fig:rogue_lacdinac_a} shows the full glycan structure, Figure \ref{fig:rogue_lacdinac_b} shows the LacDiNAc motif, with which the glycan has been correctly annotated, and Figure \ref{fig:rogue_lacdinac_c} shows the `N-Glycan truncated motif first GlcpNAC cut off' motif which the glycan has not been annotated as containing, but which is clearly seen in the full structure (Figure \ref{fig:rogue_lacdinac_a}).
 
 --- Fig 12: zoomed-in tree\\
 -- describe the clades, relate them to the network if poss\\
@@ -609,8 +624,8 @@ UPGMA hierarchical clustering\\
 \begin{sidewaysfigure}
 \centering 
 \includegraphics[scale=0.3]{trees/rogue_LacDiNAc_in_tree.png} 
-\caption{Rogue LacDiNAc. CROP and TURN THIS SIDEWAYS.}
-\label{fig:full_tree}
+\caption{A glycan (highlighted in red) which has a missing motif annotation in the GlyTouCan database has been correctly clustered with glycans sharing the same motif.}
+\label{fig:full_tree_LacDiNAc}
 \end{sidewaysfigure}
 \clearpage
 
@@ -619,7 +634,8 @@ UPGMA hierarchical clustering\\
     \begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics[scale=0.6]{trees/rogue_LacDiNAc_structure.png}
-        \caption{Rogue LacDiNAc structure. CROP}
+        \caption{Actual structure of the glycan highlighted in red in Figure \ref{fig:full_tree_LacDiNAc}.}
+        \label{fig:rogue_lacdinac_a}
     \end{subfigure}%
     \\
     \bigbreak
@@ -628,7 +644,8 @@ UPGMA hierarchical clustering\\
     \begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics[scale=0.6]{trees/LacDiNAc_motif.png}
-        \caption{LacDiNAc motif}
+        \caption{Correctly annotated LacDiNAc motif.}
+        \label{fig:rogue_lacdinac_b}
     \end{subfigure}
     \\
     \bigbreak
@@ -637,9 +654,10 @@ UPGMA hierarchical clustering\\
     \begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics[scale=0.6]{trees/N-Glycan_truncated_motif__First_GlcpNAC_cut_off_motif.png}
-        \caption{N-Glycan truncated motif First GlcpNAC cut off motif}
+        \caption{Missing motif annotation `N-Glycan truncated motif First GlcpNAC cut off'}
+        \label{fig:rogue_lacdinac_c}
     \end{subfigure}
-    \caption{Rogue LacDiNAc and motifs.}
+    \caption{The actual structure of the glycan highlighted in red in Figure \ref{fig:full_tree_LacDiNAc} and its present and missing motif annotations.}
 \label{fig:rogue_lacdinac}
 \end{figure*}
 
@@ -650,7 +668,12 @@ UPGMA hierarchical clustering\\
 (On the bigger picture)\\
 Should have calculated statistical significance of assortativity coeffs. Could use bootstrap etc.\\
 
-Uncertainties in the glycan db (carbon numbers, no. of links etc.) limit our coverage.
+Uncertainties in the glycan db (carbon numbers, no. of links etc.) (what proportion? 33000/100000) limit our coverage, as do computing resources (RAM, CPU).\\
+
+We're dependent upon the coverage and quality of glycan databases, and glycan formats (new ones keep appearing so WURCS 2.0 could be out-of-date soon? the field is in its infancy compared to e.g. protein structure prediction - give some example dates) although this technique can actually help with annotation (e.g. detecting missing motifs).\\
+
+For networks, threshold and layout choice is key and a manual process\\
+
 
 \newpage
 \section{Further Work}
@@ -659,10 +682,13 @@ Uncertainties in the glycan db (carbon numbers, no. of links etc.) limit our cov
 Can use more advanced SPARQL query to get reaction breakdown (so should increase both number of glycans and accuracy)\\
 
 Deal with uncertainties in DB.\\
+But we can use some of the certain reactions from the uncertain structures to increase our coverage\\
 
-Bi-clustering\\
+Perform on better machines to increase glycan coverage (i.e. eliminate filtering step)\\
 
-Kernel methods\\
+try bi-clustering on the original jaccard matrix (will need to include ALL reactions for each pairwise comparison, rather than just those present in the two glycans under consideration as I presently do). See John's email 17th July for method details.\\
+
+(tree) Kernel methods (see “Glycan classification with tree kernels” (Yoshihiro Yamanishi, Francis Bach and Jean-Philippe Vert) \\
 
 - New dataset, samples by cell / tissue\\
 - details on what we would do
@@ -684,9 +710,20 @@ Use LGL, organic cytoscape for vis\\
 
 chi-squared to compare two (quantified) reaction profiles\\
 
+\citep{porter2009motif} provides some `rules' on incompatibilities (Table 1) and (??? graphs) which we could compare our results with\\
+
+could try an alternative version of clustering, as used for Fig 4 D of "A motif-based analysis of glycan array data to determine the specificities of glycan-binding proteins", for comparison with my version\\
+
 \newpage
 \section{Conclusions}
 \label{sec:conclusions}
+
+we've demonstrated encouraging results without needing to perform complex tree comparisons\\
+
+\newpage
+\bibliographystyle{agsm}
+\bibliography{bibliography}
+
 
 \newpage
 \section*{Appendices}
@@ -900,7 +937,4 @@ SPARQL queries may be run programmatically, or against the GlyTouCan database at
 % \normalsize
 % \doublespace
 
-\newpage
-\bibliographystyle{agsm}
-\bibliography{bibliography}
 \end{document}
