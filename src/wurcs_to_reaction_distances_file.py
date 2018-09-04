@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     reactions_collection = parse_glytoucan_results(glycans_json_file, num_datafile_lines, use_reaction_quantities)
     reactions_collection = filter_by_common_motifs(reactions_collection, include_zero_motif_glycans)
-    heatmaps, column_names = calc_jaccard_distances(reactions_collection, use_reaction_quantities)
+    heatmaps, column_names, ignore = calc_jaccard_distances(reactions_collection, use_reaction_quantities, False)
 
     reaction_distances = [reactions_collection, heatmaps, column_names]
 
