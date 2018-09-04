@@ -5,28 +5,51 @@ from collections import Counter
 
 np.random.seed(0)
 
+def bootstrap_reactions(reactions1, reactions2):
 
-def calc_jaccard_distances(reactions_bag, use_reaction_quantities):
+    reactions1_set = set(reactions1)
+    reactions2_set = set(reactions2)
+
+    union_reactions_set_list = list(reactions1_set | reactions2_set)
+    num_reactions = len(union_reactions_set_list)
+
+    btstrp_reactions1 = []
+    btstrp_reactions2 = []
+
+    for i in range(0, num_reactions):
+        rnd_idx = np.random.randint(0, num_reactions)
+        if union_reactions_set_list[rnd_idx] in reactions1_set:
+            btstrp_reactions1.append(union_reactions_set_list[rnd_idx])
+        if union_reactions_set_list[rnd_idx] in reactions2_set:
+            btstrp_reactions2.append(union_reactions_set_list[rnd_idx])
+
+    return btstrp_reactions1, btstrp_reactions2
+
+def calc_jaccard_distances(reactions_collection, use_reaction_quantities, use_bootstrap = False):
 
     start = time.time()
 
     # Calculate Jaccard distances between all structures (both, and separately, using reactions and motifs)
-    glycan_distances=np.zeros((len(reactions_bag),len(reactions_bag)))
+    glycan_distances=np.zeros((len(reactions_collection),len(reactions_collection)))
     reactions_heatmap_items = {}
 
-    motif_distances=np.zeros((len(reactions_bag),len(reactions_bag)))
+    motif_distances=np.zeros((len(reactions_collection),len(reactions_collection)))
     motifs_heatmap_items = {}
+    if use_bootstrap:
+        reactions_collection_btsrp = dict.fromkeys(reactions_collection.keys())
+    else:
+        reactions_collection_btsrp = None
 
     glycan_idx1 = 0
 
     if use_reaction_quantities:
-        for glycan1 in reactions_bag:
+        for glycan1 in reactions_collection:
             glycan_idx2 = 0
-            for glycan2 in reactions_bag:
-                reactions1 = reactions_bag[glycan1]['reactions']
-                reactions2 = reactions_bag[glycan2]['reactions']
-                motifs1 = reactions_bag[glycan1]['motifs']
-                motifs2 = reactions_bag[glycan2]['motifs']
+            for glycan2 in reactions_collection:
+                reactions1 = reactions_collection[glycan1]['reactions']
+                reactions2 = reactions_collection[glycan2]['reactions']
+                motifs1 = reactions_collection[glycan1]['motifs']
+                motifs2 = reactions_collection[glycan2]['motifs']
 
                 reactions1_set = set(reactions1)
                 reactions2_set = set(reactions2)
@@ -55,17 +78,20 @@ def calc_jaccard_distances(reactions_bag, use_reaction_quantities):
             glycan_idx1 += 1
 
             if not np.mod(glycan_idx1, 100):
-                sys.stdout.write("\rglycan_idx1: %i of %i" % (glycan_idx1, len(reactions_bag)))
+                sys.stdout.write("\rglycan_idx1: %i of %i" % (glycan_idx1, len(reactions_collection)))
                 sys.stdout.flush()
 
     else:
-        for glycan1 in reactions_bag:
+        for glycan1 in reactions_collection:
             glycan_idx2 = 0
-            for glycan2 in reactions_bag:
-                reactions1 = reactions_bag[glycan1]['reactions']
-                reactions2 = reactions_bag[glycan2]['reactions']
-                motifs1 = reactions_bag[glycan1]['motifs']
-                motifs2 = reactions_bag[glycan2]['motifs']
+            for glycan2 in reactions_collection:
+                reactions1 = reactions_collection[glycan1]['reactions']
+                reactions2 = reactions_collection[glycan2]['reactions']
+                motifs1 = reactions_collection[glycan1]['motifs']
+                motifs2 = reactions_collection[glycan2]['motifs']
+
+                if use_bootstrap:
+                    reactions1, reactions2 = bootstrap_reactions(reactions1, reactions2)
 
                 reactions1_set = set(reactions1)
                 reactions2_set = set(reactions2)
@@ -88,14 +114,14 @@ def calc_jaccard_distances(reactions_bag, use_reaction_quantities):
             glycan_idx1 += 1
 
             if not np.mod(glycan_idx1, 100):
-                sys.stdout.write("\rglycan_idx1: %i of %i" % (glycan_idx1, len(reactions_bag)))
+                sys.stdout.write("\rglycan_idx1: %i of %i" % (glycan_idx1, len(reactions_collection)))
                 sys.stdout.flush()
 
     heatmaps = [reactions_heatmap_items, motifs_heatmap_items]
-    column_names = [list(reactions_bag.keys()), list(reactions_bag.keys())]
+    column_names = [list(reactions_collection.keys()), list(reactions_collection.keys())]
 
     end = time.time()
     print()
     print("elapsed jaccard time:", end-start)
 
-    return heatmaps, column_names
+    return heatmaps, column_names, reactions_collection_btsrp
