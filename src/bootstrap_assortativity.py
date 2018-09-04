@@ -3,6 +3,7 @@ import configparser
 import networkx as nx
 import json
 import numpy as np
+import pandas as pd
 from glycan_reaction_distances_to_network import apply_threshold_to_reaction_distance_df
 from calc_jaccard_distances import calc_jaccard_distances
 
@@ -48,7 +49,10 @@ if __name__ == "__main__":
         motif_ids_and_labels_dict[motif_primary_id] = motif_label
 
     for n in range(0, num_bootstraps):
+        print("bootstrap", n + 1, "of", num_bootstraps)
         heatmaps, column_names, reactions_collection_btsrp = calc_jaccard_distances(reactions_collection, use_reaction_quantities, use_bootstrap)
+        reaction_distance_df = pd.DataFrame.from_dict(heatmaps[0],
+                                                      orient='index', columns=column_names[0])
         thresholded_reactions_df = apply_threshold_to_reaction_distance_df(reactions_collection_btsrp, threshold)
 
         print("creating network graph from thresholded reactions...")
