@@ -8,6 +8,27 @@ import configparser
 config = configparser.ConfigParser(allow_no_value=True)
 config.read('config.ini')
 
+
+def apply_threshold_to_reaction_distance_df(reaction_dis_df, threshld):
+    threshld_reactions = []
+    print("applying threshold to glycan distances...")
+    for col in reaction_dis_df.columns:
+        col_array = np.zeros((1, len(reaction_dis_df[col])))
+        i = 0
+        for item in reaction_dis_df[col]:
+            if item > threshld:
+                col_array[0, i] = 1
+            i += 1
+
+            threshld_reactions.append((col, col_array[0][:]))
+    print("...done")
+
+    cols = [x[0] for x in threshld_reactions]
+    thresholded_reactions_df = pd.DataFrame.from_items(threshld_reactions,
+                                                       orient='index', columns=cols)
+    return thresholded_reactions_df
+
+
 if __name__ == "__main__":
 
     threshold = config['DEFAULT'].getint('Threshold', fallback=90)
@@ -80,22 +101,7 @@ if __name__ == "__main__":
 
     else:
         # Apply threshold
-        thresholded_reactions = []
-        print("applying threshold to glycan distances...")
-        for col in reaction_distance_df.columns:
-            col_array = np.zeros((1, len(reaction_distance_df[col])))
-            i = 0
-            for item in reaction_distance_df[col]:
-                if item > threshold:
-                    col_array[0, i] = 1
-                i += 1
-
-            thresholded_reactions.append((col, col_array[0][:]))
-        print("...done")
-
-        cols = [x[0] for x in thresholded_reactions]
-        thresholded_reactions_df = pd.DataFrame.from_items(thresholded_reactions,
-                                                           orient='index', columns=cols)
+        thresholded_reactions_df = apply_threshold_to_reaction_distance_df(reaction_distance_df, threshold)
 
         print("creating network graph from thresholded reactions...")
         G = nx.from_pandas_adjacency(thresholded_reactions_df)
