@@ -47,24 +47,14 @@
 \pagenumbering{gobble}
 {\fontfamily{phv}\selectfont}
 \title{\Huge Exploring the Landscape of Glycan Structure\vspace{1cm}\\ \large  MSc Bioinformatics and Theoretical Systems Biology Project\vspace{11cm}}
-% * <steven.hargreaves17@ic.ac.uk> 2018-03-20T16:27:53.008Z:
-% oh come on now...!
-% ^.
+
 \date{}
-%\begin{figure}[!b]
-%\centering 
-%\includegraphics[width=0.5\textwidth]{images/2000px-Imperial_College_London_crest_svg.png}
-%\end{figure}
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.5\textwidth]{images/2000px-Imperial_College_London_crest_svg.png}
-%\end{figure}
-%\vspace{1cm}
 
 \author{\Large Steven Hargreaves\\
 \normalsize CID 01453122 \\\vspace{0.5cm}
 \normalsize Imperial College London \\
-\normalsize Department of Life Sciences}
+\normalsize Department of Life Sciences \\
+\normalsize Word Count: 5479}
 
 
 \maketitle
@@ -73,46 +63,38 @@
 \begin{abstract}
 \pagenumbering{arabic}
 \doublespacing
-contributions\\
+\noindent Glycans are highly prevalent in living organisms, and play keys roles in a variety of important biological processes such as cell signalling, immune reaction, viral infections and tumour cell proliferation. The difficulty of analysing glycan structures experimentally provides the motivation to develop reliable computational analysis techniques. A hindrance to this effort though is the complex tree-like structure of glycans, making them more difficult to analyse and compare than, for example, the linear chains of polypeptides in proteins. We describe a novel technique for measuring glycan similarity based upon a consideration of the biological reactions necessary for their synthesis, and which avoids the need to model tree structures. By analysing the similarities between 4111 glycans from a public database, we demonstrate that we can identify communities of glycans sharing the same or similar motifs, and that we can predict the presence of specific motifs in glycans which do not as yet have motif annotations.
 
-- identify mis-laballed motifs\\
-
-- we can determine glycan structure similarity\\
--- without needing to model the precise tree structure\\
--- so could also predict structure of unknown glycans from GE data or enzyme abundance\\
-
-remove URLs from refs\\
-
-use spell-checker\\
-
-% \noindent RE-WRITE\\
-% IMPOTANT - BEAR IN MIND THE EXAMINER WILL PROB ONLY SPEND ABOUT 20 MINS READING THIS, SO NEED TO GRAN THEIR ATTENTION AND CONVINCE THEM QUICKLY IN ABSTRACT AND INTRO. USE GOOD SUMMARY DIAGRAMS AND TEXT.\\
 % Include some numbers for Sternberg\\
 % e.g. no. glycans (pre/post filtering steps), no. motifs, assortativity coeffs?\\
-% IMPORTANT - what's my contribution?\\
-% Each major new section (e.g. Methods) should start on a new page\\
+
 % The project report must include the word count on the title page (the number of words will be checked and failure to comply with the word limit will incur penalties)\\
+
 % critically evaluated your results\\
 % The Abstract
 % should be structured (i.e. aims, methods, results, conclusion), be no more 
 % than  one  side  of  paper  (in  written  reports).  Ideally  the  Abstract  should  cite  some  key numerical  results  rather  than  just  generalities.    Making  a  point  in  an  abstract  does  not remove  the  requirement  for  it  to  be  made  elsewhere  in  the  report.  The  report  must  be comprehensible even if the abstract is removed.  \\
-% etc. etc. - see course handbook\\
-% Glycans are tree-like polysaccharides that are frequently found attached to specific sites on eukaryotic cell surface and cellular matrix proteins, with diverse functions including protein folding, cell-cell signaling and immune response. Large databases describing observed glycan structures are now available, which provide an excellent resource for describing and exploring the space of naturally occurring glycans. In this project you will apply tree kernel methods to calculate distances between these structures and thereby develop clustering and data reduction methods to capture the most important differences between subsets of glycans, such as those observed in cancerous vs non-cancerous tissue.
+
 \end{abstract}
 
 \newpage
 \begin{center}
 \section*{Acknowledgements}
 \doublespacing
-Many thanks to John Pinney for his supervision and guidance during this project, and Suhail Islam for technical assistance. Database and JSON file icons used in Figure \ref{fig:flowchart} designed by Smashicons from Flaticon.
+Many thanks to John Pinney for his supervision and guidance during this project, and to Suhail Islam for technical assistance. The database and JSON file icons used in Figure \ref{fig:flowchart} were designed by Smashicons from Flaticon.
 \end{center}
 \newpage
 \tableofcontents
 \newpage
 \section*{Abbreviations}
 \doublespacing
+\textit{GT:} Glycosyltransferase\\
+\textit{JSON:} JavaScript Object Notation\\
 \textit{RDF:} Resource Description Framework\\
 \textit{SPARQL:} A recursive acronym for SPARQL Protocol and RDF Query Language\\
+\textit{UPGMA:} Unweighted Pair Group Method with Arithmetic Mean\\
+\textit{WURCS:} Web3 Unique Representation of Carbohydrate Structures\\
+\textit{XML:} Extensible Markup Language\\
 \addcontentsline{toc}{section}{Abbreviations} %adds it to the table of contents
 
 \newpage
@@ -120,20 +102,15 @@ Many thanks to John Pinney for his supervision and guidance during this project,
 \addcontentsline{toc}{section}{Glossary}
 \label{sec:glossary}
 \doublespacing
-% \noindent{\textit{Clade:} Blah.}\\\\
-% \textit{Phylogenetic tree:} Blah blah.\\\\
-% \textit{Archeopteryx.js:} ...phylogenetic trees .\\\\
-
-
-
-
-
-
-
-
-
-
-
+\noindent{\textit{Anomericity:} The configuration, either axial ($\alpha$) or equatorial ($\beta$), of the OH-group at carbon number one of a monosaccharide.}\\\\
+\noindent{\textit{Archeopteryx:} Phylogenetic tree visualisation software.}\\\\
+\noindent{\textit{Binary adjacency matrix:} A square matrix in which elements represent the adjacency of pairs of vertices in a graph.}\\\\
+\noindent{\textit{Glycan:} Compounds of monosaccharides linked glycosidically, which exist in free form or in covalent complexes with proteins or lipids .}\\\\
+\noindent{\textit{Glycan motif:} A commonly occurring glycan substructure appearing in multiple glycans.}\\\\
+\noindent{\textit{Glycosyltransferase:} An enzyme which catalyses glycosidic linkages.}\\\\
+\noindent{\textit{GlyTouCan:} Online database of glycan structures.}\\\\
+\noindent{\textit{Jaccard similarity coefficient:} A statistic for comparing the similarity of sample sets.}\\\\
+\noindent{\textit{PhyloXML:} An XML language for the storage of phylogenetic tree data.}
 
 
 \newpage
@@ -145,23 +122,13 @@ Many thanks to John Pinney for his supervision and guidance during this project,
 % -- motivation \\
 \subsection{Motivation}
 \label{sec:glycan_function}
-Monosaccharides are carbohydrates which cannot be further hydrolyzed to simpler compounds, such as glucose, fructose, and galactose. Glycans, synonymous with polysaccharides, are compounds of monosaccharides (usually more than ten) linked glycosidically \citep{mcnaught1997compendium}, which exist in free form or in covalent complexes with proteins or lipids \citep{doi:10.1093/bioinformatics/btm090}. Evidence has been found relating glycans to numerous important biological functions, including immune reaction, protein stabilization, cell signalling \citep{bucior2004carbohydrate}, and embryogenesis \citep{rosa2002functional}. Several aspects of tumour progression, such as metastasis and angiogenesis, are regulated by glycans, and tumour cell proliferation is potentiated by glycans activating growth-factor receptor tyrosine kinases \citep{fuster2005sweet}.
-
-Some pathogenic bacteria and viruses have been shown to infect their hosts via glycan-receptor interactions \citep{cossart2004bacterial, sacks2001molecular}, whilst other research has demonstrated that glycan profiles can represent important signatures of disease states \citep{tong2003glycosylation}. Studies have also implicated glycans in the regulation of inflammatory response. For example, selectins and Sialyl Lewis\textsuperscript{X} oligosaccharides, two types of glycan, have been used to probe cell adhesion molecules (CAMs), which when blocked can inhibit inflammation \citep{albelda1994adhesion}.
+Monosaccharides are carbohydrates which cannot be further hydrolysed to simpler compounds, such as glucose, fructose, and galactose. Glycans, synonymous with polysaccharides, are compounds of monosaccharides (usually more than ten) linked glycosidically \citep{mcnaught1997compendium}, which exist in free form or in covalent complexes with proteins or lipids \citep{doi:10.1093/bioinformatics/btm090}. Evidence has been found relating glycans to numerous important biological functions, including immune reaction, protein stabilization, cell signalling \citep{bucior2004carbohydrate}, and embryogenesis \citep{rosa2002functional}. Several aspects of tumour progression, such as metastasis and angiogenesis, are regulated by glycans, and tumour cell proliferation is potentiated by glycans activating growth-factor receptor tyrosine kinases \citep{fuster2005sweet}. Some pathogenic bacteria and viruses have been shown to infect their hosts via glycan-receptor interactions \citep{cossart2004bacterial, sacks2001molecular}, whilst other research has demonstrated that glycan profiles can represent important signatures of disease states \citep{tong2003glycosylation}. Studies have also implicated glycans in the regulation of inflammatory response. For example, selectins and Sialyl Lewis\textsuperscript{X} oligosaccharides, two types of glycan, have been used to probe cell adhesion molecules, which when blocked can inhibit inflammation \citep{albelda1994adhesion}.
 
 Given the important and diverse functions attributed to glycans, the ability not just to determine their individual structure, but also to accurately quantify their presence or absence within different cell and tissue types, is of great value. However, for reasons we expand upon below, glycan structure analysis presents major challenges. In this research we describe a novel computational approach allowing us to explore glycan similarity, by means of characterising glycans in terms of the glycosidic links between their constituent monosaccharides, rather than taking the more complex approach of modelling the complete glycan tree structure.
 
-% Recent research has revealed that these glycan profiles can represent important signatures of disease states and thus understanding glycan processing and structures in cells is an important systems biology goal \citep{10.1371/journal.pcbi.1002813}\\
-
-% (glycans) draw attention as the third type of biological chain next to DNA and proteins, since they play key roles in many biological processes such as fertilization (Vo et al., 2003),  immunity (Rudd et al., 2001) and diseases (Birkle et al., 2003; Brockhausen et al., 1998; Hakomori, 2002). It is well known that some pathogenic bacteria and viruses infect their hosts via glycan-receptor interactions (Cossart and Sansonetti, 2004; Sacks and Kamhawi, 2001) \citep{doi:10.1093/bioinformatics/bti666}. \\
-
-% Although a growing body of evidence supports crucial roles for glycans in many cellular processes, including cell-cell communication, immune system, protein interaction or tumor progression (Fuster and Esko, 2005; Varki et al., 1999), \citep{doi:10.1093/bioinformatics/btm090}
-
-% (Glycans) are known to play numerous biological roles related to energy storage and metabolism, protein and lipid modification, cellular structure, signal transduction, as well as mediators of cell-cell interactions and host-pathogen interactions \citep{SONG2012137}
-
 \subsection{Glycan Structure}
 \label{sec:glycans_description}
-Glycans exhibit a tree-like structure, which can be described in terms of its component monosaccharides and the glycosidic links between them. Figure \ref{fig:example_glycan} shows an example glycan, in which the differently coloured and shaped nodes represent different monosaccharides, and the labelled edges represent the glycosidic links (see \path{https://www.ncbi.nlm.nih.gov/glycans/snfg.html} for a list of monosaccharide symbols).
+Glycans exhibit a tree-like structure, which can be described in terms of its component monosaccharides and the glycosidic links between them. Figure \ref{fig:example_glycan} shows an example glycan, in which the differently coloured and shaped nodes represent different monosaccharides, and the labelled edges represent the glycosidic links (see \path{https://www.ncbi.nlm.nih.gov/glycans/snfg.html} for a full list of monosaccharide symbols).
 
 \begin{figure}[H]
 \centering 
@@ -174,15 +141,6 @@ Glycans exhibit a tree-like structure, which can be described in terms of its co
 
 When dissolved in an aqueous environment, the monosaccharides (or sugars) of which glycans are comprised, primarily exist in the cyclic (or hemiacetal) form. In this form, the sugars are further characterised by their anomeric \mbox{configurations -- either} the $\alpha$-anomer, with an axial OH-group at carbon 1, or the $\beta$-anomer, with an equatorial OH-group at carbon 1 \citep{SONG2012137}. The glycosidic links between the sugars exist between carbon 1 (the anomeric carbon) of one sugar, and some other, non-anomeric carbon of another. Hence the links are defined by their anomericity ($\alpha$ or $\beta$), and the carbon number of the non-anomeric carbon on the second sugar. This can be seen more clearly in Figure \ref{fig:example_glycan}, where, for example, the N-Acetyl-Neuraminic Acid (purple diamond) is glycosidically linked via its $\alpha$-anomer carbon 1 to carbon 6 of the D-Galactose (yellow circle), and therefore labelled as `$\alpha$ 6'. This anomericity is significant -- two pairs of monosaccharides glycosidically linked via the same carbons but with different anomeric configurations result in two stereochemically distinct disaccharides, as illustrated in Figure \ref{fig:glycosidic_linkage}. Here, the polymeric form of the maltose disaccharide (starch) is digestible by humans, whereas cellulose, formed from basic repeats of cellobiose, is not \citep{SONG2012137}.
 
-% \image{maltose}
-% {%
-%   \includegraphics[scale=0.35]{images/glycosidic_linkage_maltose.pdf}%
-% }\quad
-% \image{cellobiose}{%
-%   \includegraphics[scale=0.35]{images/glycosidic_linkage_cellobiose.pdf}%
-% }\quad
-% \captionof{figure}{CROP THESE PDFs, AND BRING THE O and HO closer together in the link.}
-% \label{fig:glycosidic_linkage}
 
 \begin{figure*}[ht!]
     \centering
@@ -204,9 +162,7 @@ When dissolved in an aqueous environment, the monosaccharides (or sugars) of whi
 \label{fig:glycosidic_linkage}
 \end{figure*}
 
-When glycans are linked with proteins or lipids, they are characterised as being either N-linked, in which a monosaccharide is attached to a nitrogen atom of a protein \citep{taylor2011introduction}, or O-linked, in which a glycosidic oxygen links the glycoside to the aglycone or reducing end sugar (LOOK FOR AN ALTERNATIVE, CITABLE EXPLANATION OF THIS, E.G. IN ALBERTS OR THE BIG BIOCHEM BOOK).
-
-
+% When glycans are linked with proteins or lipids, they are characterised as being either N-linked, in which a monosaccharide is attached to a nitrogen atom of a protein \citep{taylor2011introduction}, or O-linked, in which a glycosidic oxygen links the glycoside to the aglycone or reducing end sugar.
 
 % (from wikipedia, no citation - "Glycans can be found attached to proteins as in glycoproteins and proteoglycans. In general, they are found on the exterior surface of cells. O- and N-linked glycans are very common in eukaryotes but may also be found, although less commonly, in prokaryotes.")\\
 
@@ -230,35 +186,7 @@ Methods of characterising glycan structures include mass spectral analysis \cite
 
 Glycan analysis though remains highly problematic -- unlike the comparatively mature techniques regularly applied to DNA and RNA analysis, whose nucleotide chains are both linear and contain only 4 elementary components, and which are easy to amplify using (for example) polymerase chain reactions, glycans are tree-like in nature, and the large number of component monosaccharides involved together with the wide range of possible glycosidic links makes glycan structure determination challenging. Consequently only a small number of samples are available for analysis \citep{doi:10.1093/bioinformatics/bti666}.
 
-To mitigate for these experimental shortcomings, in much the same way as sequence homology and multiple alignments may be exploited to construct complete genomes from DNA fragments (REF needed), there is a need for reliable computational techniques of glycan structure and prevalence prediction. Examples of research towards this end include probabilistic modelling of glycan families \citep{ueda2005probabilistic}, identification of glycan fingerprint differences between prostate cancer cell stages \citep{10.1371/journal.pcbi.1002813}, prediction of glycan structures from gene expression profiles \citep{doi:10.1093/bioinformatics/bti666}, and glycan comparison \citep{aoki2004score, aoki2004kcam} MAYBE A BIT MORE DETAIL ABOUT THESE TECHNIQUES AND RESULTS.
-
-
-
-
-% To understand glycan functions, determination of their structures (sequences) like DNA and proteins is required. In spite of the improvements in purification and analytical methods for glycans such as high performance liquid chromatography, capillary electrophoresis, mass spectrometry and nuclear magnetic resonance technology (von der Lieth et al., 2004), the determination of the glycan structure is still difficult. Glycans have more complicated structures compared to nucleotide and amino acid sequences. While nucleotide and amino acid chains are linear and consist of 4 and 20 elementary components, respectively, glycan chains are branched structures and consist of various monosaccharides. In addition, they are multivalent, and linkages have anomeric configurations (alpha and beta). These complexities make it difficult to determine glycan structure. Furthermore, the amplification method of glycan is not yet fully established, while DNA and proteins are easy to amplify using polymerase chain reactions and cloning-expression systems, respectively. This means that only a few samples are available for glycan structure analysis. Therefore, a reasonable prediction method for glycan structures is useful for glycomics research. While the amino acid sequence of proteins is determined by the genetic code and the templates in the genome, the carbohydrate sequence of glycans is determined by the biosynthetic code, which is a specific set of biosynthetic reactions catalyzed by different types of glycosyltransferases (GTs). Each GT catalyzes formation of a glycosidic-bond between the glycan precursor as an accepter and the nucleotide-activated sugar as a donor (Varki et al., 1999). Thus, once we know the repertoire of GTs in the genome, in the transcriptome or in the proteome, it should, in principle, be possible to predict the repertoire of possible glycan structures in an organism or at a specific stage of the cell (von der Lieth et al., 2004). Here, we construct a reaction pattern library consisting of bond-formation patterns of GT reactions to link genome to glycome, and we predict glycan structures from gene expression profiles.
-
-% However, gene set on DNA chips is incomplete, and gene expression data is noisy. To obtain appropriate prediction result, we extract knowledge of glycan structure from the glycan database and apply it to our prediction method. In particular, a co-occurrence frequency of reaction patterns is calculated from the KEGG GLYCAN database, which is a comprehensive resource encapsulating the latest knowledge of glycans and a part of the KEGG resource containing genomic information and pathways (Kanehisa et al., 2004; Hashimoto et al., 2005a), and we use it together with the reaction pattern library. First, we evaluate the prediction method using virtual expression data generated from the KEGG GLYCAN database. Then, we apply our method to publicly available DNA microarray expression data and find characteristic glycan structures in a particular cell. (Results) First, we constructed a reaction pattern library consisting of bond-formation patterns of GT reactions and investigated the co-occurrence frequencies of all reaction patterns in the glycan database. This was followed by the prediction of glycan structures using this library and a co-occurrence score. A penalty score was also implemented in the prediction method. Then we examined the performance of prediction by the leave-one-out cross validation method using individual reaction pattern profiles in the KEGG GLYCAN database as virtual expression profiles. The accuracy of prediction was 81\% \citep{doi:10.1093/bioinformatics/bti666}. \\
-
-% Understanding the biological functions of glycans and relating them to their structure remains challenging experimentally. Unlike genes or protein sequences, for which a number of well-established algorithms are now available for various data-mining tasks such as similarity detection, clustering, supervised classification, structure prediction or functional motif extraction, glycans are generally not linear polymers. They have more complex structures, that can be represented by rooted ordered trees, with monosaccharides as labeled vertices and sugar bounds as labeled edges. As a result, specific approaches have recently been developed for comparison of glycans (Aoki et al., 2004, 2005), probabilistic modeling of glycan families (Ueda et al., 2005), and analysis of MS/MS spectra of oligosaccharides (Tang et al., 2005). There is still an incentive to develop efficient methods for the automatic classification of glycans, and the extraction of biologically relevant substructures. Glycans exhibit a large diversity of structures in different organisms, and in different tissues and organs of a given organism. Recently, a computational approach to the supervised classification of glycans into blood components and to the detection of leukemia-specific glycan substructures has been proposed (Hizukuri et al., 2005). The approach is based on the extraction of short linear substructures from the glycan structures, resulting in a quantitative measure of similarity between glycans based on the count of shared substructures. This measure of similarity is then used as an input to a support vector machine (SVM) classifier which is trained to discriminate between different blood components and blood types. The goal of this article is to extend this framework to a broader class of structure representations, with the motivation of both increasing the accuracy of glycan classification, and providing a framework for the extraction of biologically relevant glycan substructures.
-
-% More precisely, we investigate different high-dimensional representations for glycan structures and use them for supervised classification with SVM. In SVM jargon, we define new kernels for trees, adapted to the classification of glycans. Our tree kernels are based on the indexation of a glycan tree structure by a set of subtrees it contains. We investigate different variants in the definition of subtrees, in the importance placed on the depth of a subtree in the glycan tree, and in the size of the subtrees. In spite of their large dimensions, these vector representations are adapted to the supervised classification of glycans by kernel methods and in particular the SVM, in the spirit of earlier work on convolution kernels for tree structures (Collins and Duffy, 2001; Haussler, 1999). We perform a thorough analysis of the classification performance obtained by different representations on the problem of predicting the blood origin of glycans among leukemia cell, erythrocyte, plasma and serum. We then apply feature selection methods to find discriminative subtree motifs in glycans, and relate the selected substructures to biologically known facts. Finally, in order to combine the information provided by different representations we apply recently developed methods for multiple kernel learning (Bach et al.,2005), resulting in an optimal weighting of each representation for each classification task. As shown in Section 4, the methods developed in this article not only lead to better classification performance than previously reported results, but also provide additional biological insights in the role and structure of glycans, through the substructures extracted by feature selection and the weights learned by multiple kernel learning. The proposed methods are tested on their ability to classify human glycans into four blood components: leukemia cells, erythrocytes, plasma and serum. They are shown to outperform a previously published method. We also applied a feature selection approach to extract glycan motifs which are characteristic of each blood component. We confirmed that some leukemia-specific glycan motifs detected by our method corresponded to several results in the literature \citep{doi:10.1093/bioinformatics/btm090}.\\
-
-
-
-
-% - Describe glycans:\\
-
-% As a minimum, say -- Glycans are chains of sugars, forming tree structures, with links like (blah), which can be alpha/beta etc. They're found (blah), and are used in cell signalling (and blah).\\
-
-
-
-
-
-
-
-
-
-
+To mitigate for these experimental shortcomings, in much the same way as sequence homology and multiple alignments may be exploited to construct complete genomes from DNA fragments \citep{staden1979strategy}, there is a need for reliable computational techniques of glycan structure and prevalence prediction. Examples of research towards this end include probabilistic modelling of glycan families \citep{ueda2005probabilistic}, identification of glycan fingerprint differences between prostate cancer cell stages \citep{10.1371/journal.pcbi.1002813}, prediction of glycan structures from gene expression profiles \citep{doi:10.1093/bioinformatics/bti666}, multiple glycan alignments by modelling glycans as trees \citep{hosoda2017development}, and glycan comparison \citep{aoki2004score, aoki2004kcam}. A review of glycan data formats and toolboxes can also be found in \citep{campbell2014toolboxes}.
 
 
 
@@ -266,9 +194,8 @@ To mitigate for these experimental shortcomings, in much the same way as sequenc
 \subsection{Glycan Diversity, Locations and Motifs}
 \label{sec:glycan_locations}
 In contrast to the type of bonds found in proteins and nucleic acids, the high number of different glycosidic link configurations possible between monosaccharides leads to high variation and structural diversity between glycans, which confer distinctive characteristics to the cell surface where they are typically found \citep{10.1371/journal.pcbi.1002813}.
-There are a total of 105050 distinct glycan structures present in the GlyTouCan\footnote{\url{https://glytoucan.org/}} database. Glycans do however share some common sub-structures, known as motifs. For example, the glycan structure represented in Figure \ref{fig:example_glycan} contains the `N-Glycan core basic' motif, which is displayed in Figure \ref{fig:N-Glycan core basic}. There are just 61 motifs presently listed in the GlyTouCan database - the full list (with diagrams) is available via the footnote link\footnote{\url{https://glytoucan.org/Motifs/listAll}}.
+In one online glycan database (GlyTouCan\footnote{\url{https://glytoucan.org/}}), for example, there are a total of 105050 distinct glycan structures. Glycans do however share some common sub-structures, known as motifs. For example, the glycan structure represented in Figure \ref{fig:example_glycan} contains the `N-Glycan core basic' motif, which is displayed in Figure \ref{fig:N-Glycan core basic}. There are just 61 motifs presently listed in the GlyTouCan database - the full list (with diagrams) is available via the footnote link\footnote{\url{https://glytoucan.org/Motifs/listAll}}.
 
-STATE / SHOW THE THREE MAJOR MOTIF TYPES (see wiki / glytoucan)
 
 \begin{figure}[H]
 \centering 
@@ -278,98 +205,34 @@ STATE / SHOW THE THREE MAJOR MOTIF TYPES (see wiki / glytoucan)
 \end{figure}
 
 
-
-
-
-
-
-
-
-
 % -- What do we propose to do here, and why/how will it be helpful\\
 \subsection{Proposed Method for Exploring the Landscape of Glycans}
 \label{sec:proposed_method}
-Intrinsic to the method of predicting of glycan structures from gene expression profiles cited above \citep{doi:10.1093/bioinformatics/bti666}, is a recognition of the fact that a specific set of glycosyltransferases (GTs) are required to catalyze the reactions necessary for synthesising specific glycans. By building a library of the bond formation patterns of GT reactions, and determining a co-occurence score of the reaction patterns in a glycan database, the authors predicted glycan structures with an accuracy of 81\%. Additionally, using gene expression data from the human carcinoma cell, the authors predicted the presence of sialic acid and the Sialyl Lewis X motif.
+Intrinsic to the method of predicting of glycan structures from gene expression profiles cited above \citep{doi:10.1093/bioinformatics/bti666}, is a recognition of the fact that a specific set of glycosyltransferases (GTs) are required to catalyse the reactions necessary for synthesising specific glycans. By building a library of the bond formation patterns of GT reactions, and determining a co-occurrence score of the reaction patterns in a glycan database, the authors predicted glycan structures with an accuracy of 81\%. Additionally, using gene expression data from the human carcinoma cell, the authors predicted the presence of sialic acid and the Sialyl Lewis X motif.
 
-Expanding upon that approach, in this paper we describe a method of exploring glycan similarity from biochemical reaction similarity. More specifically, to compare any two glycans we calculate the Jaccard similarity coefficient between the two sets of biochemical reactions necessary for the synthesis of each glycan in the pair. We visualise clusters of similar glycans via the use of networks, which allows us to explore whether or not glycans which we have judged to be similar in terms of their biochemical synthesis reactions are also similar in terms of their constituent motif sets. Furthermore, we perform hierarchical clustering using the Unweighted Pair Group Method with Arithmetic Mean (UPGMA), allowing us to form a dendogram / cladogram ???, from which we compare the groups of similar glycans found using the two alternative methods - THIS NEEDS RE-THINKING - SAY MORE ABOUT REACTIONS, INCLUDE A DIAGRAM LIKE Figure \ref{fig:gt_reaction_pattern}.
-
-\begin{figure}[H]
-\centering 
-\includegraphics[scale=0.8]{images/gt_reaction_pattern.png} 
-\caption{NEED TO RE-DRAW THIS}
-\label{fig:gt_reaction_pattern}
-\end{figure}
+Expanding upon that approach, in this paper we describe a method of exploring glycan similarity from biochemical reaction similarity. More specifically, to compare any two glycans we calculate the Jaccard similarity coefficient between the two sets of biochemical reactions necessary for the synthesis of each glycan in the pair. We visualise clusters of similar glycans via the use of networks, which allows us to explore whether or not glycans which we have judged to be similar in terms of their biochemical synthesis reactions are also similar in terms of their constituent motif sets. Furthermore, we perform hierarchical clustering using the Unweighted Pair Group Method with Arithmetic Mean (UPGMA), allowing us to form a dendogram, which can be explored interactively using bespoke phylogentic tree visualisation software and reveals large-scale groups of similar and dissimilar glycans.
 
 The rest of this paper is organised as follows -- in Section \ref{sec:method} we describe, in sufficient detail for a Bioinformatician or Computer Scientist to be able to reproduce our results, the databases and computational methods used, before presenting and discussing our results in Section \ref{sec:results}. In Section \ref{sec:discussion} we discuss our findings within the bigger picture of glycan analysis, before providing suggestions for further work and our conclusions in Sections \ref{sec:further_work} and \ref{sec:conclusions} respectively.
 
-
-\subsection{MAKE SURE YOU'VE GOT ALL OF JOHN'S REFS IN. AND ALSO THE MOTIF PAPER cwp187.pdf}
-
-
-
-
-
-
-
-% \subsection{Objectives}
-% \label{sec:objectives}
-% Do I want this bit?\\
-% Formally, we state here the objectives of the project:
-% \begin{enumerate}
-% \item Objective 1.
-% \item Objective 2.
-% \end{enumerate}
-
-% You can swap to singlespace for a list like this and back to doublespace afterwards:
-
-% \singlespace
-% \begin{enumerate}
-% \item {\bf dndTree.js} \small \url{http://bl.ocks.org/robschmuecker/7880033} \normalsize
-% \item {\bf phylotree.js} \small \url{http://phylotree.hyphy.org/#} \normalsize
-% \item {\bf Phylogenetic Tree of Life} \small \url{https://www.jasondavies.com/tree-of-life/} \normalsize
-% \item {\bf d3.phylogram.js} \small \url{http://bl.ocks.org/kueda/1036776} \normalsize
-% \item {\bf PhyD3} \small \url{https://phyd3.bits.vib.be} \normalsize
-% \item {\bf IcyTree} \small \url{https://icytree.org} \normalsize
-% \item {\bf EvolView} \small \url{http://www.evolgenius.info/evolview/#mytrees/} \normalsize
-% \item {\bf Archaeopteryx.js} \small \url{https://github.com/cmzmasek/archaeopteryx-js} \normalsize
-% \end{enumerate}
-% \doublespace
-
-% And here's Table \ref{tab:tree_vis_eval}.\\
-
-% \begin{table}[h]
-% \centering
-% %\resizebox{\columnwidth}{!}
-% \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|} \hline
-% \multirow{2}{*} & \multicolumn{8}{c|}{\bf Candidate} \\  \cline{2-9}
-% {\bf Functionality} & {\bf 1} & {\bf 2} & {\bf 3} & {\bf 4} & {\bf 5} & {\bf 6} & {\bf 7} & {\bf 8} 	\\ \hline
-% Handles phyloXML & n & n & n & n & y & n & y & y \\ \hline
-% Code clarity & n & n & n & n & n & y & n & y \\ \hline
-% {\bf Score} & {\bf 3} & {\bf 8} & {\bf 3} & {\bf 8} & {\bf 13} & {\bf 12} & {\bf 13} & {\bf 14} \\ \hline
-% \end{tabular}
-% \caption{Phylogenetic tree visualisation software evaluation results.}
-% \label{tab:tree_vis_eval}
-% \end{table}
 
 \newpage
 \section{Method}
 \label{sec:method}
 
-Figure \ref{fig:flowchart} illustrates, at a high level, the methods used in this research. In brief, we:
-
-\begin{enumerate}
-\item Extract glycan structure and motif information from a public Glycan database (GlyTouCan)
-\item Save the data locally
-\item Parse the structure data, extracting the collection of reactions necessary to construct each glycan
-\item Use the Jaccard distance measure to determine similarity between all pairs of glycans in terms of their reactions collections
-\item Convert the similarity measurements to binary similar / dissimilar by application of a threshold
-\item Create, visualise, and explore a network of similar glycans 
-\item Construct, visualise and explore a cladogram via the use of hierarchical clustering
-\end{enumerate}
-
+Figure \ref{fig:flowchart} illustrates, at a high level, the methods used in this research.
+%In brief, we:
+% \begin{enumerate}
+% \item Extract glycan structure and motif information from a public Glycan database (GlyTouCan)
+% \item Save the data locally
+% \item Parse the structure data, extracting the collection of reactions necessary to construct each glycan
+% \item Use the Jaccard distance measure to determine similarity between all pairs of glycans in terms of their reactions collections
+% \item Convert the similarity measurements to binary similar / dissimilar by application of a threshold
+% \item Create, visualise, and explore a network of similar glycans 
+% \item Construct, visualise and explore a cladogram via the use of hierarchical clustering
+% \end{enumerate}
 In the following sub-sections we describe each of these steps in more detail.
 
-\begin{figure}[H]
+\begin{figure}
 \centering 
 \includegraphics[scale=0.83]{images/flowchart.pdf} 
 \caption{Method flowchart}
@@ -385,25 +248,21 @@ The computer program code referenced throughout this report, and which was used 
 
 A number of different publicly accessible glycan databases exist, as well as multiple different formats for expressing glycan structure. The details of these databases and formats are listed in Tables \ref{tab:glycan_databases} and \ref{tab:glycan_format_counts} in Appendix \ref{sec:glycan_dbs_and_formats}. We use the GlyTouCan database, given its larger number of glycans and supported formats compared to the other databases, as well as the fact that it also contains motif information. In our trials it was also found to have the most suitable query method. We also chose to work with the Web3 Unique Representation of Carbohydrate Structures (WURCS) glycan structure format, which is the most recently devised format and which has been designed to address various shortcomings of the other existing formats \citep{matsubara2017wurcs}.
 
-GlyTouCan is a semantic web graph database, rather than a relational database. Such databases contain Resource Description Framework (RDF) data, in which all data items take the form of \emph{triples}, and the database is queried using the query language SPARQL (a recursive acronym for SPARQL Protocol and RDF Query Language). A full description of this type of data is beyond the scope of this report, however some useful primers are available at the following URLs:
-
-\singlespace
-\begin{itemize}
-\item RDF Primer \path{https://www.w3.org/TR/rdf11-primer/}
-\item SPARQL 1.1 overview \path{https://www.w3.org/TR/sparql11-overview/}
-\end{itemize}
-\doublespace
+GlyTouCan is a semantic web graph database, rather than a relational database. Such databases contain Resource Description Framework (RDF) data, in which all data items take the form of \emph{triples}, and the database is queried using the query language SPARQL (a recursive acronym for SPARQL Protocol and RDF Query Language). A full description of this type of data is beyond the scope of this report, however some useful primers are available \citep{rdf_primer, sparql_overview}.
 
 The data we wish to extract from GlyTouCan is a list of glycan IDs, the text string (in WURCS format) describing the structure of each glycan, and the IDs of the motifs which each glycan contains. Separately, we also wish to extract a list of the motif names associated with each motif ID. The two SPARQL queries we use for these tasks are given in Appendix \ref{sec:sparql_queries}, and the Python scripts used to execute them are called \texttt{glytoucan\_rdf\_to\_json.py} and \texttt{motif\_rdf\_to\_json.py} respectively. After execution the results are saved locally to JavaScript Object Notation (JSON) files.
 
 \subsection{Extracting Reactions from Glycan Structure Data}
 \label{sec:extracting_reactions}
 
-As described in Section \ref{sec:proposed_method}, we wish to characterise our glycans in terms of the biochemical reactions necessary for their synthesis. We do this by parsing the WURCS string describing each glycan structure, and, recalling that glycans exhibit a tree-like structure, we extract collections of `child' and `parent' monosaccharides, and the type of the link that joins them (i.e. the carbon numbers of the child and parent) for every glycan. For some of the glycan entries in the database there is uncertainty regarding aspects of the glycan structure -- for example the number of links or the carbon numbers expressed with only a percentage of certainty. We reject these. The Python script which parses the WURCS strings is \texttt{parse\_glytoucan\_results.py}.
+As described in Section \ref{sec:proposed_method}, we wish to characterise our glycans in terms of the biochemical reactions necessary for their synthesis. We do this by parsing the WURCS string describing each glycan structure, and, recalling that glycans exhibit a tree-like structure, we extract collections of `child' and `parent' monosaccharides, and the type of the link that joins them (i.e. the carbon numbers of the child and parent) for every glycan. The full WURCS format specification can be found in \citep{matsubara2017wurcs}, and we provide an illustrative example in Figure \ref{fig:wurcs_example} Appendix \ref{sec:wurcs_example}.
+
+
+For some of the glycan entries in the database there is uncertainty regarding aspects of the glycan structure -- for example the number of links or the carbon numbers expressed with only a percentage of certainty. We reject these. The Python script which parses the WURCS strings is \texttt{parse\_glytoucan\_results.py}.
 
 \subsection{Filtering the Glycan Dataset}
 \label{sec:filtering_glycans}
-The previous step produces 33142 glycans. As we shall see in the next step, we wish to create a similarity matrix for these glycans -- that will be a $33142\times33142$ matrix of 64 bit floats, which requires approximately 8 gigabytes of RAM. This amount of RAM, whilst easily obtainable on current server clusters, is approaching the limit of desktop machines. Additionally, the computation time required for calculating all of the values in such a matrix is excessive. Consequently, using the Python script \texttt{filter\_by\_common\_motifs.py}, we perform a filtering step on the dataset. We determine the top 10 most frequently observed motifs (from single-motif glycans), and eliminate from our our list any glycans whose motifs are not from the top 10 list. The result is a more tractable list of 4111 glycans.
+The previous step produces 33142 glycans. As we shall see in the next step, we wish to create a similarity matrix for these glycans -- that will be a $33142\times33142$ matrix of 64 bit floats, which requires approximately 8 gigabytes of RAM. This amount of RAM, whilst easily obtainable on current server clusters, is approaching the limit of desktop machines. Additionally, the computation time required for calculating all of the values in such a matrix is excessive. Consequently, using the Python script \texttt{filter\_by\_common\_motifs.py}, we perform a filtering step on the dataset. We determine the top 10 most frequently observed motifs (from single-motif glycans), and eliminate from our our list any glycans whose motifs are contained within the top 10 list. The result is a more tractable list of 4111 glycans.
 
 
 \subsection{Calculating Distances Between Glycan Reaction Collections}
@@ -418,7 +277,7 @@ The Jaccard similarity coefficient between two sets $A$ and $B$ is given by:
 	J(A,B)=\frac{|A \cap B|}{|A \cup B|}=\frac{|A \cap B|}{|A|+|B|-|A \cap B|}
 \end{equation}
 
-As an example, consider two Glycans, $G_1$ and $G_2$. Let $G_1$ contain the set of reactions $r_1$, $r_3$, $r_5$ and $r_5$, whilst $G_2$ contains reactions $r_4$ and $r_5$ (neither glycan contains reaction $r_2$). We want to count the number of reactions shared by $G_1$ and $G_2$ as a fraction of the total number of unique reactions present in both sets. Table \ref{tab:jaccard_set_example} illustrates the two sets.
+As an example, consider two Glycans, $G_1$ and $G_2$. Let $G_1$ contain the set of reactions $r_1$, $r_3$, $r_5$ and $r_5$, whilst $G_2$ contains reactions $r_4$ and $r_5$ (neither glycan contains reaction $r_2$). We want to count the number of reactions shared by $G_1$ and $G_2$ as a fraction of the total number of unique reactions present in both sets. Table \ref{tab:jaccard_set_example} illustrates the two sets.\\
 
 \begin{table}[h]
 \centering
@@ -435,9 +294,7 @@ $G_2$ & 0 & 0 & 1 & 1 \\ \hline
 \label{tab:jaccard_set_example}
 \end{table}
 
-In this case the two glycans have just one reaction in common out of a total of four different reactions present in both glycans, and so the Jaccard similarity coefficient is $1/4$, or 25\%.
-
-In the modified Jaccard case, where we wish to take into account reaction quantities, instead of scoring one when both glycans share a reaction we calculate the score for the shared reaction as the smaller reaction quantity divided by the larger one, as illustrated in Table \ref{tab:jaccard_list_example}.\\
+In this case the two glycans have just one reaction in common out of a total of four different reactions present in both glycans, and so the Jaccard similarity coefficient is $1/4$, or 25\%. In the modified Jaccard case, where we wish to take into account reaction quantities, instead of scoring one when both glycans share a reaction we calculate the score for the shared reaction as the smaller reaction quantity divided by the larger one, as illustrated in Table \ref{tab:jaccard_list_example}.\\
 
 \begin{table}[h]
 \centering
@@ -458,13 +315,6 @@ The modified Jaccard similarity coefficient is then $\frac{1/2}{4}$, or 12.5\%. 
 
 For both methods, we calculate the similarity coefficient for all pairs of glycans, resulting in two similarity matrices. We will use these similarity matrices directly when performing hierarchical clustering as described in Section \ref{sec:clustering}, but for the purposes of creating a network of glycans to explore, we separately create a binary adjacency matrix by applying a heuristically chosen threshold to the values in the similarity matrix, such that any values falling below the threshold now score 0\% similarity, whilst any falling on or above the threshold score 100\% similarity.
 
-\begin{figure}[H]
-\centering 
-% \includegraphics[scale=1.0]{images/heatmap_set_method.png} 
-\includegraphics[scale=0.5]{images/heatmap_set_method.pdf} 
-\caption{REMOVE THIS??? Glycan Reaction Sets Heatmap CROP IMAGE. Each axis is a list of Glycans IDs, not shown here because there are too many to display.}
-\label{fig:heatmap_set_method}
-\end{figure}
 
 \subsection{Glycan Network Creation}
 \label{sec:network_creation}
@@ -482,49 +332,10 @@ Given the amount of glycans in our dataset, the resulting graph is large, and th
 \subsection{Hierarchical Clustering}
 \label{sec:clustering}
 
-When plotted on a computer, the graphs described above can be explored by zooming in to focus on particular groups of nodes/glycans, potentially revealing interesting relationships between (for example) glycans sharing the same or similar motifs. The method though is dependent upon choosing a threshold value at which to make the binary choice between similar or dissimilar for any two glycans. An alternative method of clustering, avoiding this limitation, is the Unweighted Pair Group Method with Arithmetic Mean (UPGMA) \citep{gronau2007optimal}. This algorithm represents the structure of a pairwise similarity matrix as a rooted dendogram. The algorithm proceeds in s step-wise manner, calculating the average of the distances between all elements in two clusters $A$ and $B$. At the first step, each individual element (glycan, in our case) of the similarity matrix forms an individual cluster. The most similar clusters in any step are combined to form a new cluster, and the process is repeated until all clusters have been paired. The Python script \texttt{upgma\_glycans.py} creates one of these trees using the \texttt{DistanceTreeConstructor.upgma} function from the BioPython package.
+When plotted on a computer, the graphs described above can be explored by zooming in to focus on particular groups of nodes/glycans, potentially revealing interesting relationships between (for example) glycans sharing the same or similar motifs. The method though is dependent upon choosing a threshold value at which to make the binary choice between similar or dissimilar for any two glycans. An alternative method of clustering, avoiding this limitation, is UPGMA \citep{gronau2007optimal}. This algorithm represents the structure of a pairwise similarity matrix as a rooted dendogram. The algorithm proceeds in s step-wise manner, calculating the average of the distances between all elements in two clusters $A$ and $B$. At the first step, each individual element (glycan, in our case) of the similarity matrix forms an individual cluster. The most similar clusters in any step are combined to form a new cluster, and the process is repeated until all clusters have been paired. The Python script \texttt{upgma\_glycans.py} creates one of these trees using the \texttt{DistanceTreeConstructor.upgma} function from the BioPython \citep{cock2009biopython} package.
 
-The resulting tree is given in the form of an XML file, specifically phyloXML\footnote{\url{http://www.phyloxml.org}}. In order to aid visualisation, in our script \texttt{colour\_tree\_by\_motif\_group.py} we apply colour labels to all terminal nodes according to the motif sets belonging to the glycan represented by each node. We then traverse the tree from the terminal nodes upwards, applying the same colour labels if and only if the two children of a parent node have been labelled with the same colour. This provides a useful at-a-glance mechanism of identify clades of glycans sharing motif groups.
+The resulting tree is given in the form of an XML file, specifically phyloXML \citep{han2009phyloxml}. In order to aid visualisation, in our script \path{colour_tree_by_motif_group.py} we apply colour labels to all terminal nodes according to the motif sets belonging to the glycan represented by each node. We then traverse the tree from the terminal nodes upwards, applying the same colour labels if and only if the two children of a parent node have been labelled with the same colour. This provides a useful at-a-glance mechanism of identify clades of glycans sharing motif groups. Finally, we use the phylogenetic tree visualisation software Archeopteryx \citep{han2009phyloxml} to visualise and explore the tree.
 
-Finally, we use the phylogenetic tree visualisation software Archeopteryx\footnote{\url{https://sites.google.com/site/cmzmasek/home/software/archaeopteryx}} to visualise and explore the tree.
-
-
-% \subsection{Blank}
-
-% \subsubsection{Application Startup}
-% \label{sec:startup}
-% To use code--style text in-line, use \texttt{msc\_site}, or to apply to a section, use:
-
-% \begin{verbatim}
-% python manage.py runserver
-% \end{verbatim}
-
-% Another list example:
-
-% \begin{enumerate}
-% \item {\bf ProteinDomain} has attributes \texttt{name} and \texttt{pfam\_accession}.
-% \item {\bf NodeVisualizationJsCode} The javascript library blah blah.
-% \end{enumerate}
-
-% \subsubsection{Singlespace Verbatim}
-% \label{sec:template_tags}
-% Like this:
-% \singlespace
-% \begin{figure}[H]
-% \begin{verbatim}
-% {% load phylo_extras %}
-% {% for subfamily in subfamily_val %}
-%     {% if subfamily|isinst:"dict" %}
-%         <ul>
-%         ...
-%         </ul>
-%     {% endif %}
-% {% endfor %}
-% \end{verbatim}
-% \caption{Example use of a custom Django filter in a template html file}
-% \label{fig:custom_filter_code}
-% \end{figure}
-% \doublespace
 
 \newpage
 \section{Results}
@@ -532,27 +343,18 @@ Finally, we use the phylogenetic tree visualisation software Archeopteryx\footno
 
 Possibly the most effective way to explore the landscape of glycan structure using the techniques described above in Section \ref{sec:method}, is to manipulate them in real-time on a computer, where it is possible to zoom in to examine regions of interest and to (in the case of the Archeopteryx tree viewer ) re-draw the tree in a multitude of different ways. In this section we present a selection of static images as we explore the glycan network and tree, illustrating both the validity of the techniques and some of the insights into glycan structure they provide.
 
-% (Discuss them as you present them)\\
-
-% - Walk through the network\\
-% -- Figs 5 to 10: Glycan (un)connected components\\
-
-% \begin{figure}[H]
-% \centering 
-% \includegraphics[scale=0.5]{threshold_87_conn_comp_1_method_set/threshold_87_full_network_method_set.eps} 
-% \caption{Full network of glycans, with similarity determined using the reaction set method. CROP.}
-% \label{fig:threshold_87_full_network_method_set}
-% \end{figure}
 
 \subsection{Glycan Network}
 \label{sec:glycan_network}
 
-Figures \ref{fig:threshold_87_conn_comp_1_method_set} through to \ref{fig:Neo_Lactosamine_vs_LacDiNAc} below were all produced using the reaction set method (see Section \ref{sec:distance_calc_set}). Figure \ref{fig:threshold_87_conn_comp_1_method_set} shows the most connected component of the network, with nodes (representing glycans) coloured according to the sets of motifs they contain. The figure legend details the colours assigned to each motif set. It is immediately apparent that, as hoped for, similarly coloured nodes exist in distinct communities, with mutual connections and often in close proximity, indicating high numbers of connections between glycans sharing the same motif sets. The fact that individual nodes of the same colour are still spatially separate indicates that despite sharing the same motifs, there are nevertheless structural differences between those glycans -- this is exactly as we would expect, given that all glycans taken from the database are structurally distinct, albeit many show similarity in terms of their motifs. In order to examine the relationships between these groups more closely, we need to zoom in and inspect the network in more detail.
+Figures \ref{fig:threshold_87_conn_comp_1_method_set} through to \ref{fig:Neo_Lactosamine_vs_LacDiNAc} below were all produced using the reaction set method (see Section \ref{sec:distance_calc_set}). Starting from a total of 105050 glycans in the GlyTouCan database, this number is reduced to 33142 after rejecting glycans with structural uncertainties, and finally further reduced to 4111 glycans when we consider only glycans containing motifs from the list of top 10 most frequently occurring motifs (see Sections \ref{sec:extracting_reactions} and \ref{sec:extracting_reactions}).
+
+Figure \ref{fig:threshold_87_conn_comp_1_method_set} shows the most connected component of the network, with 444 nodes (representing glycans) coloured according to the sets of motifs they contain. The figure legend details the colours assigned to each motif set. It is immediately apparent that, as hoped for, same coloured nodes exist in distinct communities, with mutual connections and often in close proximity, indicating high numbers of connections between glycans sharing the same motif sets. The fact that individual nodes of the same colour are still spatially separate indicates that despite sharing the same motifs, there are nevertheless structural differences between those glycans. This is exactly as we would expect, given that all glycans taken from the database are structurally distinct, albeit many show similarity in terms of their motifs. In order to examine the relationships between these groups more closely, we need to zoom in and inspect the network in more detail.
 
 \begin{sidewaysfigure}
 \centering 
-\includegraphics[scale=0.5]{threshold_87_conn_comp_1_method_set/threshold_87_conn_comp_1_method_set.eps} 
-\caption{Most connected component of a network of glycans, with similarity determined using the reaction set method. CROP.}
+\includegraphics[scale=0.5]{threshold_87_conn_comp_1_method_set/threshold_87_conn_comp_1_method_set.pdf} 
+\caption{Most connected component of a network of glycans, with similarity determined using the reaction set method.}
 \label{fig:threshold_87_conn_comp_1_method_set}
 \end{sidewaysfigure}
 \clearpage
@@ -605,23 +407,19 @@ The higher value for the reaction list method suggests that there is a benefit t
 \subsection{UPGMA Hierarchical Clustering}
 \label{sec:clustering_results}
 
-Figure \ref{fig:full_tree_zoomed} shows a magnified section of the full tree (in cladogram form) produced using UPGMA hierarchical clustering, applied to the distance matrix obtained using the reaction list method. The terminal nodes, which represent individual glycans, are labelled with both the names of the motifs present in each glycan, and, in brackets, the glycan ID (as taken from the GlyTouCan database). The visualisation software dynamically adjusts the number of terminal nodes for which it displays labels in order to avoid clutter. We can see via the terminal labels and the branch colours that there are distinct clades of glycans which share the same motif sets, providing further evidence of the suitability of our method for determining glycan similarity. Furthermore, adjacent clades of different colours often have motifs in common, analogous to the connected nodes we observed in the glycan network.
+Figure \ref{fig:full_tree_zoomed} shows a magnified section of the full tree (in cladogram form) produced using UPGMA hierarchical clustering, applied to the distance matrix obtained using the reaction list method. The 4111 terminal nodes, which represent individual glycans, are labelled with both the names of the motifs present in each glycan, and, in brackets, the glycan ID (as taken from the GlyTouCan database). The visualisation software dynamically adjusts the number of terminal nodes for which it displays labels in order to avoid clutter. We can see via the terminal labels and the branch colours that there are distinct clades of glycans which share the same motif sets, providing further evidence of the suitability of our method for determining glycan similarity. Furthermore, adjacent clades of different colours often have motifs in common, analogous to the connected nodes we observed in the glycan network.
 
 \begin{sidewaysfigure}
 \centering 
 \includegraphics[scale=0.3]{trees/zoomed_full_tree_cladogram.png} 
-\caption{Full depth UPGMA tree (zoomed in to subsection). Clades of equal colour indicate clusters of glycans sharing the same motifs sets.}
+\caption{Full depth UPGMA tree (zoomed in to subsection). Clades of equal colour indicate clusters of glycans sharing the same motif sets.}
 \label{fig:full_tree_zoomed}
 \end{sidewaysfigure}
 \clearpage
 
-subsubsection{Motif Discovery}
-A detailed inspection of the UPGMA tree reveals some features which, initially, seem to be at odds with the notion of shared motifs between simlar glycans observed so far. For example, in Figure \ref{fig:full_tree_LacDiNAc}, a glycan with the sole motif LacDiNAc (highlighted in red) appears amongst a cluster of glycans containing only the `N-Glycan truncated motif first GlcpNAC cut off' motif. However, looking up the structure of this glycan in the GlyTouCan database reveals that this glycan does in fact contain the `N-Glycan truncated motif first GlcpNAC cut off' motif as well as LacDiNAc, it just has not been annotated as containing it. Figure \ref{fig:rogue_lacdinac_a} shows the full glycan structure, Figure \ref{fig:rogue_lacdinac_b} shows the LacDiNAc motif, with which the glycan has been correctly annotated, and Figure \ref{fig:rogue_lacdinac_c} shows the `N-Glycan truncated motif first GlcpNAC cut off' motif which the glycan has not been annotated as containing, but which is clearly seen in the full structure (Figure \ref{fig:rogue_lacdinac_a}).
+\subsubsection{Motif Discovery}
+A detailed inspection of the UPGMA tree reveals some features which, initially, seem to be at odds with the notion of shared motifs between similar glycans observed so far. For example, in Figure \ref{fig:full_tree_LacDiNAc}, a glycan with the sole motif LacDiNAc (highlighted in red) appears amongst a cluster of glycans containing only the `N-Glycan truncated motif first GlcpNAC cut off' motif. However, looking up the structure of this glycan in the GlyTouCan database\footnote{\url{https://glytoucan.org/Structures/Glycans/G35645QP}} reveals that this glycan does in fact contain the `N-Glycan truncated motif first GlcpNAC cut off' motif as well as LacDiNAc, it just has not been annotated as containing it. Figure \ref{fig:rogue_lacdinac_a} shows the full glycan structure, Figure \ref{fig:rogue_lacdinac_b} shows the LacDiNAc motif, with which the glycan has been correctly annotated, and Figure \ref{fig:rogue_lacdinac_c} shows the `N-Glycan truncated motif first GlcpNAC cut off' motif which the glycan has not been annotated as containing, but which is clearly seen in the full structure (Figure \ref{fig:rogue_lacdinac_a}). We cannot rule out though the possibility that there is some positional dependency associated with the `N-Glycan truncated motif first GlcpNAC cut off' motif which precludes it from being declared as a motif for this particular glycan.
 
---- Fig 12: zoomed-in tree\\
--- describe the clades, relate them to the network if poss\\
---- therefore make a comparison between jaccard + network and UPGMA tree methods\\
----- Are there similarities between tree and network? (network is only a vis tool, the tree is the real deal) \\
 
 \begin{sidewaysfigure}
 \centering 
@@ -667,60 +465,40 @@ A detailed inspection of the UPGMA tree reveals some features which, initially, 
 \newpage
 \section{Discussion}
 \label{sec:discussion}
-(On the bigger picture)\\
-Should have calculated statistical significance of assortativity coeffs. Could use bootstrap etc.\\
 
-Uncertainties in the glycan db (carbon numbers, no. of links etc.) (what proportion? 33000/100000) limit our coverage, as do computing resources (RAM, CPU).\\
+The same-motif glycans displayed in both the connected communities of  our network graphs and the clades of the UPGMA tree, as well as the discovery of the missing motif annotation for a particular glycan, are highly encouraging outcomes. These were found using just 4111 glycans from an original set of 105050 in the GlyTouCan database. Increasing the number of glycans in our analysis would open up the possibility of yet more insights of a similar nature. One straightforward way to achieve this would be to simply employ more computing resources -- this study was carried out on a single moderately powerful desktop machine. Beyond that though, we currently reject a large number of glycans because of experimental uncertainty in their structure. It should be possible to modify our parsing technique to make use of some of the certain glycan reactions contained within gycans whose overall structure contains ambiguities, therefore increasing our overall coverage.
 
-We're dependent upon the coverage and quality of glycan databases, and glycan formats (new ones keep appearing so WURCS 2.0 could be out-of-date soon? the field is in its infancy compared to e.g. protein structure prediction - give some example dates) although this technique can actually help with annotation (e.g. detecting missing motifs).\\
+The results we present here are produced using a technique based upon characterisation of glycans in terms of the reactions necessary to construct them. Glycans exhibit a tree-like structure, which we do not take into account. Measuring distance between tree structures is inherently more complex than the technique we present here, and it would be instructive to make a comparison between this approach and one which accounts for the specific tree-like nature of glycan structure, such as glycan classification with tree kernels \citep{doi:10.1093/bioinformatics/btm090}.
 
-For networks, threshold and layout choice is key and a manual process\\
+In Section \ref{sec:assortativity_coefficient} we report and compare the network assortativity coefficients for the networks produced by our two alternative glycan similarity measurement techniques. To increase our confidence in these values we should also determine their statistical significance. The script \texttt{bootstrap\_assortativity.py} is included in the source code for this project, which uses the `bootstrap' \citep{efron1992bootstrap} method to determine the means and standard deviations of the coefficients. Computation time for this script is high though, and the results were not available at the time of publication.
+
 
 
 \newpage
 \section{Further Work}
 \label{sec:further_work}
 
-Can use more advanced SPARQL query to get reaction breakdown (so should increase both number of glycans and accuracy)\\
+In Sections \ref{sec:glycan_databases} and \ref{sec:extracting_reactions} we describe querying the GlyTouCan database using SPARQL queries, and later parsing the WURCS format string in order to obtain a list of reactions for each glycan. In fact, the GlyTouCan RDF data already provides a breakdown of more fine-grained elements of the full WURCS string, which offers us the opportunity to increase the amount of glycan reactions in our dataset via the use of alternative SPARQL queries. Suggestions for exploratory SPARQL queries are given in Appendix \ref{sec:sparql_queries}.
 
-Deal with uncertainties in DB.\\
-But we can use some of the certain reactions from the uncertain structures to increase our coverage\\
+The visualisations created from our glycan networks are a valuable tool for exploring glycan similarity. The obvious communities of glycans sharing the same motif sets gives us confidence that our technique for measuring glycan similarity from their reactions is valid, and the spatial positioning offers some qualitative, if not quantitative, assessment of glycan similarity both within and between those communities of same motif set glycans. We present some static images here, however the full value of the visualisations is only realised when viewed live and interactively on a computer. We use the Python Matplotlib \citep{Hunter:2007} package to display our networks, which allows the user to zoom in and move the image up/down/left/right. This also seems somewhat limited though, and a custom visualisation tool would enhance the value of the networks. For example, there is useful motif, structure, and similarity coefficient information which could be displayed when clicking or hovering over nodes and edges. Groups of glycans could be dynamically selected, either by mouse clicking or via a search mechanism, and compared against one another. Rendering the images in three rather than two dimensions would also be useful. Possible visualisation tools include Cytoscape \citep{shannon2003cytoscape} and Large Graph Layout \citep{adai2004lgl}.
 
-Perform on better machines to increase glycan coverage (i.e. eliminate filtering step)\\
+A key factor in producing useful network visualisations is the choice of threshold value applied to the similarity matrix, in order to then reduce it down to a binary adjacency matrix. A value too high will result in only glycans with near identical structure forming connections, whilst too low will result in connections between unrelated glycans. This is not seen to be a major problem, as we are free to manipulate the networks as we please in order to maximise their utility. However it does leave open the question of where do we draw the line between similar and dissimilar glycans -- further work to define this boundary would be useful.
 
-try bi-clustering on the original jaccard matrix (will need to include ALL reactions for each pairwise comparison, rather than just those present in the two glycans under consideration as I presently do). See John's email 17th July for method details.\\
+When performing hierarchical clustering (Section \ref{sec:clustering}, we used the UPGMA algorithm. Other algorithms could be employed here, and could potentially offer gains in terms of computation time. One example, the Bit-Pattern Biclustering (BiBit) Algorithm \citep{rodriguez2011biclustering}, claims good performance when applied to large datasets, such as gene expression data. 
 
-(tree) Kernel methods (see “Glycan classification with tree kernels” (Yoshihiro Yamanishi, Francis Bach and Jean-Philippe Vert) \\
+The dataset we use here solely provides details of glycan structure, including motifs. A dataset of glycan samples by cell and tissue type exists \citep{cfg_dataset}, which provides an opportunity to (for example) make comparisons between glycan structures in disease state and non-disease state cells or tissues. We provide a Python script, \texttt{glycan\_scraper.py} for downloading the data from this website, however the data is in a different format (MSA) to that required by our software (WURCS). There are tools available \citep{Glycome_Analytics_Platform} which can convert from MSA to another format, `linearcode', and then to WURCS, however in our tests the conversion from linearcode to WURCS was not able to deal with data in which uncertainties in the glycan structure are expressed, and consequently further development of the conversion tools is required in order to proceed with this dataset.
 
-- New dataset, samples by cell / tissue\\
-- details on what we would do
--- Work already done (web scraping for data)\\
--- Format conversion problems\\
---- conversion software breaks for linearcode to WURCS (can't handle uncertainties)\\
-
-Compare full structures, not just reactions\\
-
-Compare sets of structures\\
-
-Use neighbour joining or K-means instead of UPGMA (can you say why that might be useful?)\\
-
-Other glycan databases?\\
-
-KEGG?\\
-
-Use LGL, organic cytoscape for vis\\
-
-chi-squared to compare two (quantified) reaction profiles\\
-
-\citep{porter2009motif} provides some `rules' on incompatibilities (Table 1) and (??? graphs) which we could compare our results with\\
-
-could try an alternative version of clustering, as used for Fig 4 D of "A motif-based analysis of glycan array data to determine the specificities of glycan-binding proteins", for comparison with my version\\
+In Table 1 of \citep{porter2009motif}, some rules governing glycan structure in relation to motifs are given. For example, the definition given for the N-Glycan hybrid motif is ``A glycan chain with a Mana1-3(Mana1-6)Manb1-4GlcNAcb1-4GlcNAcb base with GlcNAcb1-2 linked to only one of the two terminal mannose glycans (Mana1,3 or Mana1,6); the branch with the GlcNAcb1,2 can continue to grow with any glycan, but only mannose may be present on the other mannose''. An extension of the tools we present here could be used to validate these rules, for example by modelling glycans which break the rules and then searching for real examples of high similarity.
 
 \newpage
 \section{Conclusions}
 \label{sec:conclusions}
 
-we've demonstrated encouraging results without needing to perform complex tree comparisons\\
+Measuring similarity between glycans is challenging due to their complex tree-like structure and the high number of both constituent monosaccharides and the types of glycosidic links between them. We have demonstrated encouraging results based upon a novel technique of determining glycan similarity which avoids the need to carry out complex comparisons of tree structures, allowing us to explore similarities both within and between communities of glycans sharing the same or similar sets of motifs. Our technique enables the identification of previously unlabelled motifs in glycans, and we provide several suggestions for advancing this research further. Of particular interest is the possibility of using the cell and tissue-specific glycan dataset in order to broaden the scope of the research into identifying glycan structures associated with disease states.
+
+We present network graph and cladogram images offering a qualitative validation of the technique, and would encourage the adaptation of the computer code provided such that our results might be visualised and explored further using more advanced imaging software.
+
+Some relatively straightforward modifications to the method of querying the glycan database, and the use of more powerful computing resources, open up the possibility of vastly increasing the number of glycans analysed, and we provide the necessary computer script to determine the statistical significance of our quantitative results in order to further validate the technique.
 
 \newpage
 \bibliographystyle{agsm}
@@ -822,7 +600,7 @@ SPARQL queries may be run programmatically, or against the GlyTouCan database at
 
 \noindent \path{https://ts.glytoucan.org/sparql}\\
 
-\noindent The following SPARQL query returns all Glycan IDs, WURCS format strings, and motif IDs. Results for glycans with multiple motifs will be spread across multiple lines:\\
+\noindent The following SPARQL query returns all Glycan IDs, WURCS format strings, and motif IDs. Results for glycans with multiple motifs will be spread across multiple lines:
 
 \singlespace
 \begin{verbatim}
@@ -848,7 +626,7 @@ SPARQL queries may be run programmatically, or against the GlyTouCan database at
 \doublespace
 
 \newpage
-\noindent This SPARQL query returns all Motif IDs and motif labels:\\
+\noindent This SPARQL query returns all Motif IDs and motif labels:
 
 \singlespace
 \begin{verbatim}
@@ -862,81 +640,93 @@ SPARQL queries may be run programmatically, or against the GlyTouCan database at
   WHERE {
     ?Saccharide glycan:has_motif ?Motif .
     ?Motif glytoucan:has_primary_id ?MotifPrimaryId.
-      ?Motif rdfs:label ?MotifLabel
+    ?Motif rdfs:label ?MotifLabel
   }
   ORDER BY ?MotifPrimaryId
+  
 \end{verbatim}
 \doublespace
 
+\noindent This SPARQL query is useful for exploring the glycan properties available in the GlyTouCan database, and returns a list of the distinct RDF properties within the full set of triples:
 
-% \section{Example JavaScript Code}
-% \label{sec:gains_js_code}
-% JavaScript code for determining the width of a rectangle representing total domain gains for each node. The function \texttt{domian\_count} loops through all of the xml property tags associated with a node, parses their content, and returns a dictionary with domain names as keys, and their copy number as the values. The function \texttt{calc\_dom\_deltas} takes the domain count dictionaries of both a parent and a child node, and calculates the total gains and losses across all domains from the parent to the child. The in-line \texttt{function(n)} of the \texttt{nodeEnter} code is called by the underlying D3 library for every node in our data object (which has previously been created from a phyloXML file), and, using the two functions \texttt{domian\_count} and \texttt{calc\_dom\_deltas}, determines which numeric value to apply to the `width' attribute of a rectangle to be displayed alongside the node.
-% \singlespace
-% \footnotesize
-% \begin{verbatim}
-% function domain_count(anode) {
-%   var domain_counts = {};
-%   if (anode) {
-%     if (anode.properties && anode.properties.length > 0) {
-%       var propertiesLength = anode.properties.length;
-%       for (var i = 0; i < propertiesLength; ++i) {
-%         var property = anode.properties[i];
-%         var prop_ref_components = property.ref.split(":")
-%         var prop_ref_prefix = prop_ref_components[0]
-%         var prop_id_ref = property.id_ref;
-%         if (prop_ref_prefix == "idr" && property.value) {
-%           domain_counts[prop_id_ref] = property.value;
-%         }
-%       }
-%     }
-%   }
-%   return domain_counts;
-% }
-% \end{verbatim}
-% \newpage
-% \begin{verbatim}
-% // calculates the total gains and losses of protein domains from
-% // a parent to its child,
-% // returned as a dictionary with keys 'losses' and 'gains'
-% function calc_dom_deltas(parent_domain_counts, node_domain_counts) {
-%   // check both dictionaries are of the same length
-%   if (parent_domain_counts.length != node_domain_counts.length) {
-%     alert("Unequal number of doamins between parent and child")
-%   }
+\singlespace
+\begin{verbatim}
+    SELECT DISTINCT ?p
+    FROM <http://rdf.glytoucan.org/core>
+    FROM <http://rdf.glytoucan.org/sequence/wurcs>
+    FROM <http://rdf.glytoucan.org/motif>
+    WHERE {
+        ?s ?p ?o
+    }
+    
+\end{verbatim}
+\doublespace
 
-%   var dom_deltas = {losses: 0, gains: 0};
-%   var dom_losses = 0;
-%   var dom_gains = 0;
-%   for (var key in parent_domain_counts) {
-%     var parent_dom_count = parent_domain_counts[key];
-%     var node_dom_count = node_domain_counts[key];
-%     var dom_delta = node_dom_count - parent_dom_count;
-%     if (dom_delta < 0) {
-%       dom_deltas.losses += Math.abs(dom_delta);
-%     } else if (dom_delta > 0) {
-%       dom_deltas.gains += dom_delta;
-%     }
-%   }
-%   return dom_deltas;
-% }
+\noindent A selection of results from the query above which could be useful for constructing new exploratory SPARQL queries are listed overleaf.\\
 
-% nodeEnter.append('rect') //gains
-%   .attr('width', function(n) {
-%     // count each domain both for this node's parent and this node.
-%     // calculate the loss or gain for each domain from the parent to this node.
-%     // only do this if the node has a parent
-%     if (typeof n.parent != 'undefined' && n.parent.children.length == 2) {
-%       var parent_domain_counts = domain_count(n.parent);
-%       var node_domain_counts = domain_count(n);
-%       var dom_deltas = calc_dom_deltas(parent_domain_counts, node_domain_counts);
-%       return dom_deltas.gains /10;
-%     } else {
-%       return 0;
-%     }
-%   })
-% \end{verbatim}
-% \normalsize
-% \doublespace
+\newpage
+\singlespace
+{\scriptsize
+\begin{verbatim}
+http://purl.jp/bio/12/glyco/glycan#has_glycosequence
+http://purl.jp/bio/12/glyco/glycan#has_resource_entry
+http://purl.jp/bio/12/glyco/glycan#has_sequence
+http://purl.jp/bio/12/glyco/glycan#in_carbohydrate_format
+http://purl.jp/bio/12/glyco/glycan#in_glycan_database
+http://purl.jp/bio/12/glyco/glycan#has_motif
+http://www.glycoinfo.org/glyco/owl/wurcs#LIN_count
+http://www.glycoinfo.org/glyco/owl/wurcs#RES_count
+http://www.glycoinfo.org/glyco/owl/wurcs#has_GLIP
+http://www.glycoinfo.org/glyco/owl/wurcs#has_GLIPS
+http://www.glycoinfo.org/glyco/owl/wurcs#has_LIN
+http://www.glycoinfo.org/glyco/owl/wurcs#has_MAP_position
+http://www.glycoinfo.org/glyco/owl/wurcs#has_RES
+http://www.glycoinfo.org/glyco/owl/wurcs#has_SC_position
+http://www.glycoinfo.org/glyco/owl/wurcs#has_basetype
+http://www.glycoinfo.org/glyco/owl/wurcs#has_direction
+http://www.glycoinfo.org/glyco/owl/wurcs#has_monosaccharide
+http://www.glycoinfo.org/glyco/owl/wurcs#has_rep_max
+http://www.glycoinfo.org/glyco/owl/wurcs#has_rep_min
+http://www.glycoinfo.org/glyco/owl/wurcs#has_root_RES
+http://www.glycoinfo.org/glyco/owl/wurcs#has_uniqueRES
+http://www.glycoinfo.org/glyco/owl/wurcs#is_fuzzy
+http://www.glycoinfo.org/glyco/owl/wurcs#is_monosaccharide
+http://www.glycoinfo.org/glyco/owl/wurcs#is_repeat
+http://www.glycoinfo.org/glyco/owl/wurcs#is_uniqueRES
+http://www.glycoinfo.org/glyco/owl/wurcs#uniqueRES_count
+http://www.glycoinfo.org/glyco/owl/wurcs#has_modification_prob_lower
+http://www.glycoinfo.org/glyco/owl/wurcs#has_modification_prob_upper
+http://www.glycoinfo.org/glyco/owl/wurcs#has_MAP
+http://www.glycoinfo.org/glyco/owl/wurcs#has_acceptor
+http://www.glycoinfo.org/glyco/owl/wurcs#has_donor
+http://www.glytoucan.org/glyco/owl/glytoucan#has_primary_id
+http://www.glytoucan.org/glyco/owl/glytoucan#date_registered
+http://www.glytoucan.org/glyco/owl/glytoucan#contributor
+http://www.glycoinfo.org/glyco/owl/wurcs#has_root_GRES
+http://www.glycoinfo.org/glyco/owl/wurcs#has_GRES
+http://www.glycoinfo.org/glyco/owl/wurcs#is_acceptor_of
+http://www.glycoinfo.org/glyco/owl/wurcs#has_acceptor_position
+http://www.glycoinfo.org/glyco/owl/wurcs#has_donor_position
+http://www.glycoinfo.org/glyco/owl/wurcs#is_donor_of
+http://www.glycoinfo.org/glyco/owl/wurcs#count_RES
+http://www.glycoinfo.org/glyco/owl/wurcs#count_uniqueRES
+http://www.glycoinfo.org/glyco/owl/wurcs#count_LIN
+http://www.glytoucan.org/glyco/owl/glytoucan#is_reducing_end
+\end{verbatim}
+}
+\doublespace
+
+\clearpage
+\section{Illustrative WURCS Format String Example}
+\label{sec:wurcs_example}
+
+Figure \ref{fig:wurcs_example} (overleaf) illustrates the components of a WURCS format string, describing glycan structure. The corresponding brreakdown in terms of the biological reactions necessary for glycan synthesis is also shown.
+
+\begin{sidewaysfigure}
+\centering 
+\includegraphics[scale=0.85]{images/wurcs_example.pdf} 
+\caption{An example of glycan structure expressed in the WURCS format, with a corresponding breakdown in terms of child sugar, glycosidic link, and parent sugar. This breakdown is what we use to characterise glycans in terms of the biological reactions necessary for their synthesis.}
+\label{fig:wurcs_example}
+\end{sidewaysfigure}
 
 \end{document}
