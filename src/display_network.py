@@ -120,11 +120,11 @@ if __name__ == "__main__":
     fig1 = plt.figure(1)
     ax = fig1.add_subplot(1, 1, 1)
 
-    for label in node_colors:
-        motif_labels = []
-        for motif_id in motif_sets_from_all_glycans[label]:
-            motif_labels.append(motif_ids_and_labels_dict[motif_id])
-        ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=' & '.join(motif_labels))
+    # for label in node_colors:
+    #     motif_labels = []
+    #     for motif_id in motif_sets_from_all_glycans[label]:
+    #         motif_labels.append(motif_ids_and_labels_dict[motif_id])
+    #     ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=' & '.join(motif_labels))
 
     for node_color in node_colors:
         nodelist = []
@@ -155,6 +155,7 @@ if __name__ == "__main__":
     print("drawing connected components...")
     fig = plt.figure(2)
     ax = fig.add_subplot(1, 1, 1)
+    plt.axis('off')
     motif_sets_from_most_conn_comps = []
 
     print("Motifs for top", num_connected_components_displayed, "connected components:")
@@ -199,21 +200,22 @@ if __name__ == "__main__":
     #                     ['G00056MO', 'G00057MO']]  # display all motif sets
 
     # similar?
-    # display_motifs = [['G00056MO'], ['G00057MO']]  # 2 & 4 - Neo Lactosamine & LacDiNAc
     # display_motifs = [['G00056MO'], ['G00055MO']]  # 2 & 3 - Neo Lactosamine & Lactosamine motif
-    # display_motifs = [['G00046MO', 'G00055MO', 'G00068MO'], ['G00055MO', 'G00068MO']]  # 16 & 10 - Galalpha1-3Gal epitope, Lactosamine motif, Blood group H & Lactosamine motif, Blood group H
 
     # re-check
-    # display_motifs = [['G00056MO'], ['G00055MO', 'G00056MO']]  # 2 & 12 - Neo Lactosamine & Lactosamine motif, Neo Lactosamine
     # display_motifs = [['G00026MO', 'G00055MO', 'G00056MO'], ['G00026MO', 'G00055MO', 'G00057MO']]  # 18 & 19 - N-Glycan core basic, Lactosamine motif, Neo Lactosamine & N-Glycan core basic, Lactosamine motif, LacDiNAc
     # display_motifs = [['G00026MO', 'G00057MO'], ['G00026MO', 'G00055MO']]  # 5 & 7 - N-Glycan core basic, LacDiNAc & N-Glycan core basic, Lactosamine motif
     # display_motifs = [['G00026MO', 'G00055MO'], ['G00027MO', 'G00055MO']]  # 7 & 8 - N-Glycan core basic, Lactosamine motif & N-Glycan truncated motif. First GlcpNAC cut off, Lactosamine motif
+
+    # display_motifs = [['G00046MO', 'G00055MO', 'G00068MO'], ['G00055MO', 'G00068MO']]  # 16 & 10 - Galalpha1-3Gal epitope, Lactosamine motif, Blood group H & Lactosamine motif, Blood group H
+    # display_motifs = [['G00056MO'], ['G00055MO', 'G00056MO']]  # 2 & 12 - Neo Lactosamine & Lactosamine motif, Neo Lactosamine
     # display_motifs = [['G00046MO', 'G00055MO'], ['G00055MO']]  # 9 & 3 - Galalpha1-3Gal epitope, Lactosamine motif & Lactosamine motif
     # display_motifs = [['G00057MO'], ['G00055MO', 'G00057MO']]  # 4 & 13 LacDiNAc & Lactosamine motif, LacDiNAc
 
     # dissimilar?
-    # display_motifs = [['G00026MO'], ['G00055MO']]  # 1 & 3 N-Glycan core basic & Lactosamine motif
+    display_motifs = [['G00026MO'], ['G00055MO']]  # 1 & 3 N-Glycan core basic & Lactosamine motif
     # display_motifs = [['G00057MO'], ['G00026MO', 'G00057MO']]  # 4 & 5 – LacDiNAc & N-Glycan core basic, LacDiNAc
+    # display_motifs = [['G00056MO'], ['G00057MO']]  # 2 & 4 - Neo Lactosamine & LacDiNAc
 
     print("(connected components) len(motifs):", len(motif_sets_from_most_conn_comps))
     node_colors = range(len(motif_sets_from_most_conn_comps))
@@ -222,13 +224,13 @@ if __name__ == "__main__":
     cNorm = colors.Normalize(vmin=node_colors[0], vmax=node_colors[-1])
     scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=tab20b)
 
-    for label in node_colors:
-        motif_labels = []
-        for motif_id in motif_sets_from_most_conn_comps[label]:
-            motif_labels.append(motif_ids_and_labels_dict[motif_id])
-        if motif_sets_from_most_conn_comps[label] in display_motifs:
-            ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=' & '.join(motif_labels))
-    ax.plot([0], [0], color='Gray', label='All other motif sets')
+    # for label in node_colors:
+    #     motif_labels = []
+    #     for motif_id in motif_sets_from_most_conn_comps[label]:
+    #         motif_labels.append(motif_ids_and_labels_dict[motif_id])
+    #     if motif_sets_from_most_conn_comps[label] in display_motifs:
+    #         ax.plot([0], [0], color=scalarMap.to_rgba(node_colors[label]), label=' & '.join(motif_labels))
+    # ax.plot([0], [0], color='Gray', label='All other motif sets')
 
     motif_set_counts = dict.fromkeys(node_colors, 0)
 
@@ -256,7 +258,8 @@ if __name__ == "__main__":
 
             nx.draw_networkx_edges(G, pos, edgelist=G.edges(nbunch=nodelist), width=1.0, alpha=0.5, ax=ax)
 
-        leg = plt.legend(fontsize="x-small")
+        leg = plt.legend(fontsize="medium")
+        # leg = plt.legend(fontsize="small")
         for line in leg.get_lines():
             line.set_linewidth(4.0)
 
@@ -269,7 +272,7 @@ if __name__ == "__main__":
             plot_title += ', '.join(motif_names)
             plot_title += ' & '
         plot_title = plot_title[0:-3]
-        plt.title(plot_title)
+        # plt.title(plot_title)
         plt.axis('off')
 
     print("...done")
