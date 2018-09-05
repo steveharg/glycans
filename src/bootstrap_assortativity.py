@@ -53,7 +53,7 @@ if __name__ == "__main__":
         heatmaps, column_names, reactions_collection_btsrp = calc_jaccard_distances(reactions_collection, use_reaction_quantities, use_bootstrap)
         reaction_distance_df = pd.DataFrame.from_dict(heatmaps[0],
                                                       orient='index', columns=column_names[0])
-        thresholded_reactions_df = apply_threshold_to_reaction_distance_df(reactions_collection_btsrp, threshold)
+        thresholded_reactions_df = apply_threshold_to_reaction_distance_df(reaction_distance_df, threshold)
 
         print("creating network graph from thresholded reactions...")
         G = nx.from_pandas_adjacency(thresholded_reactions_df)
