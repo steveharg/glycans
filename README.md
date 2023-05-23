@@ -1,1 +1,4 @@
-# glycans
+# Glycans MSc Project
+
+Glycans are highly prevalent in living organisms, and play keys roles in a variety of important biological processes such as cell signalling, immune reaction, viral infections and tumour cell proliferation. The difficulty of analysing glycan structures experimentally provides the motivation to develop reliable computational analysis techniques. A hindrance to this effort though is the complex tree-like structure of glycans, making them more difficult to analyse and compare than, for example, the linear chains of polypeptides in proteins. We describe a novel technique for measuring glycan similarity based upon a consideration of the biological reactions necessary for their synthesis, and which avoids the need to model tree structures. By analysing the similarities between 4111 glycans from a public database, we
+demonstrate that we can identify communities of glycans sharing the same or similar motifs, and that we can predict the presence of specific motifs in glycans which do not as yet have motif annotations.
