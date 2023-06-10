@@ -1,5 +1,5 @@
 import pickle
-from parse_glytoucan_results import parse_glytoucan_results
+from src.glycans.parse_glytoucan_results import parse_glytoucan_results
 from calc_jaccard_distances import calc_jaccard_distances
 from filter_by_common_motifs import filter_by_common_motifs
 import configparser
@@ -10,7 +10,7 @@ config.read('config.ini')
 if __name__ == "__main__":
 
     include_zero_motif_glycans = config['DEFAULT'].getboolean('IncludeZeroMotifGlycans')
-    num_datafile_lines = config['DEFAULT'].getint('NumDatafileLines')  # None means use all datafile lines
+    num_datafile_lines = config['DEFAULT'].getint('NumDatafileLines')  # -1 means use all datafile lines
     use_reaction_quantities = True if config['DEFAULT']['ReactionCountMethod'] == 'List' else False
     glycans_json_file = config['DEFAULT']['GlycansJsonFile']
     reactions_collection_pickle_file = config['DEFAULT']['ReactionsCollectionPickleFile']
