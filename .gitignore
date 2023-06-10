@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.DS_Store
+.idea/
+docs/glycans_report.aux
+docs/glycans_report.bbl
+docs/glycans_report.blg
+docs/glycans_report.out
+docs/glycans_report.synctex.gz
+docs/glycans_report.toc
+
